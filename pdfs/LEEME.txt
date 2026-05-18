@@ -1,0 +1,23 @@
+==============================
+  CARPETA DE PDFs — IMAR Page
+==============================
+
+Estructura:
+  pdfs/
+  ├── primaria/
+  │   ├── tercero/    ← tus PDFs de 3er año
+  │   ├── cuarto/     ← tus PDFs de 4to año
+  │   ├── quinto/     ← tus PDFs de 5to año
+  │   └── sexto/      ← tus PDFs de 6to año
+  └── secundaria/     ← tus PDFs de secundaria
+
+Cómo agregar un PDF:
+  1. Copiá el archivo a la carpeta del grado
+  2. En el HTML correspondiente, editá el href:
+     href="../../pdfs/primaria/tercero/NOMBRE-EXACTO.pdf"
+  3. Guardá y hacé push a GitHub
+
+Nombres recomendados (sin espacios ni tildes):
+  wedo-basico-robot1.pdf
+  wedo-avanzado-milo.pdf
+  scratch-wedo-proyecto1.pdf
