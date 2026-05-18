@@ -1,0 +1,412 @@
+/* ================================================
+   IMAR Page — primaria.css
+   Estética: colorida, didáctica, amigable
+   Fuentes: Fredoka One (títulos) + Nunito (cuerpo)
+   ================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+/* ---- Variables ---- */
+:root {
+  --prim-bg:       #f4f7ff;
+  --prim-surface:  #ffffff;
+  --prim-border:   #e2e8f0;
+
+  --wedo-color:    #ff6b35;
+  --wedo-light:    #fff2ed;
+  --avanzado-color:#7c3aed;
+  --avanzado-light:#f5f3ff;
+  --scratch-color: #f59e0b;
+  --scratch-light: #fffbeb;
+
+  --texto:         #1e293b;
+  --muted:         #64748b;
+  --bloqueado-bg:  #f1f5f9;
+  --bloqueado-txt: #94a3b8;
+
+  --radius:        16px;
+  --shadow:        0 4px 20px rgba(0,0,0,0.08);
+  --shadow-hover:  0 8px 32px rgba(0,0,0,0.14);
+}
+
+/* ---- Reset básico ---- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background: var(--prim-bg);
+  font-family: 'Nunito', sans-serif;
+  color: var(--texto);
+  min-height: 100vh;
+}
+
+/* ================================================
+   NAVBAR
+   ================================================ */
+.imar-navbar {
+  background: #ffffff;
+  border-bottom: 3px solid var(--prim-border);
+  padding: 12px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.navbar-logo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 22px;
+  color: var(--texto);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar-logo:hover { color: var(--texto); }
+
+.navbar-grado {
+  font-family: 'Fredoka One', cursive;
+  font-size: 18px;
+  padding: 6px 18px;
+  border-radius: 50px;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.btn-logout {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: 2px solid #e2e8f0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.btn-logout:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+/* ================================================
+   HERO DE BIENVENIDA
+   ================================================ */
+.prim-hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 48px 0 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+.prim-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.08) 2px, transparent 2px);
+  background-size: 28px 28px;
+}
+
+.hero-emoji {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 12px;
+  animation: hero-float 3s ease-in-out infinite;
+}
+
+@keyframes hero-float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+.hero-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(28px, 5vw, 48px);
+  margin-bottom: 8px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+}
+
+.hero-sub {
+  font-size: 16px;
+  opacity: 0.85;
+  font-weight: 600;
+}
+
+.hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.hero-chip {
+  background: rgba(255,255,255,0.18);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 800;
+  backdrop-filter: blur(4px);
+}
+
+/* ================================================
+   SECCIONES DE CONTENIDO
+   ================================================ */
+.contenido-section {
+  padding: 48px 0;
+}
+
+.contenido-section:nth-child(even) {
+  background: #fff;
+}
+
+/* Encabezado de sección */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 3px solid var(--prim-border);
+}
+
+.section-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+}
+
+.section-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(20px, 3vw, 28px);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.section-badge {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 50px;
+  flex-shrink: 0;
+}
+
+/* Colores por sección */
+.sec-wedo-basico  .section-titulo { color: var(--wedo-color); }
+.sec-wedo-basico  .section-badge  { background: var(--wedo-light); color: var(--wedo-color); border: 2px solid var(--wedo-color); }
+
+.sec-wedo-avanzado .section-titulo { color: var(--avanzado-color); }
+.sec-wedo-avanzado .section-badge  { background: var(--avanzado-light); color: var(--avanzado-color); border: 2px solid var(--avanzado-color); }
+
+.sec-scratch .section-titulo { color: var(--scratch-color); }
+.sec-scratch .section-badge  { background: var(--scratch-light); color: var(--scratch-color); border: 2px solid var(--scratch-color); }
+
+/* ================================================
+   TARJETAS DE CONTENIDO
+   ================================================ */
+.contenido-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.contenido-card {
+  background: var(--prim-surface);
+  border-radius: var(--radius);
+  border: 2px solid var(--prim-border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.contenido-card:hover:not(.bloqueado) {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Franja de color superior por tipo */
+.card-stripe {
+  height: 6px;
+  width: 100%;
+}
+.sec-wedo-basico   .card-stripe { background: var(--wedo-color); }
+.sec-wedo-avanzado .card-stripe { background: var(--avanzado-color); }
+.sec-scratch       .card-stripe { background: var(--scratch-color); }
+
+/* Cuerpo de la tarjeta */
+.card-body-imar {
+  padding: 22px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-tipo {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card-titulo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 18px;
+  color: var(--texto);
+  line-height: 1.2;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* Botón de acción */
+.card-footer-imar {
+  padding: 0 20px 20px;
+}
+
+.btn-ver {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+
+.sec-wedo-basico .btn-ver {
+  background: var(--wedo-color);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(255,107,53,0.35);
+}
+.sec-wedo-basico .btn-ver:hover { background: #e55a26; color: #fff; transform: scale(1.02); }
+
+.sec-wedo-avanzado .btn-ver {
+  background: var(--avanzado-color);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+}
+.sec-wedo-avanzado .btn-ver:hover { background: #6d28d9; color: #fff; transform: scale(1.02); }
+
+.sec-scratch .btn-ver {
+  background: var(--scratch-color);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(245,158,11,0.35);
+}
+.sec-scratch .btn-ver:hover { background: #d97706; color: #fff; transform: scale(1.02); }
+
+/* ================================================
+   IMAGEN DENTRO DE LA TARJETA
+   ================================================ */
+.card-img-wrap {
+  padding: 0 20px 16px;
+}
+
+.card-img-wrap figure {
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--prim-border);
+  background: var(--prim-bg);
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-img-wrap figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.contenido-card:hover:not(.bloqueado) .card-img-wrap figure img {
+  transform: scale(1.04);
+}
+
+/* Placeholder cuando no hay imagen */
+.card-img-wrap figure .img-placeholder {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+/* ================================================
+   ESTADO BLOQUEADO
+   ================================================ */
+.contenido-card.bloqueado {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.contenido-card.bloqueado .card-titulo,
+.contenido-card.bloqueado .card-tipo { color: var(--bloqueado-txt); }
+
+.contenido-card.bloqueado .btn-ver {
+  background: var(--bloqueado-bg) !important;
+  color: var(--bloqueado-txt) !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.lock-icon {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+/* ================================================
+   FOOTER
+   ================================================ */
+.imar-footer {
+  background: var(--texto);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.imar-footer span { color: #fff; font-weight: 800; }
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+@media (max-width: 576px) {
+  .contenido-grid { grid-template-columns: 1fr; }
+  .hero-chips     { justify-content: center; }
+  .section-badge  { display: none; }
+}

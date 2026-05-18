@@ -1,0 +1,44 @@
+[
+  {
+    "usuario": "alumnotercero",
+    "password": "auxiliadora2026",
+    "rol": "alumno",
+    "grado": "tercero",
+    "redirige": "../html/primaria/tercero.html"
+  },
+  {
+    "usuario": "alumnocuarto",
+    "password": "auxiliadora2026",
+    "rol": "alumno",
+    "grado": "cuarto",
+    "redirige": "../html/primaria/cuarto.html"
+  },
+  {
+    "usuario": "alumnoquinto",
+    "password": "auxiliadora2026",
+    "rol": "alumno",
+    "grado": "quinto",
+    "redirige": "../html/primaria/quinto.html"
+  },
+  {
+    "usuario": "alumnosexto",
+    "password": "auxiliadora2026",
+    "rol": "alumno",
+    "grado": "sexto",
+    "redirige": "../html/primaria/sexto.html"
+  },
+  {
+    "usuario": "alumnosecundaria",
+    "password": "auxiliadora2026",
+    "rol": "alumno",
+    "grado": "secundaria",
+    "redirige": "../html/secundaria/secundaria.html"
+  },
+  {
+    "usuario": "panteralan",
+    "password": "admin2026",
+    "rol": "admin",
+    "grado": "admin",
+    "redirige": "../html/admin/panel.html"
+  }
+]
