@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMAR Page — Cuarto Año</title>
+  <link rel="stylesheet" href="../../css/bootstrap.css" />
+  <link rel="stylesheet" href="../../css/primaria.css" />
+  <style>
+    /* Colores específicos de cuarto */
+    :root {
+      --wedo-color:      #e91e8c;   /* rosa fuerte — WeDo avanzado */
+      --wedo-light:      #fce4f3;
+      --avanzado-color:  #0097a7;   /* teal — Micro:bit */
+      --avanzado-light:  #e0f7fa;
+      --scratch-color:   #43a047;   /* verde — MakeCode Arcade */
+      --scratch-light:   #e8f5e9;
+      --makey-color:     #f4511e;   /* naranja rojizo — Makey Makey */
+      --makey-light:     #fbe9e7;
+    }
+
+    /* Badge y título de sección Micro:bit */
+    .sec-microbit .section-titulo { color: var(--avanzado-color); }
+    .sec-microbit .section-badge  { background: var(--avanzado-light); color: var(--avanzado-color); border: 2px solid var(--avanzado-color); }
+    .sec-microbit .card-stripe    { background: var(--avanzado-color); }
+    .sec-microbit .btn-ver        { background: var(--avanzado-color); color: #fff; box-shadow: 0 4px 14px rgba(0,151,167,0.35); }
+    .sec-microbit .btn-ver:hover  { background: #00838f; color: #fff; transform: scale(1.02); }
+
+    /* Badge y título de sección MakeCode Arcade */
+    .sec-arcade .section-titulo { color: var(--scratch-color); }
+    .sec-arcade .section-badge  { background: var(--scratch-light); color: var(--scratch-color); border: 2px solid var(--scratch-color); }
+    .sec-arcade .card-stripe    { background: var(--scratch-color); }
+    .sec-arcade .btn-ver        { background: var(--scratch-color); color: #fff; box-shadow: 0 4px 14px rgba(67,160,71,0.35); }
+    .sec-arcade .btn-ver:hover  { background: #388e3c; color: #fff; transform: scale(1.02); }
+
+    /* Badge y título de sección WeDo Avanzado de cuarto */
+    .sec-wedo-avanzado .section-titulo { color: var(--wedo-color); }
+    .sec-wedo-avanzado .section-badge  { background: var(--wedo-light); color: var(--wedo-color); border: 2px solid var(--wedo-color); }
+    .sec-wedo-avanzado .card-stripe    { background: var(--wedo-color); }
+    .sec-wedo-avanzado .btn-ver        { background: var(--wedo-color); color: #fff; box-shadow: 0 4px 14px rgba(233,30,140,0.35); }
+    .sec-wedo-avanzado .btn-ver:hover  { background: #c2185b; color: #fff; transform: scale(1.02); }
+
+    /* Botón especial Makey Makey */
+    .btn-makey { background: var(--makey-color) !important; box-shadow: 0 4px 14px rgba(244,81,30,0.35) !important; }
+    .btn-makey:hover { background: #bf360c !important; }
+
+    /* Botón Scratch azul */
+    .btn-scratch { background: #4c97ff !important; box-shadow: 0 4px 14px rgba(76,151,255,0.35) !important; }
+    .btn-scratch:hover { background: #3a7fd4 !important; }
+
+    /* Botón MakeCode verde oscuro */
+    .btn-makecode { background: #1c7d35 !important; box-shadow: 0 4px 14px rgba(28,125,53,0.35) !important; }
+    .btn-makecode:hover { background: #155a26 !important; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="imar-navbar">
+    <div class="container d-flex align-items-center justify-content-between gap-3 flex-wrap">
+      <a href="#" class="navbar-logo">🤖 <span>IMAR Page</span></a>
+      <span class="navbar-grado" style="background: linear-gradient(135deg, #e91e8c, #0097a7);">🎒 Cuarto Año</span>
+      <button class="btn-logout" onclick="AUTH.logout()">Cerrar sesión →</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="prim-hero" style="background: linear-gradient(135deg, #e91e8c 0%, #0097a7 100%);">
+    <div class="container text-center position-relative">
+      <span class="hero-emoji">⚙️</span>
+      <h1 class="hero-titulo">¡Bienvenidos, Cuarto Año!</h1>
+      <p class="hero-sub">Robótica avanzada, Micro:bit, MakeCode y mucho más. ¡A programar!</p>
+      <div class="hero-chips justify-content-center">
+        <span class="hero-chip">🧱 WeDo Avanzado</span>
+        <span class="hero-chip">💻 Micro:bit</span>
+        <span class="hero-chip">🎮 MakeCode Arcade</span>
+        <span class="hero-chip">🎹 Makey Makey</span>
+        <span class="hero-chip">🐱 Scratch</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 1 — WEDO 2.0 AVANZADOS
+       ================================================ -->
+  <section class="contenido-section sec-wedo-avanzado">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🧱</span>
+        <div>
+          <h2 class="section-titulo">WeDo 2.0 — Avanzados</h2>
+          <p class="section-desc">Manuales avanzados creados por el profe</p>
+        </div>
+        <span class="section-badge">IMAR Exclusivo</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más manuales WeDo -->
+        <div class="contenido-card" data-id="wa-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Avanzado · WeDo 2.0</span>
+            <h3 class="card-titulo">🚗 El Smart Car 🚗</h3>
+            <p class="card-desc">En este manual, tratarán de construir un auto inteligente. El armado del auto es facil. La idea es será, que el auto no pueda chocarse con obstaculos. Trata de pensar la programación del robót con tus compañeros.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <!-- Reemplazá src con: ../../img/primaria/cuarto/nombre.jpg -->
+              <img src="../../img/primaria/Smart-Car.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <!-- Reemplazá href con la ruta a tu PDF -->
+            <a class="btn-ver" href="../../pdfs/primaria/auto.pdf" target="_blank" rel="noopener">
+              📄 Ver PDF
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="wa-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Avanzado · WeDo 2.0</span>
+            <h3 class="card-titulo">🎨 El espirografo 🎨</h3>
+            <p class="card-desc">En esta actividad, tratarán de armar un robot capaz de trazar epitrocoides, figras geometricas que siguen un patron en específico. La idea es que puedan experimentar por primera vez estas figuras. Se recomienda tener <strong>marcadores finos o silvapenes</strong> de diferentes colores para que la imagen quede mejor.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Espirografo.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../pdfs/primaria/Espirografo.pdf" target="_blank" rel="noopener">
+              📄 Ver PDF
+            </a>
+          </div>
+        </div>
+
+        <!-- Tarjeta BLOQUEADA -->
+        <div class="contenido-card" data-id="wa-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Avanzado · WeDo 2.0</span>
+            <h3 class="card-titulo">🖌🖼🚗 Robót pintor movil 🖌🖼🚗</h3>
+            <p class="card-desc">Tratemos de llevar el arte a otro nivel. En este manual le daran movimiento al espirografo. Usarán la mecanica de un auto inteligente combinado con el espirografo para darle movimiento a sus pinturas.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Robot_pintor_1.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../pdfs/primaria/robotpintormovil.pdf" target="_blank" rel="noopener">📄 Ver PDF</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 2 — MICRO:BIT
+       ================================================ -->
+  <section class="contenido-section sec-microbit">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">💻</span>
+        <div>
+          <h2 class="section-titulo">Micro:bit</h2>
+          <p class="section-desc">Actividades con la placa Micro:bit — oficiales y del profe</p>
+        </div>
+        <span class="section-badge">Micro:bit</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- Actividad oficial (link externo) -->
+        <div class="contenido-card" data-id="mb-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad Oficial · Micro:bit</span>
+            <h3 class="card-titulo">💘 Medidor de amor 💘</h3>
+            <p class="card-desc">Fabricaran un <strong>"medidor de amor"</strong> su primera actividad dentro de la plataforma Makecode.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <!-- Reemplazá src con: ../../img/primaria/cuarto/nombre.jpg -->
+              <img src="../../img/primaria/Love_Matter.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <!-- Link oficial de Micro:bit o tu PDF -->
+            <a class="btn-ver" href="../../html/microbit/primaria/microbit-love-meter.html" target="_blank" rel="noopener">
+              💻 Ver Actividad
+            </a>
+          </div>
+        </div>
+
+        <!-- Actividad propia (PDF) -->
+        <div class="contenido-card" data-id="mb-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad IMAR · Micro:bit</span>
+            <h3 class="card-titulo">👏Aplausos y luces fuera💡</h3>
+            <p class="card-desc">¡Van a programar el Micro:bit para que prenda y apague las luces con un aplauso! Cada vez que hagan un sonido fuerte (como aplaudir), las luces van a cambiar de estado. ¿Están prendidas? Se apagan. ¿Están apagadas? Se prenden. ¡Como un interruptor mágico!</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Claps_Light.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../html/microbit/primaria/microbit-clap-lights.html" target="_blank" rel="noopener">
+              💻 Ver Actividad
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="mb-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad · Micro:bit</span>
+            <h3 class="card-titulo">🌡️ Nombre de la Actividad 3</h3>
+            <p class="card-desc">Próximamente disponible. ¡Terminá las anteriores primero!</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/cuarto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="#" target="_blank" rel="noopener">💻 Ver Actividad</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 3 — MAKECODE ARCADE + MAKEY MAKEY
+       ================================================ -->
+  <section class="contenido-section sec-arcade">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🎮</span>
+        <div>
+          <h2 class="section-titulo">MakeCode Arcade + Makey Makey</h2>
+          <p class="section-desc">Creamos videojuegos y los controlamos con Makey Makey</p>
+        </div>
+        <span class="section-badge">Arcade + Makey</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- Tarjeta con tres botones: PDF + MakeCode + Makey info -->
+        <div class="contenido-card" data-id="arc-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · MakeCode Arcade</span>
+            <h3 class="card-titulo">🐟 El tiburón y el pez 🦈</h3>
+            <p class="card-desc">¡Van a crear su primer videojuego arcade! Un tiburón persigue a un pez por la pantalla. El jugador controla el pez con el Makey Makey y tiene que sobrevivir durante 30 segundos sin que el tiburón lo atrape.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/arcade-proyecto-1.png" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <!-- PDF de instrucciones tuyo -->
+            <a class="btn-ver" href="../../html/arcade makecode/primaria/arcade-tiburon-pez.html" target="_blank" rel="noopener">
+              📄 Ver Instrucciones
+            </a>
+            <!-- Link a MakeCode Arcade -->
+            <a class="btn-ver btn-makecode" href="https://arcade.makecode.com/" target="_blank" rel="noopener">
+              🎮 Abrir en MakeCode
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="arc-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · MakeCode Arcade</span>
+            <h3 class="card-titulo">💣 Esquivando las bombas 💣</h3>
+            <p class="card-desc">¡Un juego de esquivar bombas que caen del cielo! Controlan un personaje que se mueve izquierda y derecha en un mapa pequeño. Las 3 bombas caen desde arriba y explotan cuando tocan el piso. Si una bomba te toca, perdés una vida. Tenés que sobrevivir 30 segundos sin perder todas las vidas. Recuerda que una vez que el juego esté terminado <strong>hay que usar la Makey Makey</strong>.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Bombas.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="../../html/arcade makecode/primaria/arcade-esquiva-bombas.html" target="_blank" rel="noopener">
+              📄 Ver Instrucciones
+            </a>
+            <a class="btn-ver btn-makecode" href="https://arcade.makecode.com/" target="_blank" rel="noopener">
+              🎮 Abrir en MakeCode
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="arc-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · MakeCode Arcade</span>
+            <h3 class="card-titulo">🌟 Nombre del Juego 3</h3>
+            <p class="card-desc">Este proyecto se habilita más adelante. ¡Terminá los anteriores!</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/cuarto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="#" target="_blank" rel="noopener">📄 Ver Instrucciones</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 4 — SCRATCH + WEDO 2.0
+       ================================================ -->
+  <section class="contenido-section sec-scratch">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🐱</span>
+        <div>
+          <h2 class="section-titulo">Scratch + LEGO WeDo 2.0</h2>
+          <p class="section-desc">Proyectos combinados de programación y robótica</p>
+        </div>
+        <span class="section-badge">Scratch + WeDo</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <div class="contenido-card" data-id="sc-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Scratch + WeDo</span>
+            <h3 class="card-titulo">🎮 Jostick para juego de autos de carrera 🎮</h3>
+            <p class="card-desc">Un juego de carreras retro que usa clones para dibujar la pista. ¿Es parecido a Mario Kart? Puedes usar el sensor de inclinación de Lego WeDo. La idea es que se implementará el sensor de inclinación al armar este robót.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Race_Car_Scratch.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="https://assets.education.lego.com/v3/assets/blt293eea581807678a/bltf94c66d602549dfe/5f880330e53bb90f6c283634/45300_15b_joystick.pdf?locale=es-es" target="_blank" rel="noopener">
+              📄 Ver Instrucciones
+            </a>
+            <a class="btn-ver btn-scratch" href="https://scratch.mit.edu/projects/48918626/" target="_blank" rel="noopener">
+              🐱 Abrir en Scratch
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="sc-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Scratch + WeDo</span>
+            <h3 class="card-titulo">🎵 Piano 🎵</h3>
+            <p class="card-desc">Trataremos de armar un piano en Lego Wedo y ponerlo a prueba.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/piano.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="../../pdfs/primaria/PIANO.pdf" target="_blank" rel="noopener">
+              📄 Ver Instrucciones
+            </a>
+            <a class="btn-ver btn-scratch" href="https://scratch.mit.edu/projects/998538449/" target="_blank" rel="noopener">
+              🐱 Abrir en Scratch
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="sc-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Scratch + WeDo</span>
+            <h3 class="card-titulo">🚗 El bolante para un juego de carreras 🚗</h3>
+            <p class="card-desc">Próximamente disponible.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Automovil Bolante.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="#" target="_blank" rel="noopener">📄 Ver Instrucciones</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="imar-footer">
+    <span>IMAR Page</span> · Robótica Educativa · 2026
+  </footer>
+
+  <script src="../../js/auth.js"></script>
+  <script src="../../js/supabase.js"></script>
+  <script src="../../js/visibilidad.js"></script>
+  <script>
+    AUTH.verificar('alumno');
+    // Cargar visibilidad desde Supabase
+    VISIBILIDAD.aplicar('cuarto');
+  </script>
+
+</body>
+</html>

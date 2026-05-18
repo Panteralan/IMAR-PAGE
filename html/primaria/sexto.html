@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMAR Page — Sexto Año</title>
+  <link rel="stylesheet" href="../../css/bootstrap.css" />
+  <link rel="stylesheet" href="../../css/primaria.css" />
+  <style>
+    /* Colores específicos de sexto */
+    :root {
+      --spike-color:     #e63946;
+      --spike-light:     #fdecea;
+      --spike-av-color:  #457b9d;
+      --spike-av-light:  #e8f4f8;
+      --arduino-color:   #00878a;
+      --arduino-light:   #e0f5f5;
+      --microbit-color:  #0097a7;
+      --microbit-light:  #e0f7fa;
+      --tinkercad-color: #f77f00;
+      --tinkercad-light: #fff3e0;
+      --studio-color:    #6a0572;
+      --studio-light:    #f5e6f7;
+    }
+
+    /* SPIKE Oficial */
+    .sec-spike .section-titulo { color: var(--spike-color); }
+    .sec-spike .section-badge  { background: var(--spike-light); color: var(--spike-color); border: 2px solid var(--spike-color); }
+    .sec-spike .card-stripe    { background: var(--spike-color); }
+    .sec-spike .btn-ver        { background: var(--spike-color); color: #fff; box-shadow: 0 4px 14px rgba(230,57,70,0.35); }
+    .sec-spike .btn-ver:hover  { background: #b02a37; color: #fff; transform: scale(1.02); }
+
+    /* SPIKE Avanzado */
+    .sec-spike-av .section-titulo { color: var(--spike-av-color); }
+    .sec-spike-av .section-badge  { background: var(--spike-av-light); color: var(--spike-av-color); border: 2px solid var(--spike-av-color); }
+    .sec-spike-av .card-stripe    { background: var(--spike-av-color); }
+    .sec-spike-av .btn-ver        { background: var(--spike-av-color); color: #fff; box-shadow: 0 4px 14px rgba(69,123,157,0.35); }
+    .sec-spike-av .btn-ver:hover  { background: #2e5f7a; color: #fff; transform: scale(1.02); }
+
+    /* Arduino */
+    .sec-arduino .section-titulo { color: var(--arduino-color); }
+    .sec-arduino .section-badge  { background: var(--arduino-light); color: var(--arduino-color); border: 2px solid var(--arduino-color); }
+    .sec-arduino .card-stripe    { background: var(--arduino-color); }
+    .sec-arduino .btn-ver        { background: var(--arduino-color); color: #fff; box-shadow: 0 4px 14px rgba(0,135,138,0.35); }
+    .sec-arduino .btn-ver:hover  { background: #005f61; color: #fff; transform: scale(1.02); }
+
+    /* Micro:bit */
+    .sec-microbit .section-titulo { color: var(--microbit-color); }
+    .sec-microbit .section-badge  { background: var(--microbit-light); color: var(--microbit-color); border: 2px solid var(--microbit-color); }
+    .sec-microbit .card-stripe    { background: var(--microbit-color); }
+    .sec-microbit .btn-ver        { background: var(--microbit-color); color: #fff; box-shadow: 0 4px 14px rgba(0,151,167,0.35); }
+    .sec-microbit .btn-ver:hover  { background: #00838f; color: #fff; transform: scale(1.02); }
+
+    /* Tinkercad */
+    .sec-tinkercad .section-titulo { color: var(--tinkercad-color); }
+    .sec-tinkercad .section-badge  { background: var(--tinkercad-light); color: var(--tinkercad-color); border: 2px solid var(--tinkercad-color); }
+    .sec-tinkercad .card-stripe    { background: var(--tinkercad-color); }
+    .sec-tinkercad .btn-ver        { background: var(--tinkercad-color); color: #fff; box-shadow: 0 4px 14px rgba(247,127,0,0.35); }
+    .sec-tinkercad .btn-ver:hover  { background: #c96500; color: #fff; transform: scale(1.02); }
+
+    /* Studio 2.0 */
+    .sec-studio .section-titulo { color: var(--studio-color); }
+    .sec-studio .section-badge  { background: var(--studio-light); color: var(--studio-color); border: 2px solid var(--studio-color); }
+    .sec-studio .card-stripe    { background: var(--studio-color); }
+    .sec-studio .btn-ver        { background: var(--studio-color); color: #fff; box-shadow: 0 4px 14px rgba(106,5,114,0.35); }
+    .sec-studio .btn-ver:hover  { background: #4a0350; color: #fff; transform: scale(1.02); }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="imar-navbar">
+    <div class="container d-flex align-items-center justify-content-between gap-3 flex-wrap">
+      <a href="#" class="navbar-logo">🤖 <span>IMAR Page</span></a>
+      <span class="navbar-grado" style="background: linear-gradient(135deg, #e63946 0%, #457b9d 100%);">🎒 Sexto Año</span>
+      <button class="btn-logout" onclick="AUTH.logout()">Cerrar sesión →</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="prim-hero" style="background: linear-gradient(135deg, #e63946 0%, #457b9d 100%);">
+    <div class="container text-center position-relative">
+      <span class="hero-emoji">🏆</span>
+      <h1 class="hero-titulo">¡Bienvenidos, Sexto Año!</h1>
+      <p class="hero-sub">SPIKE Prime, Arduino, Micro:bit, Tinkercad y Studio 2.0. ¡El nivel más alto!</p>
+      <div class="hero-chips justify-content-center">
+        <span class="hero-chip">🟡 SPIKE Prime</span>
+        <span class="hero-chip">⚡ Arduino</span>
+        <span class="hero-chip">🔬 Micro:bit</span>
+        <span class="hero-chip">🖨️ Tinkercad</span>
+        <span class="hero-chip">🧱 Studio 2.0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 1 — SPIKE PRIME OFICIALES
+       ================================================ -->
+  <section class="contenido-section sec-spike">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🟡</span>
+        <div>
+          <h2 class="section-titulo">SPIKE Prime and Lego Wedo 2.0 — Oficiales</h2>
+          <p class="section-desc">Manuales oficiales de LEGO Education</p>
+        </div>
+        <span class="section-badge">LEGO Oficial</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más manuales SPIKE oficiales -->
+        <div class="contenido-card" data-id="sp-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Oficial · SPIKE Prime</span>
+            <h3 class="card-titulo">🎃👻HALLOWEEN👻🎃</h3>
+            <p class="card-desc">Tratemos de armar algunas cosas spoky.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <!-- Reemplazá src con: ../../img/primaria/sexto/nombre.jpg -->
+              <img src="https://static.wixstatic.com/media/c9fc3c_f9fcb50e10924ce3bb624774907d039e~mv2.png/v1/fill/w_397,h_360,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/appdevstz_PNG.png" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <!-- Reemplazá href con el link de LEGO Education SPIKE Prime -->
+            <a class="btn-ver" href="https://drive.google.com/file/d/1Mv6vWP6hJaRLB9dMm80j5leOh7ABUpRz/view" target="_blank" rel="noopener">
+              📄 Ver Manual
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="sp-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Oficial · SPIKE Prime</span>
+            <h3 class="card-titulo">🥚 El huevo misterioso🥚</h3>
+            <p class="card-desc">¿Que guardara el huevo?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="https://static.wixstatic.com/media/c9fc3c_fe98e156e12e4d479e0df763ce3eba90~mv2.png/v1/fill/w_397,h_360,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/appdevstz_PNG.png" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://drive.google.com/file/d/17Eh97foLQuo-lAuYWA0vDqlMuHRNhkqn/view" target="_blank" rel="noopener">
+              📄 Ver Manual
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="sp-03" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Oficial · SPIKE Prime</span>
+            <h3 class="card-titulo">🤖WALL-E🤖</h3>
+            <p class="card-desc">Me parece que este robot es muy conocido.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="https://static.wixstatic.com/media/c9fc3c_41e80d2626754b0194bceed10fdf1e7b~mv2.png/v1/fill/w_397,h_360,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/appdevstz_PNG.pngg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://drive.google.com/file/d/1z7uey95FUT3JTFIokC2aiqSXbSxkxQKh/view" target="_blank" rel="noopener">
+              📄 Ver Manual
+            </a>
+          </div>
+        </div>
+
+        <!-- Tarjeta BLOQUEADA -->
+        <div class="contenido-card" data-id="sp-04" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Oficial · SPIKE Prime</span>
+            <h3 class="card-titulo">🛰️ El robot bailarin </h3>
+            <p class="card-desc">Comenzamos estrenando <strong>Spike Prime</strong> con este robót capaz de realizar bailes programados. Dividansen en dos grupos y traten de armar las piernas y el cuerpo por separado. Despues junten ambas partes.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="https://spike.legoeducation.com/content/v3/assets/blt293eea581807678a/blt56fac52f0d74e896/612802e9504fe365615e2b1a/breakdancer-bi-thumb.png" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://spike.legoeducation.com/prime/models/bltfaff00476c0a518b" target="_blank" rel="noopener">📄 Armar piernas</a>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://spike.legoeducation.com/prime/models/bltfaff00476c0a518b" target="_blank" rel="noopener">📄 Armar cuerpo</a>
+          </div>
+        </div>
+
+        <!-- Tarjeta BLOQUEADA -->
+        <div class="contenido-card" data-id="sp-05" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Oficial · SPIKE Prime</span>
+            <h3 class="card-titulo">🛰️ Juego de memoria </h3>
+            <p class="card-desc">Este robót que armaran será capaz de detectar colores de las piezas la idea es que, al aparecer la pieza <strong>roja</strong> el robót pueda escupirlas todas a la vez. Se recomienda que vean el video y subtitulenlo en español para que puedan comprender su funcionamiento.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="https://spike.legoeducation.com/content/v3/assets/blt293eea581807678a/blt68280e6b47931bd6/5ec6d1dd2238e044d39d0761/lesson-header-bi.png" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://spike.legoeducation.com/prime/models/bltfaff00476c0a518b" target="_blank" rel="noopener">📄 Armar Robót</a>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://youtu.be/IcCj202Tp9s?list=PL0sNbySwjbb2cFyEG5m_Wuh-ZpkzAJPR4" target="_blank" rel="noopener">🎥 Ver vídeo</a>
+          </div>
+        </div>
+
+        <!-- Tarjeta BLOQUEADA -->
+        <div class="contenido-card" data-id="sp-06" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Oficial · SPIKE Prime</span>
+            <h3 class="card-titulo">🚲 La bicicleta inteligente </h3>
+            <p class="card-desc">Trata de armar a Nico encima de su bicileta. ¿Puedes hacer que el no choque o caiga?, ¿faltará algo?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="https://spike.legoeducation.com/content/v3/assets/blt293eea581807678a/blt7f0bdd6f97eb797a/5f2424ead9a24d7c67e4db38/45678_Science_45-resize.png" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://spike.legoeducation.com/prime/models/blt32815e2095841b5a" target="_blank" rel="noopener">📄 Armar robót</a>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://www.youtube.com/watch?v=GQSWvapCTcc" target="_blank" rel="noopener">🎥 Ver vídeo</a>
+          </div>
+        </div>
+    
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 2 — SPIKE PRIME AVANZADOS
+       ================================================ -->
+  <section class="contenido-section sec-spike-av">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">⚙️</span>
+        <div>
+          <h2 class="section-titulo">SPIKE Prime — Avanzados</h2>
+          <p class="section-desc">Manuales avanzados creados por el profe · exclusivos IMAR</p>
+        </div>
+        <span class="section-badge">IMAR Exclusivo</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más manuales SPIKE avanzados -->
+        <div class="contenido-card" data-id="spa-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Avanzado · IMAR</span>
+            <h3 class="card-titulo">🤖 Prime Cube🤖</h3>
+            <p class="card-desc">En este manual avanzado de Spike Prime, tratarás de armar un robot capaz de armar el Cubo Rubik. Al ser muy grande, el manual presenta diferentes partes de armado. Traten de decidír que parte del Robot diseñar y despues junten todas las partes.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <!-- Reemplazá src con: ../../img/primaria/sexto/nombre.jpg -->
+              <img src="../../img/primaria/Prime_Cube.JPG"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <!-- Reemplazá href con la ruta a tu PDF -->
+            <a class="btn-ver" href="../../html/spike/primecuber-instrucciones.html" target="_blank" rel="noopener">
+              📄 Ver Actividad
+            </a>
+            <a class="btn-ver" href="https://youtu.be/9Zdzz665-JE?t=820" target="_blank" rel="noopener">
+              📄 Ver Video
+            </a>
+            <a class="btn-ver" href="../../html/spike/spike-prime-cube-actividad.html" target="_blank" rel="noopener">
+              📄 Ver Actividad
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="spa-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Avanzado · IMAR</span>
+            <h3 class="card-titulo">🦿 Self-Uprighting Balancer </h3>
+            <p class="card-desc">Un robot capaz de realizar acrobacias, detenerse y girar. El grán desafio que tienen es poder programarlo correctamente. ¿Podrán realizarlo?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Self-uprighting balance Robot.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../html/spike/spike-balancer-challenge.html" target="_blank" rel="noopener">
+              📄 Ver Actividad
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="spa-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Avanzado · IMAR</span>
+            <h3 class="card-titulo">🎱 The Ultimate LEGO Cannon</h3>
+            <p class="card-desc"><strong>PROXIMAMENTE</strong></p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/sexto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="#" target="_blank" rel="noopener">📄 Ver PDF</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 3 — TINKERCAD (todo oculto por ahora)
+       ================================================ -->
+  <section class="contenido-section sec-tinkercad">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🖨️</span>
+        <div>
+          <h2 class="section-titulo">Tinkercad</h2>
+          <p class="section-desc">Diseño 3D y circuitos virtuales.</p><p><strong>Usuario Tinkercad Sexto<ul>
+            <li>Usuario:</li>
+            <li>Contraseña:</li>
+          </ul></strong></p>
+        </div>
+        <span class="section-badge">Tinkercad</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <div class="contenido-card" data-id="tk-01" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Diseño 3D · Tinkercad</span>
+            <h3 class="card-titulo">🖨️ Amung Us</h3>
+            <p class="card-desc">Trataremos de diseñar los personajes de Amung Us. Trata de ver el video y hacerlos para que puedan ser impresos de manera 3D por la impresora. <strong>Acuerdate de siempre guardar los proyectos antes de irte.</strong></p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Amung_Us.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="https://www.youtube.com/watch?v=-NeLlV191yw&list=PLHw7rNymqoaKWwS7sWmJFHPuAgNNOGbJ2" target="_blank" rel="noopener">
+              📄 Ver Video
+            </a>
+            <a class="btn-ver" href="https://www.tinkercad.com/3d-design" target="_blank" rel="noopener"
+               style="background:#f77f00; box-shadow: 0 4px 14px rgba(247,127,0,0.35);">
+              🖨️ Abrir en Tinkercad
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="tk-02" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Diseño 3D · Tinkercad</span>
+            <h3 class="card-titulo">🏗️ 
+PEN HOLDER | PORTALÁPICES </h3>
+            <p class="card-desc">¿Qué te parece si armas tu propio portalápices personalizado.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Portalapices.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="https://www.youtube.com/watch?v=MgDESmylRAU&list=PLHw7rNymqoaKWwS7sWmJFHPuAgNNOGbJ2&index=9" target="_blank" rel="noopener">
+              📄 Ver Video
+            </a>
+            <a class="btn-ver" href="https://www.tinkercad.com/3d-design" target="_blank" rel="noopener"
+               style="background:#f77f00; box-shadow: 0 4px 14px rgba(247,127,0,0.35);">
+              🖨️ Abrir en Tinkercad
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="tk-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Diseño 3D · Tinkercad</span>
+            <h3 class="card-titulo">🔩 Cohete espacial</h3>
+            <p class="card-desc">Tratarás de armar tu primer cohete espacial. Mira el vídeo detenidamente, y aprende a realizar otro tipo de figuras curvas, combinando figuras rellenas con figuras huecas.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Cohete.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="https://www.youtube.com/watch?v=MoqKlpevUyA&list=PLHw7rNymqoaKWwS7sWmJFHPuAgNNOGbJ2&index=12" target="_blank" rel="noopener">
+              📄 Ver Video
+            </a>
+            <a class="btn-ver" href="https://www.tinkercad.com/3d-design" target="_blank" rel="noopener"
+               style="background:#f77f00; box-shadow: 0 4px 14px rgba(247,127,0,0.35);">
+              🖨️ Abrir en Tinkercad
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 4 — ARDUINO (todo oculto por ahora)
+       ================================================ -->
+  <section class="contenido-section sec-arduino">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">⚡</span>
+        <div>
+          <h2 class="section-titulo">Arduino</h2>
+          <p class="section-desc">Proyectos con placa Arduino · próximamente</p>
+        </div>
+        <span class="section-badge">Arduino</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- TARJETA — todas bloqueadas por ahora, desbloqueá cuando estés listo -->
+        <div class="contenido-card" data-id="ard-01" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Arduino</span>
+            <h3 class="card-titulo">⚡ Nombre del Proyecto 1</h3>
+            <p class="card-desc">Descripción del proyecto con Arduino. ¿Qué construyen y programan?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/sexto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="../../pdfs/primaria/sexto/NOMBRE-ARCHIVO.pdf" target="_blank" rel="noopener">
+              📄 Ver PDF
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="ard-02" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Arduino</span>
+            <h3 class="card-titulo">🔌 Nombre del Proyecto 2</h3>
+            <p class="card-desc">Descripción del proyecto con Arduino. ¿Qué construyen y programan?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/sexto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../pdfs/primaria/sexto/NOMBRE-ARCHIVO.pdf" target="_blank" rel="noopener">
+              📄 Ver PDF
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="ard-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Arduino</span>
+            <h3 class="card-titulo">💡 Nombre del Proyecto 3</h3>
+            <p class="card-desc">Descripción del proyecto con Arduino. ¿Qué construyen y programan?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/sexto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../pdfs/primaria/sexto/NOMBRE-ARCHIVO.pdf" target="_blank" rel="noopener">
+              📄 Ver PDF
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================================
+       SECCIÓN 6 — STUDIO 2.0 (todo oculto por ahora)
+       ================================================ -->
+  <section class="contenido-section sec-studio">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🧱</span>
+        <div>
+          <h2 class="section-titulo">Studio 2.0</h2>
+          <p class="section-desc">Diseño de instrucciones LEGO con Studio 2.0 · próximamente</p>
+        </div>
+        <span class="section-badge">Studio 2.0</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <div class="contenido-card" data-id="st-01" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Diseño · Studio 2.0</span>
+            <h3 class="card-titulo">🧱 Nombre del Proyecto 1</h3>
+            <p class="card-desc">Descripción del proyecto. ¿Qué diseñan en Studio 2.0?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/sexto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../pdfs/primaria/sexto/NOMBRE-ARCHIVO.pdf" target="_blank" rel="noopener">
+              📄 Ver PDF
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="st-02" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Diseño · Studio 2.0</span>
+            <h3 class="card-titulo">🏗️ Nombre del Proyecto 2</h3>
+            <p class="card-desc">Descripción del proyecto. ¿Qué diseñan en Studio 2.0?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/sexto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../pdfs/primaria/sexto/NOMBRE-ARCHIVO.pdf" target="_blank" rel="noopener">
+              📄 Ver PDF
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="st-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Diseño · Studio 2.0</span>
+            <h3 class="card-titulo">🔧 Nombre del Proyecto 3</h3>
+            <p class="card-desc">Descripción del proyecto. ¿Qué diseñan en Studio 2.0?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/sexto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../pdfs/primaria/sexto/NOMBRE-ARCHIVO.pdf" target="_blank" rel="noopener">
+              📄 Ver PDF
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="imar-footer">
+    <span>IMAR Page</span> · Robótica Educativa · 2026
+  </footer>
+
+  <script src="../../js/auth.js"></script>
+  <script src="../../js/supabase.js"></script>
+  <script src="../../js/visibilidad.js"></script>
+  <script>
+    AUTH.verificar('alumno');
+    // Cargar visibilidad desde Supabase
+    VISIBILIDAD.aplicar('sexto');
+  </script>
+
+</body>
+</html>

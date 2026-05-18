@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMAR Page — Secundaria</title>
+  <link rel="stylesheet" href="../../css/bootstrap.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #050810;
+      --surface:    #0b0f1a;
+      --surface2:   #0f1624;
+      --border:     rgba(0, 255, 140, 0.12);
+      --green:      #00ff8c;
+      --green-dim:  rgba(0, 255, 140, 0.08);
+      --green-glow: rgba(0, 255, 140, 0.25);
+      --cyan:       #00d4ff;
+      --cyan-dim:   rgba(0, 212, 255, 0.08);
+      --yellow:     #ffd700;
+      --red:        #ff3d5a;
+      --texto:      #c8d6e5;
+      --muted:      #ffffff;
+      --radius:     8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--texto);
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grilla de fondo animada */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,255,140,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,140,0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: grid-scroll 30s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes grid-scroll {
+      from { background-position: 0 0; }
+      to   { background-position: 40px 40px; }
+    }
+
+    /* Orbe superior */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -300px; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(0,255,140,0.04) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== NAVBAR ===== */
+    .sec-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5, 8, 16, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .nav-logo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 18px;
+      color: var(--green);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 2px;
+    }
+    .nav-logo span { color: var(--texto); }
+
+    .nav-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      padding: 6px 16px;
+      border-radius: 4px;
+      border: 1px solid var(--green);
+      color: var(--green);
+      background: var(--green-dim);
+      text-transform: uppercase;
+    }
+
+    .nav-logout {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 1px;
+      padding: 7px 18px;
+      border-radius: 4px;
+      border: 1px solid var(--muted);
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    .nav-logout:hover {
+      border-color: var(--red);
+      color: var(--red);
+      background: rgba(255, 61, 90, 0.08);
+    }
+
+    /* ===== HERO ===== */
+    .sec-hero {
+      position: relative;
+      z-index: 1;
+      padding: 72px 0 80px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    /* Línea de scan animada */
+    .sec-hero::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      animation: scan 4s ease-in-out infinite;
+      opacity: 0.4;
+    }
+    @keyframes scan {
+      0%   { top: 0%; }
+      100% { top: 100%; }
+    }
+
+    .hero-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .hero-tag::before { content: '[ '; }
+    .hero-tag::after  { content: ' ]'; }
+
+    .hero-titulo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(28px, 5vw, 56px);
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      text-shadow: 0 0 30px rgba(0,255,140,0.3);
+    }
+
+    .hero-titulo .highlight {
+      color: var(--green);
+      text-shadow: 0 0 20px var(--green-glow);
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 32px;
+      font-family: 'Share Tech Mono', monospace;
+    }
+    .hero-sub::before { content: '// '; color: var(--green); }
+
+    .hero-stats {
+      display: flex;
+      gap: 0;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      max-width: 560px;
+      margin: 0 auto;
+      background: var(--surface);
+    }
+
+    .stat-item {
+      flex: 1;
+      padding: 14px 12px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 22px;
+      color: var(--green);
+      display: block;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ===== SECCIÓN ===== */
+    .sec-section {
+      position: relative;
+      z-index: 1;
+      padding: 56px 0;
+    }
+
+    .sec-section:nth-child(even) {
+      background: rgba(11, 15, 26, 0.6);
+    }
+
+    /* Header de sección */
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--green);
+      background: var(--green-dim);
+      border: 1px solid var(--green);
+      padding: 4px 10px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .section-info h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .section-desc {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+    .section-desc::before { content: '> '; color: var(--green); }
+
+    .section-badge {
+      margin-left: auto;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      padding: 5px 12px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    /* ===== GRID DE TARJETAS ===== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    /* ===== TARJETA ===== */
+    .sec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+      position: relative;
+    }
+
+    .sec-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .sec-card:hover:not(.bloqueado) {
+      border-color: rgba(0,255,140,0.3);
+      box-shadow: 0 0 30px rgba(0,255,140,0.08);
+      transform: translateY(-3px);
+    }
+
+    .sec-card:hover:not(.bloqueado)::before { opacity: 1; }
+
+    /* ID de la tarjeta */
+    .card-id {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      padding: 10px 16px 0;
+    }
+
+    /* Cuerpo */
+    .card-content {
+      padding: 12px 16px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-tipo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .card-titulo {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      letter-spacing: 0.3px;
+      flex: 1;
+    }
+
+    /* Imagen */
+    .card-img {
+      padding: 0 16px 14px;
+    }
+
+    .card-img figure {
+      margin: 0;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Esquinas decorativas tipo HUD */
+    .card-img figure::before,
+    .card-img figure::after {
+      content: '';
+      position: absolute;
+      width: 12px; height: 12px;
+      border-color: var(--green);
+      border-style: solid;
+      opacity: 0.5;
+    }
+    .card-img figure::before {
+      top: 6px; left: 6px;
+      border-width: 1px 0 0 1px;
+    }
+    .card-img figure::after {
+      bottom: 6px; right: 6px;
+      border-width: 0 1px 1px 0;
+    }
+
+    .card-img figure img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s, filter 0.4s;
+      filter: saturate(0.8) brightness(0.9);
+    }
+
+    .sec-card:hover:not(.bloqueado) .card-img figure img {
+      transform: scale(1.04);
+      filter: saturate(1) brightness(1);
+    }
+
+    .img-placeholder {
+      font-size: 40px;
+      opacity: 0.2;
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--green);
+    }
+
+    /* Footer botones */
+    .card-actions {
+      padding: 0 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-sec {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-decoration: none;
+      border: 1px solid;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      background: transparent;
+    }
+
+    /* Variantes de botón */
+    .btn-green {
+      border-color: var(--green);
+      color: var(--green);
+    }
+    .btn-green:hover {
+      background: var(--green);
+      color: #000;
+      box-shadow: 0 0 20px var(--green-glow);
+    }
+
+    .btn-cyan {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .btn-cyan:hover {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 20px rgba(0,212,255,0.3);
+    }
+
+    /* ===== ESTADO BLOQUEADO ===== */
+    .sec-card.bloqueado {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .sec-card.bloqueado .card-titulo { color: var(--muted); }
+
+    .sec-card.bloqueado .btn-sec {
+      border-color: var(--muted) !important;
+      color: var(--muted) !important;
+      background: transparent !important;
+      pointer-events: none;
+      box-shadow: none !important;
+    }
+
+    /* ===== COLORES POR SECCIÓN ===== */
+    /* SPIKE Oficial */
+    .spike-oficial .section-num  { color: var(--yellow); border-color: var(--yellow); background: rgba(255,215,0,0.06); }
+    .spike-oficial .section-badge { color: var(--yellow); border: 1px solid var(--yellow); background: rgba(255,215,0,0.06); }
+    .spike-oficial .card-tipo    { color: var(--yellow); }
+    .spike-oficial .sec-card::before { background: linear-gradient(90deg, transparent, var(--yellow), transparent); }
+    .spike-oficial .sec-card:hover:not(.bloqueado) { border-color: rgba(255,215,0,0.3); box-shadow: 0 0 30px rgba(255,215,0,0.08); }
+    .spike-oficial .btn-green { border-color: var(--yellow); color: var(--yellow); }
+    .spike-oficial .btn-green:hover { background: var(--yellow); color: #000; box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+
+    /* SPIKE Avanzado */
+    .spike-avanzado .section-num  { color: var(--cyan); border-color: var(--cyan); background: var(--cyan-dim); }
+    .spike-avanzado .section-badge { color: var(--cyan); border: 1px solid var(--cyan); background: var(--cyan-dim); }
+    .spike-avanzado .card-tipo    { color: var(--cyan); }
+    .spike-avanzado .sec-card::before { background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+    .spike-avanzado .sec-card:hover:not(.bloqueado) { border-color: rgba(0,212,255,0.3); box-shadow: 0 0 30px rgba(0,212,255,0.08); }
+
+    /* ===== FOOTER ===== */
+    .sec-footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 2px;
+    }
+    .footer-text span { color: var(--green); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 576px) {
+      .cards-grid  { grid-template-columns: 1fr; }
+      .hero-stats  { flex-wrap: wrap; }
+      .section-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="sec-navbar">
+    <div class="container navbar-inner">
+      <a href="#" class="nav-logo">🤖 <span>IMAR_PAGE</span></a>
+      <span class="nav-badge">// SECUNDARIA</span>
+      <button class="nav-logout" onclick="AUTH.logout()">[ SALIR ]</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="sec-hero">
+    <div class="container position-relative">
+      <span class="hero-tag">Sistema IMAR · Acceso Secundaria · 2026</span>
+      <h1 class="hero-titulo">
+        BIENVENIDOS A<br>
+        <span class="highlight">IMAR_SECUNDARIA</span>
+      </h1>
+      <p class="hero-sub">Robótica avanzada con SPIKE Prime. Construí, programá, innová.</p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">01</span>
+          <span class="stat-label">Módulo activo</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="total-contenidos">--</span>
+          <span class="stat-label">Contenidos</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="total-disponibles">--</span>
+          <span class="stat-label">Disponibles</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">🟢</span>
+          <span class="stat-label">Sistema online</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 1 — SPIKE PRIME OFICIALES
+       ================================================ -->
+  <section class="sec-section spike-oficial">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <div class="section-info">
+          <h2>SPIKE Prime — Oficiales</h2>
+          <span class="section-desc">Manuales oficiales de LEGO Education</span>
+        </div>
+        <span class="section-badge">LEGO OFICIAL</span>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más manuales oficiales -->
+        <div class="sec-card" data-id="sp-01" data-bloqueado="false">
+          <div class="card-id">// SPIKE-PRIME · OFICIAL · 001</div>
+          <div class="card-content">
+            <span class="card-tipo">Manual Oficial · SPIKE Prime</span>
+            <h3 class="card-titulo"></h3>
+            <p class="card-desc"></p>
+          </div>
+          <div class="card-img">
+            <figure>
+              <!-- Reemplazá src con: ../../img/secundaria/nombre.jpg -->
+              <img src="../../img/primaria/Prime_Cube.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>[ IMG ]</span>'" />
+            </figure>
+          </div>
+          <div class="card-actions">
+            <!-- Reemplazá href con el link de LEGO Education SPIKE Prime -->
+            <a class="btn-sec btn-green" href="../../html/spike/primecuber-instrucciones.html" target="_blank" rel="noopener">
+              ▶ VER MANUAL
+            </a>
+          </div>
+        </div>
+
+        <div class="sec-card" data-id="sp-02" data-bloqueado="false">
+          <div class="card-id">// SPIKE-PRIME · OFICIAL · 002</div>
+          <div class="card-content">
+            <span class="card-tipo">Manual Oficial · SPIKE Prime</span>
+            <h3 class="card-titulo">Nombre del Manual 2</h3>
+            <p class="card-desc">Descripción del robot o proyecto. ¿Qué construyen y programan los alumnos?</p>
+          </div>
+          <div class="card-img">
+            <figure>
+              <img src="../../img/secundaria/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>[ IMG ]</span>'" />
+            </figure>
+          </div>
+          <div class="card-actions">
+            <a class="btn-sec btn-green" href="PEGAR_LINK_LEGO_SPIKE_AQUI" target="_blank" rel="noopener">
+              ▶ VER MANUAL
+            </a>
+          </div>
+        </div>
+
+        <div class="sec-card" data-id="sp-03" data-bloqueado="false">
+          <div class="card-id">// SPIKE-PRIME · OFICIAL · 003</div>
+          <div class="card-content">
+            <span class="card-tipo">Manual Oficial · SPIKE Prime</span>
+            <h3 class="card-titulo">Nombre del Manual 3</h3>
+            <p class="card-desc">Descripción del robot o proyecto. ¿Qué construyen y programan los alumnos?</p>
+          </div>
+          <div class="card-img">
+            <figure>
+              <img src="../../img/secundaria/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>[ IMG ]</span>'" />
+            </figure>
+          </div>
+          <div class="card-actions">
+            <a class="btn-sec btn-green" href="PEGAR_LINK_LEGO_SPIKE_AQUI" target="_blank" rel="noopener">
+              ▶ VER MANUAL
+            </a>
+          </div>
+        </div>
+
+        <!-- Tarjeta BLOQUEADA -->
+        <div class="sec-card" data-id="sp-04" data-bloqueado="true">
+          <div class="card-id">// SPIKE-PRIME · OFICIAL · 004</div>
+          <div class="card-content">
+            <span class="card-tipo">Manual Oficial · SPIKE Prime</span>
+            <h3 class="card-titulo">Nombre del Manual 4</h3>
+            <p class="card-desc">Contenido no disponible todavía. Esperá la habilitación del sistema.</p>
+          </div>
+          <div class="card-img">
+            <figure>
+              <img src="../../img/secundaria/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>[ IMG ]</span>'" />
+            </figure>
+          </div>
+          <div class="card-actions">
+            <a class="btn-sec btn-green" href="#" target="_blank" rel="noopener">
+              ▶ VER MANUAL
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 2 — SPIKE PRIME AVANZADOS
+       ================================================ -->
+  <section class="sec-section spike-avanzado">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <div class="section-info">
+          <h2>SPIKE Prime — Avanzados</h2>
+          <span class="section-desc">Manuales exclusivos IMAR · nivel avanzado</span>
+        </div>
+        <span class="section-badge">IMAR EXCLUSIVO</span>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más manuales avanzados -->
+        <div class="sec-card" data-id="spa-01" data-bloqueado="false">
+          <div class="card-id">// SPIKE-PRIME · AVANZADO · 001</div>
+          <div class="card-content">
+            <span class="card-tipo">Manual Avanzado · IMAR</span>
+            <h3 class="card-titulo">🤖 Prime Cube 🤖</h3>
+            <p class="card-desc">En este manual avanzado de Spike Prime, tratarás de armar un robot capaz de armar el Cubo Rubik. Al ser muy grande, el manual presenta diferentes partes de armado. Traten de decidír que parte del Robot diseñar y despues junten todas las partes.</p>
+          </div>
+          <div class="card-img">
+            <figure>
+              <!-- Reemplazá src con: ../../img/secundaria/nombre.jpg -->
+              <img src="../../img/primaria/Prime_Cube.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>[ IMG ]</span>'" />
+            </figure>
+          </div>
+          <div class="card-actions">
+            <!-- Reemplazá href con la ruta a tu PDF -->
+            <a class="btn-sec btn-cyan" href="../../html/spike/primecuber-instrucciones.html" target="_blank" rel="noopener">
+              ▶ VER PAGINA
+            </a>
+          </div>
+        </div>
+
+        <div class="sec-card" data-id="spa-02" data-bloqueado="false">
+          <div class="card-id">// SPIKE-PRIME · AVANZADO · 002</div>
+          <div class="card-content">
+            <span class="card-tipo">Manual Avanzado · IMAR</span>
+            <h3 class="card-titulo">SPIKE TRAINING BOT 2</h3>
+            <p class="card-desc">Trata de armar un sensor inteligente de camino.</p>
+          </div>
+          <div class="card-img">
+            <figure>
+              <img src="https://static.wixstatic.com/media/c9fc3c_c1a37a39d87c4019a8a3886e91b71300~mv2.png" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>[ IMG ]</span>'" />
+            </figure>
+          </div>
+          <div class="card-actions">
+            <a class="btn-sec btn-cyan" href="https://drive.google.com/file/d/13GJgm009SuHqbUQ1uj4PGAAhnDADac5H/view" target="_blank" rel="noopener">
+              ▶ VER PDF
+            </a>
+          </div>
+        </div>
+
+        <div class="sec-card" data-id="spa-03" data-bloqueado="false">
+          <div class="card-id">// SPIKE-PRIME · AVANZADO · 003</div>
+          <div class="card-content">
+            <span class="card-tipo">Manual Avanzado · IMAR</span>
+            <h3 class="card-titulo">Nombre de tu Manual 3</h3>
+            <p class="card-desc">Descripción del proyecto avanzado. ¿Qué construyen? ¿Qué concepto trabajan?</p>
+          </div>
+          <div class="card-img">
+            <figure>
+              <img src="../../img/secundaria/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>[ IMG ]</span>'" />
+            </figure>
+          </div>
+          <div class="card-actions">
+            <a class="btn-sec btn-cyan" href="../../pdfs/secundaria/NOMBRE-ARCHIVO.pdf" target="_blank" rel="noopener">
+              ▶ VER PDF
+            </a>
+          </div>
+        </div>
+
+        <!-- Tarjeta BLOQUEADA -->
+        <div class="sec-card" data-id="spa-04" data-bloqueado="true">
+          <div class="card-id">// SPIKE-PRIME · AVANZADO · 004</div>
+          <div class="card-content">
+            <span class="card-tipo">Manual Avanzado · IMAR</span>
+            <h3 class="card-titulo">Nombre de tu Manual 4</h3>
+            <p class="card-desc">Acceso restringido. El sistema lo habilitará próximamente.</p>
+          </div>
+          <div class="card-img">
+            <figure>
+              <img src="../../img/secundaria/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>[ IMG ]</span>'" />
+            </figure>
+          </div>
+          <div class="card-actions">
+            <a class="btn-sec btn-cyan" href="#" target="_blank" rel="noopener">
+              ▶ VER PDF
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="sec-footer">
+    <div class="container">
+      <p class="footer-text">
+        <span>IMAR_PAGE</span> · ROBÓTICA EDUCATIVA · 2026 · SISTEMA ONLINE
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/auth.js"></script>
+  <script src="../../js/supabase.js"></script>
+  <script src="../../js/visibilidad.js"></script>
+  <script>
+    // Protección de página
+    AUTH.verificar('alumno');
+    // Cargar visibilidad desde Supabase
+    VISIBILIDAD.aplicar('secundaria').then(() => {
+      const todasLasTarjetas = document.querySelectorAll('.sec-card');
+      const disponibles = document.querySelectorAll('.sec-card:not(.bloqueado)').length;
+      document.getElementById('total-contenidos').textContent = todasLasTarjetas.length;
+      document.getElementById('total-disponibles').textContent = disponibles;
+    });
+  </script>
+
+</body>
+</html>

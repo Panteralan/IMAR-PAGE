@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMAR Page — Tercer Año</title>
+  <link rel="stylesheet" href="../../css/bootstrap.css" />
+  <link rel="stylesheet" href="../../css/primaria.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="imar-navbar">
+    <div class="container d-flex align-items-center justify-content-between gap-3 flex-wrap">
+      <a href="#" class="navbar-logo">🤖 <span>IMAR Page</span></a>
+      <span class="navbar-grado">🎒 Tercer Año</span>
+      <button class="btn-logout" onclick="AUTH.logout()">Cerrar sesión →</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="prim-hero">
+    <div class="container text-center position-relative">
+      <span class="hero-emoji">🤖</span>
+      <h1 class="hero-titulo">¡Bienvenidos, Tercer Año!</h1>
+      <p class="hero-sub">Acá están todos tus materiales de Robótica. ¡A construir!</p>
+      <div class="hero-chips justify-content-center">
+        <span class="hero-chip">🧱 WeDo 2.0</span>
+        <span class="hero-chip">🐱 Scratch</span>
+        <span class="hero-chip">⚙️ Robótica</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 1 — WEDO 2.0 BÁSICOS OFICIALES
+       ================================================ -->
+  <section class="contenido-section sec-wedo-basico">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🧱</span>
+        <div>
+          <h2 class="section-titulo">WeDo 2.0 — Básicos Oficiales</h2>
+          <p class="section-desc">Manuales oficiales de LEGO Education</p>
+        </div>
+        <span class="section-badge">LEGO Oficial</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más -->
+        <div class="contenido-card" data-id="wb-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Oficial · WeDo 2.0</span>
+            <h3 class="card-titulo">🚁 El Helicoptero 🚁</h3>
+            <p class="card-desc">El famoso helicoptero a llegado para que ustedes lo puedan armar. Tratemos de rescatar a esos pandas e imaginemos alguna situación para poder rescatarlos.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <!-- Reemplazá src con: ../../img/primaria/tercero/nombre.jpg -->
+              <img src="../../img/primaria/Helicoptero_Wedo_Education.JPG" alt="Vista previa" onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <!-- Reemplazá href con el link de LEGO Education -->
+            <a class="btn-ver" href="https://assets.education.lego.com/v3/assets/blt293eea581807678a/bltfca247efe00b6955/5f88038069efd81ab4debf32/45300_7a_helicopter.pdf?locale=es-es" target="_blank" rel="noopener">📄 Ver Manual</a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="wb-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Oficial · WeDo 2.0</span>
+            <h3 class="card-titulo">🌑Luna el robót lunar.🌑</h3>
+            <p class="card-desc">Conoce a Luna, un robot de lego que puede recolectar objetos y moverse de una manera "peculiar". Trata de programarla para que pueda moverse en un entorno, y si puedes, ponle el sensor de movimiento para que no se choque.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Luna_Robot_Lego_Wedo.JPG" alt="Vista previa" onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://assets.education.lego.com/v3/assets/blt293eea581807678a/blt93f5125c1d1251c0/5f880346c7a3ba77aa91cc1e/45300_16a_luna_rover.pdf?locale=es-es" target="_blank" rel="noopener">📄 Ver Manual</a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="wb-03" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Oficial · WeDo 2.0</span>
+            <h3 class="card-titulo">🐰 EASTER BUNNY THE RABBIT 🐰</h3>
+            <p class="card-desc">Que te parece si armamos algo muy desafiante. Comenzando por tu primer conejo.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/The_Banny_Lego_Wedo_RGT.png" alt="Vista previa" onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://drive.google.com/file/d/1m9ETBO3AhwhtoblxPLk6swQx3554n0Lf/view" target="_blank" rel="noopener">📄 Ver Manual</a>
+          </div>
+        </div>
+
+        <!-- Tarjeta BLOQUEADA de ejemplo -->
+        <div class="contenido-card" data-id="wb-04" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Oficial · WeDo 2.0</span>
+            <h3 class="card-titulo">🦾🦾 El brazo robotico 🦾🦾</h3>
+            <p class="card-desc">De la mano de Lego Wedo 2.0 tendran que armar su primer brazo robótico. La idea es que este pueda abrir y cerrarse al ver algun objeto para que este sea atrapado.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Robotic_Arm_Lego_Wedo.JPG" alt="Vista previa" onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://assets.education.lego.com/v3/assets/blt293eea581807678a/blt31b1c4b8bee378c6/5f8803240fa6ca0be8c8d3cf/45300_09a_robotic_arm.pdf?locale=es-es" target="_blank" rel="noopener">📄 Ver Manual</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 2 — WEDO 2.0 AVANZADOS
+       ================================================ -->
+  <section class="contenido-section sec-wedo-avanzado">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">⚙️</span>
+        <div>
+          <h2 class="section-titulo">WeDo 2.0 — Avanzados</h2>
+          <p class="section-desc">Manuales creados por el profe · exclusivos IMAR</p>
+        </div>
+        <span class="section-badge">IMAR Exclusivo</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <div class="contenido-card" data-id="wa-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Avanzado · IMAR</span>
+            <h3 class="card-titulo">🚗 El Smart Car 🚗</h3>
+            <p class="card-desc">Ante ustedes el auto inteligente, su misión tratar de no chocarse con los objetos que tiene delante y evitarlos lo mejor posible. Armarlo es sencillo, ¿podrás programarlo bien?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <!-- Reemplazá src con: ../../img/primaria/tercero/nombre.jpg -->
+              <img src="../../img/primaria/Smart-Car.JPG" alt="Vista previa" onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <!-- Reemplazá href con la ruta a tu PDF -->
+            <a class="btn-ver" href="../../pdfs/primaria/auto.pdf" target="_blank" rel="noopener">📄 Ver PDF</a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="wa-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Avanzado · IMAR</span>
+            <h3 class="card-titulo"> EL SUPERGOLERO </h3>
+            <p class="card-desc">En este manual necesitarán dos kits de robótica. Tratarán de armar un golero que será capaz de atajar las pelotas que metan al arco.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Supergolero.JPG" alt="Vista previa" onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../pdfs/primaria/golero.pdf" target="_blank" rel="noopener">📄 Ver PDF</a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="wa-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Manual Avanzado · IMAR</span>
+            <h3 class="card-titulo">✈ Acrobatic Plane ✈</h3>
+            <p class="card-desc">El siguiente robót, aunque es pequeño hace acrobasias. Trata de armarlo y programarlo para que puedas ver lo que hace.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/aerobatic plane.png" alt="Vista previa" onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../pdfs/primaria/Aerobatic Airplane.pdf" target="_blank" rel="noopener">📄 Ver PDF</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 3 — SCRATCH + LEGO WEDO 2.0
+       ================================================ -->
+  <section class="contenido-section sec-scratch">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🐱</span>
+        <div>
+          <h2 class="section-titulo">Scratch + LEGO WeDo 2.0</h2>
+          <p class="section-desc">Proyectos combinados de programación y robótica</p>
+        </div>
+        <span class="section-badge">Scratch + WeDo</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <div class="contenido-card" data-id="sc-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Scratch + WeDo</span>
+            <h3 class="card-titulo">🎮 Nombre del Proyecto 1</h3>
+            <p class="card-desc">Descripción del proyecto. ¿Qué programa el alumno en Scratch?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/tercero/IMAGEN.jpg" alt="Vista previa" onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="../../pdfs/primaria/tercero/NOMBRE-ARCHIVO.pdf" target="_blank" rel="noopener">📄 Ver Instrucciones</a>
+            <!-- Reemplazá href con tu link de Scratch -->
+            <a class="btn-ver btn-scratch" href="PEGAR_LINK_SCRATCH_AQUI" target="_blank" rel="noopener">🐱 Abrir en Scratch</a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="sc-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Scratch + WeDo</span>
+            <h3 class="card-titulo">🎵 Nombre del Proyecto 2</h3>
+            <p class="card-desc">Descripción del proyecto. ¿Qué programa el alumno en Scratch?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/tercero/IMAGEN.jpg" alt="Vista previa" onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="../../pdfs/primaria/tercero/NOMBRE-ARCHIVO.pdf" target="_blank" rel="noopener">📄 Ver Instrucciones</a>
+            <a class="btn-ver btn-scratch" href="PEGAR_LINK_SCRATCH_AQUI" target="_blank" rel="noopener">🐱 Abrir en Scratch</a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="sc-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Scratch + WeDo</span>
+            <h3 class="card-titulo">🌟 Nombre del Proyecto 3</h3>
+            <p class="card-desc">Próximamente disponible. ¡Terminá los anteriores primero!</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/tercero/IMAGEN.jpg" alt="Vista previa" onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="#" target="_blank" rel="noopener">📄 Ver Instrucciones</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="imar-footer">
+    <span>IMAR Page</span> · Robótica Educativa · 2026
+  </footer>
+
+  <script src="../../js/auth.js"></script>
+  <script src="../../js/supabase.js"></script>
+  <script src="../../js/visibilidad.js"></script>
+  <script>
+    AUTH.verificar('alumno');
+    // Cargar visibilidad desde Supabase
+    VISIBILIDAD.aplicar('tercero');
+  </script>
+
+</body>
+</html>

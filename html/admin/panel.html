@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMAR Page — Panel Admin</title>
+  <link rel="stylesheet" href="../../css/bootstrap.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #06080f;
+      --surface:  #0c1017;
+      --surface2: #111827;
+      --border:   rgba(0,212,255,0.1);
+      --cyan:     #00d4ff;
+      --cyan-dim: rgba(0,212,255,0.08);
+      --green:    #00ff8c;
+      --red:      #ff3d5a;
+      --yellow:   #ffd700;
+      --orange:   #ff9f43;
+      --muted:    #4a5568;
+      --texto:    #cbd5e0;
+      --radius:   10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--texto);
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ===== NAVBAR ===== */
+    .admin-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(6,8,15,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+
+    .nav-inner {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+
+    .nav-logo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 16px; color: var(--cyan);
+      letter-spacing: 2px; text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-logo span { color: #fff; }
+
+    .nav-admin-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 2px;
+      padding: 5px 14px; border-radius: 4px;
+      border: 1px solid var(--yellow);
+      color: var(--yellow);
+      background: rgba(255,215,0,0.06);
+    }
+
+    .nav-logout {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 1px;
+      padding: 7px 16px; border-radius: 4px;
+      border: 1px solid var(--muted);
+      color: var(--muted); background: transparent;
+      cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+    }
+    .nav-logout:hover { border-color: var(--red); color: var(--red); background: rgba(255,61,90,0.08); }
+
+    /* ===== HEADER ===== */
+    .admin-header {
+      position: relative; z-index: 1;
+      padding: 48px 0 40px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(0,212,255,0.03) 0%, transparent 100%);
+    }
+
+    .header-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 3px;
+      color: var(--cyan); text-transform: uppercase;
+      display: block; margin-bottom: 12px;
+    }
+
+    .header-titulo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(24px, 4vw, 40px);
+      color: #fff; margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(0,212,255,0.2);
+    }
+    .header-titulo span { color: var(--cyan); }
+
+    .header-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px; color: var(--muted); letter-spacing: 1px;
+    }
+    .header-sub::before { content: '// '; color: var(--cyan); }
+
+    /* Stats */
+    .admin-stats {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px;
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 20px; text-align: center; min-width: 100px;
+    }
+
+    .stat-n {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 28px; display: block; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-n.cyan   { color: var(--cyan); }
+    .stat-n.green  { color: var(--green); }
+    .stat-n.red    { color: var(--red); }
+    .stat-n.yellow { color: var(--yellow); }
+
+    .stat-l {
+      font-size: 11px; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* Botón guardar todo */
+    .btn-save-all {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px; letter-spacing: 1px;
+      padding: 10px 24px; border-radius: 6px;
+      border: 1px solid var(--cyan); color: var(--cyan);
+      background: var(--cyan-dim); cursor: pointer;
+      transition: all 0.2s; text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .btn-save-all:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px rgba(0,212,255,0.3); }
+    .btn-save-all:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ===== MAIN ===== */
+    main {
+      position: relative; z-index: 1;
+      padding: 40px 0 80px;
+    }
+
+    /* ===== TABS DE GRADO ===== */
+    .grado-tabs {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .tab-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px; letter-spacing: 1.5px;
+      padding: 8px 18px; border-radius: 6px;
+      border: 1px solid var(--border); color: var(--muted);
+      background: var(--surface); cursor: pointer;
+      transition: all 0.2s; text-transform: uppercase;
+    }
+    .tab-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+    .tab-btn.active { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim); }
+
+    /* ===== PANEL DE GRADO ===== */
+    .grado-panel { display: none; }
+    .grado-panel.active { display: block; animation: fadeIn 0.3s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .grado-titulo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 20px; color: #fff;
+      margin-bottom: 6px; letter-spacing: 1px;
+    }
+
+    .grado-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px; color: var(--muted);
+      margin-bottom: 28px; letter-spacing: 1px;
+    }
+    .grado-sub::before { content: '> '; color: var(--cyan); }
+
+    /* ===== SECCIÓN DENTRO DEL PANEL ===== */
+    .admin-seccion {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .seccion-head {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.2);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .seccion-nombre {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px; letter-spacing: 1px;
+      color: var(--cyan);
+    }
+
+    .seccion-conteo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; color: var(--muted); letter-spacing: 1px;
+    }
+
+    .seccion-arrow {
+      font-size: 14px; color: var(--muted);
+      transition: transform 0.3s;
+    }
+    .admin-seccion.open .seccion-arrow { transform: rotate(180deg); }
+
+    .seccion-body {
+      display: none; padding: 16px 20px;
+    }
+    .admin-seccion.open .seccion-body { display: block; }
+
+    /* ===== FILA DE TARJETA ===== */
+    .card-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px; border-radius: 8px;
+      border: 1px solid transparent;
+      margin-bottom: 8px; gap: 12px;
+      transition: all 0.2s;
+      background: var(--surface2);
+    }
+    .card-row:last-child { margin-bottom: 0; }
+    .card-row:hover { border-color: var(--border); }
+    .card-row.visible-on  { border-left: 3px solid var(--green); }
+    .card-row.visible-off { border-left: 3px solid var(--red); opacity: 0.6; }
+
+    .card-row-info { flex: 1; min-width: 0; }
+
+    .card-row-id {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; color: var(--muted);
+      letter-spacing: 1.5px; margin-bottom: 2px;
+    }
+
+    .card-row-titulo {
+      font-size: 15px; font-weight: 700;
+      color: #fff; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .card-row-estado {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 1px;
+      margin-top: 2px;
+    }
+    .card-row-estado.on  { color: var(--green); }
+    .card-row-estado.off { color: var(--red); }
+
+    /* ===== SWITCH ===== */
+    .switch-wrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+    .switch-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 1px;
+      text-transform: uppercase; min-width: 40px;
+      text-align: right;
+    }
+    .switch-label.on  { color: var(--green); }
+    .switch-label.off { color: var(--red); }
+
+    .switch {
+      position: relative; width: 48px; height: 26px; flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute; inset: 0;
+      background: rgba(255,61,90,0.2);
+      border: 1px solid var(--red);
+      border-radius: 50px; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .slider::before {
+      content: '';
+      position: absolute;
+      left: 3px; top: 50%; transform: translateY(-50%);
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--red);
+      transition: all 0.3s;
+      box-shadow: 0 0 8px rgba(255,61,90,0.5);
+    }
+
+    .switch input:checked + .slider {
+      background: rgba(0,255,140,0.15);
+      border-color: var(--green);
+    }
+    .switch input:checked + .slider::before {
+      transform: translateY(-50%) translateX(22px);
+      background: var(--green);
+      box-shadow: 0 0 8px rgba(0,255,140,0.5);
+    }
+
+    /* ===== TOAST ===== */
+    .toast-container {
+      position: fixed; bottom: 24px; right: 24px;
+      z-index: 9999; display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .toast {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px; letter-spacing: 1px;
+      padding: 12px 20px; border-radius: 8px;
+      border: 1px solid; min-width: 240px;
+      animation: toast-in 0.3s ease;
+    }
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .toast.ok  { background: rgba(0,255,140,0.1); border-color: var(--green); color: var(--green); }
+    .toast.err { background: rgba(255,61,90,0.1); border-color: var(--red); color: var(--red); }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(6,8,15,0.8);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px;
+    }
+    .loading-overlay.hidden { display: none; }
+
+    .loading-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px; color: var(--cyan);
+      letter-spacing: 2px; animation: blink 1s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--cyan);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 576px) {
+      .admin-stats { gap: 8px; }
+      .stat-box { min-width: 80px; padding: 10px 14px; }
+      .card-row-titulo { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading -->
+  <div class="loading-overlay" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">CARGANDO SISTEMA...</div>
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toasts"></div>
+
+  <!-- NAVBAR -->
+  <nav class="admin-nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">🤖 <span>IMAR_PAGE</span></a>
+      <span class="nav-admin-badge">// PANEL ADMIN</span>
+      <button class="nav-logout" onclick="AUTH.logout()">[ SALIR ]</button>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="admin-header">
+    <div class="container">
+      <span class="header-tag">Sistema IMAR · Control de Acceso · 2026</span>
+      <h1 class="header-titulo">PANEL DE <span>ADMINISTRACIÓN</span></h1>
+      <p class="header-sub">Controlá la visibilidad de contenidos por grado en tiempo real</p>
+
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4">
+        <div class="admin-stats">
+          <div class="stat-box">
+            <span class="stat-n cyan" id="stat-total">--</span>
+            <span class="stat-l">Total</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-n green" id="stat-visibles">--</span>
+            <span class="stat-l">Visibles</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-n red" id="stat-bloqueados">--</span>
+            <span class="stat-l">Bloqueados</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-n yellow">6</span>
+            <span class="stat-l">Grados</span>
+          </div>
+        </div>
+        <button class="btn-save-all" id="btn-guardar-todo" onclick="guardarTodo()">
+          💾 GUARDAR CAMBIOS
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container">
+
+      <!-- TABS -->
+      <div class="grado-tabs">
+        <button class="tab-btn active" onclick="switchTab('tercero', this)">3° Primaria</button>
+        <button class="tab-btn" onclick="switchTab('cuarto', this)">4° Primaria</button>
+        <button class="tab-btn" onclick="switchTab('quinto', this)">5° Primaria</button>
+        <button class="tab-btn" onclick="switchTab('sexto', this)">6° Primaria</button>
+        <button class="tab-btn" onclick="switchTab('secundaria', this)">Secundaria</button>
+      </div>
+
+      <!-- ================================================
+           PANEL TERCERO
+           ================================================ -->
+      <div class="grado-panel active" id="panel-tercero">
+        <div class="grado-titulo">// TERCER AÑO</div>
+        <div class="grado-sub">WeDo 2.0 Básicos · WeDo 2.0 Avanzados · Scratch + WeDo</div>
+
+        <!-- Sección WeDo Básico -->
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🧱 WeDo 2.0 — Básicos Oficiales</span>
+            <div class="d-flex align-items-center gap-3">
+              <span class="seccion-conteo" id="conteo-tercero-wb"></span>
+              <span class="seccion-arrow">▼</span>
+            </div>
+          </div>
+          <div class="seccion-body">
+            <!-- Las filas se generan dinámicamente -->
+            <div id="rows-tercero-wb">
+              <!-- wb-01 --> <div data-grado="tercero" data-card="wb-01" data-titulo="Manual Oficial 1" data-seccion="WeDo Básico"></div>
+              <!-- wb-02 --> <div data-grado="tercero" data-card="wb-02" data-titulo="Manual Oficial 2" data-seccion="WeDo Básico"></div>
+              <!-- wb-03 --> <div data-grado="tercero" data-card="wb-03" data-titulo="Manual Oficial 3" data-seccion="WeDo Básico"></div>
+              <!-- wb-04 --> <div data-grado="tercero" data-card="wb-04" data-titulo="Manual Oficial 4" data-seccion="WeDo Básico"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección WeDo Avanzado -->
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">⚙️ WeDo 2.0 — Avanzados</span>
+            <div class="d-flex align-items-center gap-3">
+              <span class="seccion-conteo" id="conteo-tercero-wa"></span>
+              <span class="seccion-arrow">▼</span>
+            </div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-tercero-wa">
+              <div data-grado="tercero" data-card="wa-01" data-titulo="Manual Avanzado 1"></div>
+              <div data-grado="tercero" data-card="wa-02" data-titulo="Manual Avanzado 2"></div>
+              <div data-grado="tercero" data-card="wa-03" data-titulo="Manual Avanzado 3"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección Scratch -->
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🐱 Scratch + WeDo 2.0</span>
+            <div class="d-flex align-items-center gap-3">
+              <span class="seccion-conteo" id="conteo-tercero-sc"></span>
+              <span class="seccion-arrow">▼</span>
+            </div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-tercero-sc">
+              <div data-grado="tercero" data-card="sc-01" data-titulo="Proyecto Scratch 1"></div>
+              <div data-grado="tercero" data-card="sc-02" data-titulo="Proyecto Scratch 2"></div>
+              <div data-grado="tercero" data-card="sc-03" data-titulo="Proyecto Scratch 3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================
+           PANEL CUARTO
+           ================================================ -->
+      <div class="grado-panel" id="panel-cuarto">
+        <div class="grado-titulo">// CUARTO AÑO</div>
+        <div class="grado-sub">WeDo Avanzado · Micro:bit · MakeCode Arcade · Scratch + WeDo</div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🧱 WeDo 2.0 — Avanzados</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-cuarto-wa"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-cuarto-wa">
+              <div data-grado="cuarto" data-card="wa-01" data-titulo="Manual Avanzado 1"></div>
+              <div data-grado="cuarto" data-card="wa-02" data-titulo="Manual Avanzado 2"></div>
+              <div data-grado="cuarto" data-card="wa-03" data-titulo="Manual Avanzado 3"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">💻 Micro:bit</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-cuarto-mb"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-cuarto-mb">
+              <div data-grado="cuarto" data-card="mb-01" data-titulo="Actividad Micro:bit 1"></div>
+              <div data-grado="cuarto" data-card="mb-02" data-titulo="Actividad Micro:bit 2"></div>
+              <div data-grado="cuarto" data-card="mb-03" data-titulo="Actividad Micro:bit 3"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🎮 MakeCode Arcade + Makey Makey</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-cuarto-arc"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-cuarto-arc">
+              <div data-grado="cuarto" data-card="arc-01" data-titulo="Juego MakeCode 1"></div>
+              <div data-grado="cuarto" data-card="arc-02" data-titulo="Juego MakeCode 2"></div>
+              <div data-grado="cuarto" data-card="arc-03" data-titulo="Juego MakeCode 3"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🐱 Scratch + WeDo</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-cuarto-sc"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-cuarto-sc">
+              <div data-grado="cuarto" data-card="sc-01" data-titulo="Proyecto Scratch 1"></div>
+              <div data-grado="cuarto" data-card="sc-02" data-titulo="Proyecto Scratch 2"></div>
+              <div data-grado="cuarto" data-card="sc-03" data-titulo="Proyecto Scratch 3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================
+           PANEL QUINTO
+           ================================================ -->
+      <div class="grado-panel" id="panel-quinto">
+        <div class="grado-titulo">// QUINTO AÑO</div>
+        <div class="grado-sub">Scratch + WeDo · Code.org · Minecraft · MakeCode · Micro:bit · Edubit</div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🐱 Scratch + WeDo</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-quinto-sc"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-quinto-sc">
+              <div data-grado="quinto" data-card="sc-01" data-titulo="Proyecto Scratch 1"></div>
+              <div data-grado="quinto" data-card="sc-02" data-titulo="Proyecto Scratch 2"></div>
+              <div data-grado="quinto" data-card="sc-03" data-titulo="Proyecto Scratch 3"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">💻 Code.org</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-quinto-co"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-quinto-co">
+              <div data-grado="quinto" data-card="co-01" data-titulo="Actividad Code.org 1"></div>
+              <div data-grado="quinto" data-card="co-02" data-titulo="Actividad Code.org 2"></div>
+              <div data-grado="quinto" data-card="co-03" data-titulo="Actividad Code.org 3"></div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🎮 MakeCode Arcade</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-quinto-arc"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-quinto-arc">
+              <div data-grado="quinto" data-card="arc-01" data-titulo="Juego MakeCode 1"></div>
+              <div data-grado="quinto" data-card="arc-02" data-titulo="Juego MakeCode 2"></div>
+              <div data-grado="quinto" data-card="arc-03" data-titulo="Juego MakeCode 3"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🔬 Micro:bit</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-quinto-mb"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-quinto-mb">
+              <div data-grado="quinto" data-card="mb-01" data-titulo="Actividad Micro:bit 1"></div>
+              <div data-grado="quinto" data-card="mb-02" data-titulo="Actividad Micro:bit 2"></div>
+              <div data-grado="quinto" data-card="mb-03" data-titulo="Actividad Micro:bit 3"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">⚡ Edubit</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-quinto-eb"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-quinto-eb">
+              <div data-grado="quinto" data-card="eb-01" data-titulo="Actividad Edubit 1"></div>
+              <div data-grado="quinto" data-card="eb-02" data-titulo="Actividad Edubit 2"></div>
+              <div data-grado="quinto" data-card="eb-03" data-titulo="Actividad Edubit 3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================
+           PANEL SEXTO
+           ================================================ -->
+      <div class="grado-panel" id="panel-sexto">
+        <div class="grado-titulo">// SEXTO AÑO</div>
+        <div class="grado-sub">SPIKE Prime · Micro:bit · Arduino · Tinkercad · Studio 2.0</div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🟡 SPIKE Prime — Oficiales</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-sexto-sp"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-sexto-sp">
+              <div data-grado="sexto" data-card="sp-01" data-titulo="Manual SPIKE Oficial 1"></div>
+              <div data-grado="sexto" data-card="sp-02" data-titulo="Manual SPIKE Oficial 2"></div>
+              <div data-grado="sexto" data-card="sp-03" data-titulo="Manual SPIKE Oficial 3"></div>
+              <div data-grado="sexto" data-card="sp-04" data-titulo="Manual SPIKE Oficial 4"></div>
+              <div data-grado="sexto" data-card="sp-05" data-titulo="Manual SPIKE Oficial 5"></div>
+              <div data-grado="sexto" data-card="sp-06" data-titulo="Manual SPIKE Oficial 6"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">⚙️ SPIKE Prime — Avanzados</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-sexto-spa"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-sexto-spa">
+              <div data-grado="sexto" data-card="spa-01" data-titulo="Manual SPIKE Avanzado 1"></div>
+              <div data-grado="sexto" data-card="spa-02" data-titulo="Manual SPIKE Avanzado 2"></div>
+              <div data-grado="sexto" data-card="spa-03" data-titulo="Manual SPIKE Avanzado 3"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">⚡ Arduino</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-sexto-ard"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-sexto-ard">
+              <div data-grado="sexto" data-card="ard-01" data-titulo="Proyecto Arduino 1"></div>
+              <div data-grado="sexto" data-card="ard-02" data-titulo="Proyecto Arduino 2"></div>
+              <div data-grado="sexto" data-card="ard-03" data-titulo="Proyecto Arduino 3"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🖨️ Tinkercad</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-sexto-tk"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-sexto-tk">
+              <div data-grado="sexto" data-card="tk-01" data-titulo="Proyecto Tinkercad 1"></div>
+              <div data-grado="sexto" data-card="tk-02" data-titulo="Proyecto Tinkercad 2"></div>
+              <div data-grado="sexto" data-card="tk-03" data-titulo="Proyecto Tinkercad 3"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🧱 Studio 2.0</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-sexto-st"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-sexto-st">
+              <div data-grado="sexto" data-card="st-01" data-titulo="Proyecto Studio 1"></div>
+              <div data-grado="sexto" data-card="st-02" data-titulo="Proyecto Studio 2"></div>
+              <div data-grado="sexto" data-card="st-03" data-titulo="Proyecto Studio 3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================
+           PANEL SECUNDARIA
+           ================================================ -->
+      <div class="grado-panel" id="panel-secundaria">
+        <div class="grado-titulo">// SECUNDARIA</div>
+        <div class="grado-sub">SPIKE Prime Oficiales · SPIKE Prime Avanzados</div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">🟡 SPIKE Prime — Oficiales</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-secundaria-sp"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-secundaria-sp">
+              <div data-grado="secundaria" data-card="sp-01" data-titulo="Manual SPIKE Oficial 1"></div>
+              <div data-grado="secundaria" data-card="sp-02" data-titulo="Manual SPIKE Oficial 2"></div>
+              <div data-grado="secundaria" data-card="sp-03" data-titulo="Manual SPIKE Oficial 3"></div>
+              <div data-grado="secundaria" data-card="sp-04" data-titulo="Manual SPIKE Oficial 4"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-seccion open">
+          <div class="seccion-head" onclick="toggleSeccion(this)">
+            <span class="seccion-nombre">⚙️ SPIKE Prime — Avanzados</span>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-secundaria-spa"></span><span class="seccion-arrow">▼</span></div>
+          </div>
+          <div class="seccion-body">
+            <div id="rows-secundaria-spa">
+              <div data-grado="secundaria" data-card="spa-01" data-titulo="Manual SPIKE Avanzado 1"></div>
+              <div data-grado="secundaria" data-card="spa-02" data-titulo="Manual SPIKE Avanzado 2"></div>
+              <div data-grado="secundaria" data-card="spa-03" data-titulo="Manual SPIKE Avanzado 3"></div>
+              <div data-grado="secundaria" data-card="spa-04" data-titulo="Manual SPIKE Avanzado 4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="../../js/auth.js"></script>
+  <script src="../../js/supabase.js"></script>
+  <script>
+
+    // Solo admin puede entrar
+    AUTH.verificar('admin');
+
+    // Estado local de switches
+    // { "tercero:wb-01": true/false, ... }
+    const estado = {};
+    let cambiosPendientes = 0;
+
+    // ---- Generar fila de tarjeta con switch ----
+    function crearFila(grado, cardId, titulo, visible) {
+      const key = `${grado}:${cardId}`;
+      estado[key] = visible;
+
+      const row = document.createElement('div');
+      row.className = `card-row ${visible ? 'visible-on' : 'visible-off'}`;
+      row.id = `row-${key.replace(':','-')}`;
+
+      row.innerHTML = `
+        <div class="card-row-info">
+          <div class="card-row-id">// ${grado.toUpperCase()} · ${cardId.toUpperCase()}</div>
+          <div class="card-row-titulo">${titulo}</div>
+          <div class="card-row-estado ${visible ? 'on' : 'off'}" id="estado-${key.replace(':','-')}">
+            ${visible ? '● VISIBLE' : '○ BLOQUEADO'}
+          </div>
+        </div>
+        <div class="switch-wrap">
+          <span class="switch-label ${visible ? 'on' : 'off'}" id="label-${key.replace(':','-')}">
+            ${visible ? 'ON' : 'OFF'}
+          </span>
+          <label class="switch">
+            <input type="checkbox" ${visible ? 'checked' : ''}
+              onchange="toggleSwitch('${grado}', '${cardId}', this)" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      `;
+      return row;
+    }
+
+    // ---- Toggle de switch ----
+    function toggleSwitch(grado, cardId, checkbox) {
+      const key = `${grado}:${cardId}`;
+      const visible = checkbox.checked;
+      estado[key] = visible;
+
+      const safeKey = key.replace(':','-');
+      const row     = document.getElementById(`row-${safeKey}`);
+      const label   = document.getElementById(`label-${safeKey}`);
+      const estadoEl = document.getElementById(`estado-${safeKey}`);
+
+      row.className = `card-row ${visible ? 'visible-on' : 'visible-off'}`;
+      label.textContent = visible ? 'ON' : 'OFF';
+      label.className = `switch-label ${visible ? 'on' : 'off'}`;
+      estadoEl.textContent = visible ? '● VISIBLE' : '○ BLOQUEADO';
+      estadoEl.className = `card-row-estado ${visible ? 'on' : 'off'}`;
+
+      cambiosPendientes++;
+      document.getElementById('btn-guardar-todo').textContent =
+        `💾 GUARDAR (${cambiosPendientes} cambios)`;
+
+      actualizarStats();
+    }
+
+    // ---- Guardar todos los cambios en Supabase ----
+    async function guardarTodo() {
+      const btn = document.getElementById('btn-guardar-todo');
+      btn.disabled = true;
+      btn.textContent = '⏳ GUARDANDO...';
+
+      let ok = 0; let err = 0;
+
+      for (const [key, visible] of Object.entries(estado)) {
+        const [grado, cardId] = key.split(':');
+        const resultado = await DB.setVisibilidad(grado, cardId, visible);
+        if (resultado) ok++; else err++;
+      }
+
+      btn.disabled = false;
+      cambiosPendientes = 0;
+      btn.textContent = '💾 GUARDAR CAMBIOS';
+
+      if (err === 0) {
+        toast(`✅ ${ok} registros guardados correctamente`, 'ok');
+      } else {
+        toast(`⚠️ ${ok} guardados · ${err} con error`, 'err');
+      }
+    }
+
+    // ---- Cargar datos desde Supabase y renderizar filas ----
+    async function cargarDatos() {
+      const todo = await DB.obtenerTodo();
+
+      // Recorrer todos los contenedores de filas
+      document.querySelectorAll('[id^="rows-"]').forEach(container => {
+        const partes = container.id.replace('rows-','').split('-');
+        const grado = partes[0];
+        const seccion = partes.slice(1).join('-');
+
+        // Buscar los divs placeholder dentro del container
+        const placeholders = container.querySelectorAll('[data-card]');
+        container.innerHTML = '';
+
+        placeholders.forEach(ph => {
+          const cardId  = ph.dataset.card;
+          const titulo  = ph.dataset.titulo;
+
+          // Visible por defecto según data-bloqueado del HTML original
+          // Si está en Supabase, usar ese valor
+          let visible = true; // default
+          if (todo[grado] && cardId in todo[grado]) {
+            visible = todo[grado][cardId];
+          }
+
+          const fila = crearFila(grado, cardId, titulo, visible);
+          container.appendChild(fila);
+        });
+
+        // Actualizar conteo de la sección
+        actualizarConteosSeccion(grado, seccion, container);
+      });
+
+      actualizarStats();
+      document.getElementById('loading').classList.add('hidden');
+    }
+
+    // ---- Conteo por sección ----
+    function actualizarConteosSeccion(grado, seccion, container) {
+      const conteoBadge = document.getElementById(`conteo-${grado}-${seccion}`);
+      if (!conteoBadge) return;
+      const total = container.querySelectorAll('.card-row').length;
+      const visibles = container.querySelectorAll('.card-row.visible-on').length;
+      conteoBadge.textContent = `${visibles}/${total} visibles`;
+    }
+
+    // ---- Stats globales ----
+    function actualizarStats() {
+      const total     = Object.keys(estado).length;
+      const visibles  = Object.values(estado).filter(v => v).length;
+      const bloqueados = total - visibles;
+
+      document.getElementById('stat-total').textContent     = total;
+      document.getElementById('stat-visibles').textContent  = visibles;
+      document.getElementById('stat-bloqueados').textContent = bloqueados;
+
+      // Actualizar conteos de cada sección
+      document.querySelectorAll('[id^="rows-"]').forEach(container => {
+        const partes  = container.id.replace('rows-','').split('-');
+        const grado   = partes[0];
+        const seccion = partes.slice(1).join('-');
+        actualizarConteosSeccion(grado, seccion, container);
+      });
+    }
+
+    // ---- Tabs ----
+    function switchTab(grado, btn) {
+      document.querySelectorAll('.grado-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`panel-${grado}`).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // ---- Acordeón de secciones ----
+    function toggleSeccion(head) {
+      head.parentElement.classList.toggle('open');
+    }
+
+    // ---- Toast ----
+    function toast(msg, tipo) {
+      const container = document.getElementById('toasts');
+      const t = document.createElement('div');
+      t.className = `toast ${tipo}`;
+      t.textContent = msg;
+      container.appendChild(t);
+      setTimeout(() => t.remove(), 3500);
+    }
+
+    // ---- Inicializar ----
+    cargarDatos();
+
+  </script>
+
+</body>
+</html>

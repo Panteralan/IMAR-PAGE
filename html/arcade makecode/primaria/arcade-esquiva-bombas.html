@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💣 Esquiva las Bombas — MakeCode Arcade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #0f0e17;
+      --surface:   #1a1a2e;
+      --surface2:  #16213e;
+      --amarillo:  #ffd700;
+      --cyan:      #00f5ff;
+      --verde:     #39ff14;
+      --rojo:      #ff3f3f;
+      --rosa:      #ff6eb4;
+      --naranja:   #ff8c00;
+      --morado:    #bf5fff;
+      --texto:     #f0f0f0;
+      --muted:     #8892b0;
+      --radius:    16px;
+
+      /* Colores bloques MakeCode Arcade */
+      --bloque-verde:   #5c9e31;
+      --bloque-rojo:    #c73030;
+      --bloque-azul:    #2979b5;
+      --bloque-morado:  #8854d0;
+      --bloque-rosa:    #d44d9b;
+      --bloque-amarillo:#b8860b;
+      --bloque-cyan:    #1e8c9e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
+      color: var(--texto);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(rgba(0,245,255,0.06) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .hero {
+      position: relative; z-index: 1;
+      background: linear-gradient(180deg, #0f0e17 0%, #1a0533 100%);
+      padding: 56px 24px 72px;
+      text-align: center;
+      border-bottom: 3px solid var(--rojo);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px);
+      pointer-events: none;
+    }
+
+    .hero-arcade {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px;
+      color: var(--rojo);
+      letter-spacing: 3px;
+      display: block;
+      margin-bottom: 20px;
+      animation: blink 1.2s step-end infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .hero-sprites {
+      font-size: 56px;
+      display: block;
+      margin-bottom: 16px;
+      animation: caida 1.5s ease-in infinite;
+    }
+
+    @keyframes caida {
+      0%   { transform: translateY(-10px) rotate(0deg); }
+      100% { transform: translateY(10px) rotate(10deg); }
+    }
+
+    .hero h1 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(14px, 3vw, 26px);
+      color: var(--rojo);
+      text-shadow: 3px 3px 0 #ff8c00, 6px 6px 0 rgba(255,140,0,0.3);
+      line-height: 1.5;
+      margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--cyan);
+      font-weight: 700;
+      position: relative; z-index: 1;
+      margin-bottom: 28px;
+      letter-spacing: 1px;
+    }
+
+    .hero-chips {
+      display: flex; flex-wrap: wrap;
+      gap: 10px; justify-content: center;
+      position: relative; z-index: 1;
+    }
+
+    .chip {
+      background: rgba(255,63,63,0.1);
+      border: 2px solid var(--rojo);
+      color: var(--rojo);
+      padding: 7px 16px;
+      border-radius: 4px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
+    }
+
+    .main {
+      position: relative; z-index: 1;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    .intro-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      border: 2px solid var(--rojo);
+      box-shadow: 0 0 30px rgba(255,63,63,0.1);
+      margin-bottom: 20px;
+    }
+
+    .intro-card h2 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 13px;
+      color: var(--rojo);
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .intro-card p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 600;
+    }
+    .intro-card strong { color: var(--texto); }
+
+    .reglas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    @media(max-width:500px){ .reglas { grid-template-columns: 1fr; } }
+
+    .regla-item {
+      border-radius: 12px;
+      padding: 16px;
+      border: 2px solid;
+      text-align: center;
+    }
+
+    .regla-item.ganar {
+      background: rgba(57,255,20,0.06);
+      border-color: var(--verde);
+    }
+    .regla-item.perder {
+      background: rgba(255,63,63,0.06);
+      border-color: var(--rojo);
+    }
+
+    .regla-emoji { font-size: 32px; display: block; margin-bottom: 8px; }
+
+    .regla-titulo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      margin-bottom: 6px;
+    }
+    .regla-item.ganar .regla-titulo { color: var(--verde); }
+    .regla-item.perder .regla-titulo { color: var(--rojo); }
+
+    .regla-desc { font-size: 13px; font-weight: 700; color: var(--muted); line-height: 1.5; }
+
+    .mat-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      border: 2px solid var(--morado);
+      box-shadow: 0 0 20px rgba(191,95,255,0.08);
+      margin-bottom: 20px;
+    }
+
+    .mat-card h2 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      color: var(--morado);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .mat-list { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .mat-item {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(191,95,255,0.1);
+      border: 2px solid rgba(191,95,255,0.3);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 14px; font-weight: 800;
+      color: var(--morado);
+    }
+
+    .pasos-titulo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 13px;
+      color: var(--rojo);
+      text-align: center;
+      margin-bottom: 28px;
+      line-height: 1.6;
+      text-shadow: 2px 2px 0 var(--naranja);
+    }
+
+    .paso-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 14px;
+      border: 2px solid rgba(255,255,255,0.06);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .paso-card:hover { border-color: rgba(255,63,63,0.3); box-shadow: 0 0 20px rgba(255,63,63,0.06); }
+
+    .paso-card.p1  { border-color: rgba(57,255,20,0.25); }
+    .paso-card.p2  { border-color: rgba(0,245,255,0.25); }
+    .paso-card.p3  { border-color: rgba(255,110,180,0.25); }
+    .paso-card.p4  { border-color: rgba(191,95,255,0.25); }
+    .paso-card.p5  { border-color: rgba(255,140,0,0.25); }
+    .paso-card.p6  { border-color: rgba(255,63,63,0.25); }
+    .paso-card.p7  { border-color: rgba(57,255,20,0.25); }
+    .paso-card.p8  { border-color: rgba(0,245,255,0.25); }
+    .paso-card.p9  { border-color: rgba(255,215,0,0.25); }
+    .paso-card.p10 { border-color: rgba(57,255,20,0.25); }
+
+    .paso-header {
+      display: flex; align-items: center;
+      gap: 14px; padding: 16px 20px;
+      cursor: pointer; user-select: none;
+    }
+
+    .paso-num {
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 16px; color: #000; flex-shrink: 0;
+    }
+
+    .p1  .paso-num { background: var(--verde); }
+    .p2  .paso-num { background: var(--cyan); }
+    .p3  .paso-num { background: var(--rosa); }
+    .p4  .paso-num { background: var(--morado); color: #fff; }
+    .p5  .paso-num { background: var(--naranja); }
+    .p6  .paso-num { background: var(--rojo); color: #fff; }
+    .p7  .paso-num { background: var(--verde); }
+    .p8  .paso-num { background: var(--cyan); }
+    .p9  .paso-num { background: var(--amarillo); }
+    .p10 .paso-num { background: var(--verde); }
+
+    .paso-info { flex: 1; }
+
+    .paso-titulo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      color: var(--texto);
+      margin-bottom: 4px;
+      line-height: 1.6;
+    }
+
+    .paso-sub {
+      font-size: 12px; color: var(--muted); font-weight: 700;
+    }
+
+    .paso-arrow {
+      font-size: 14px; color: var(--muted);
+      transition: transform 0.3s;
+    }
+
+    .paso-card.open .paso-arrow { transform: rotate(180deg); }
+
+    .paso-body {
+      display: none;
+      padding: 0 20px 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .paso-card.open .paso-body { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .paso-body p {
+      font-size: 14px; color: var(--muted);
+      line-height: 1.7; font-weight: 600; margin-bottom: 14px;
+    }
+    .paso-body p strong { color: var(--texto); }
+
+    .mini-pasos { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
+
+    .mini-paso { display: flex; gap: 12px; align-items: flex-start; }
+
+    .mini-num {
+      width: 26px; height: 26px; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px; color: #000; flex-shrink: 0; margin-top: 2px;
+    }
+
+    .mini-text {
+      font-size: 14px; font-weight: 700;
+      color: var(--texto); line-height: 1.6; flex: 1;
+    }
+
+    .bloque-visual {
+      border-radius: 10px; overflow: hidden;
+      margin: 14px 0;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .bloque-visual-header {
+      padding: 7px 14px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px; letter-spacing: 1px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .bloque-visual-content {
+      padding: 14px 18px;
+      background: #0d1117;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+
+    .bloque {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      width: fit-content;
+      position: relative;
+    }
+
+    .bloque::before {
+      content: '';
+      position: absolute;
+      left: -6px; top: 50%;
+      transform: translateY(-50%);
+      width: 6px; height: 12px;
+      background: inherit;
+      border-radius: 2px 0 0 2px;
+    }
+
+    .b-verde   { background: var(--bloque-verde); }
+    .b-rojo    { background: var(--bloque-rojo); }
+    .b-azul    { background: var(--bloque-azul); }
+    .b-morado  { background: var(--bloque-morado); }
+    .b-rosa    { background: var(--bloque-rosa); }
+    .b-amarillo{ background: var(--bloque-amarillo); }
+    .b-cyan    { background: var(--bloque-cyan); }
+    .b-header  { background: #2d6a2d; border-radius: 8px 8px 0 0; }
+    .b-header::before { display: none; }
+
+    .b-val {
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+
+    .b-img {
+      background: rgba(255,255,255,0.15);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 14px;
+    }
+
+    .indent-1 { margin-left: 16px; }
+    .indent-2 { margin-left: 32px; }
+
+    .tip-box {
+      border-radius: 10px; padding: 12px 16px;
+      display: flex; gap: 10px; align-items: flex-start;
+      margin-top: 10px;
+    }
+
+    .tip-box.verde   { background: rgba(57,255,20,0.06);  border-left: 3px solid var(--verde); }
+    .tip-box.cyan    { background: rgba(0,245,255,0.06);  border-left: 3px solid var(--cyan); }
+    .tip-box.amarillo{ background: rgba(255,215,0,0.06);  border-left: 3px solid var(--amarillo); }
+    .tip-box.rosa    { background: rgba(255,110,180,0.06);border-left: 3px solid var(--rosa); }
+    .tip-box.rojo    { background: rgba(255,63,63,0.06);  border-left: 3px solid var(--rojo); }
+    .tip-box.morado  { background: rgba(191,95,255,0.06); border-left: 3px solid var(--morado); }
+    .tip-box.naranja { background: rgba(255,140,0,0.06);  border-left: 3px solid var(--naranja); }
+
+    .tip-icon { font-size: 20px; flex-shrink: 0; }
+    .tip-text { font-size: 13px; font-weight: 700; line-height: 1.6; color: var(--muted); }
+    .tip-text strong { color: var(--texto); }
+
+    .donde-buscar { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+
+    .cat-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 12px; border-radius: 4px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px; letter-spacing: 0.5px;
+    }
+
+    .cat-escena  { background: rgba(45,106,45,0.3);  color: #6ddc6d; border: 1px solid #2d6a2d; }
+    .cat-sprites { background: rgba(41,121,181,0.3); color: #60aadc; border: 1px solid #2979b5; }
+    .cat-control { background: rgba(199,48,48,0.3);  color: #ff7070; border: 1px solid #c73030; }
+    .cat-info    { background: rgba(136,84,208,0.3); color: #c090ff; border: 1px solid #8854d0; }
+    .cat-efectos { background: rgba(255,140,0,0.3);  color: #ffb84d; border: 1px solid #ff8c00; }
+
+    .desafios {
+      border-radius: 12px; padding: 20px;
+      background: rgba(255,63,63,0.05);
+      border: 2px dashed var(--rojo);
+      margin-top: 12px;
+    }
+
+    .desafios h4 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px; color: var(--rojo);
+      margin-bottom: 12px; line-height: 1.6;
+    }
+
+    .desafios p {
+      font-size: 13px; color: var(--muted);
+      font-weight: 700; line-height: 1.9; margin-bottom: 0;
+    }
+
+    .insert-coin {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      color: var(--cyan);
+      text-align: center;
+      margin: 32px 0 24px;
+      animation: blink 1s step-end infinite;
+      letter-spacing: 2px;
+    }
+
+    footer {
+      position: relative; z-index: 1;
+      background: var(--surface);
+      border-top: 3px solid var(--rojo);
+      color: var(--muted);
+      text-align: center; padding: 24px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px; letter-spacing: 1px;
+      line-height: 2;
+    }
+    footer span { color: var(--rojo); }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <span class="hero-arcade">★ DANGER ZONE AHEAD ★</span>
+    <span class="hero-sprites">💣💥</span>
+    <h1>ESQUIVA<br>LAS BOMBAS</h1>
+    <p class="hero-sub">MakeCode Arcade · Cuarto Año · ¡Sobreviví!</p>
+    <div class="hero-chips">
+      <div class="chip">🎮 ARCADE</div>
+      <div class="chip">💣 BOMBAS</div>
+      <div class="chip">⏱️ 10 PASOS</div>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <div class="intro-card">
+      <h2>¿QUÉ VAN<br>A PROGRAMAR?</h2>
+      <p>
+        ¡Un juego de esquivar bombas que caen del cielo! Controlan un personaje que se mueve
+        <strong>izquierda y derecha</strong> en un mapa pequeño. Las <strong>3 bombas</strong> caen
+        desde arriba y <strong>explotan</strong> cuando tocan el piso. Si una bomba te toca, <strong>perdés una vida</strong>.
+        Tenés que sobrevivir <strong>30 segundos</strong> sin perder todas las vidas.
+      </p>
+      <div class="reglas">
+        <div class="regla-item ganar">
+          <span class="regla-emoji">🏆</span>
+          <div class="regla-titulo">GANÁS SI...</div>
+          <div class="regla-desc">La cuenta regresiva llega a 0 y todavía tenés vidas</div>
+        </div>
+        <div class="regla-item perder">
+          <span class="regla-emoji">💀</span>
+          <div class="regla-titulo">PERDÉS SI...</div>
+          <div class="regla-desc">Las bombas te tocan y te quedás sin vidas (0 vidas = game over)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mat-card">
+      <h2>¿QUÉ<br>NECESITAN?</h2>
+      <div class="mat-list">
+        <div class="mat-item">💻 Computadora</div>
+        <div class="mat-item">🌐 MakeCode Arcade abierto</div>
+        <div class="mat-item">🎨 Creatividad para sprites</div>
+      </div>
+    </div>
+
+    <div class="insert-coin">▶ PRESIONÁ PARA EMPEZAR ◀</div>
+    <h2 class="pasos-titulo">PASOS PARA<br>PROGRAMAR</h2>
+
+    <!-- PASO 1 -->
+    <div class="paso-card p1 open">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-titulo">CREAR EL PERSONAJE</div>
+          <div class="paso-sub">El jugador que controlan</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Primero creamos al personaje que van a controlar. Va a moverse solo de <strong>izquierda a derecha</strong> porque las bombas caen desde arriba.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-sprites">🟦 Sprites</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#39ff14">1</div>
+            <div class="mini-text">De <strong>Sprites</strong>, arrastrá <strong>"establecer [miSprite] como objeto de tipo Player"</strong> adentro del bloque verde "al inicio"</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#39ff14">2</div>
+            <div class="mini-text">Renombrá "miSprite" como <strong>"la pili"</strong> (o el nombre que quieran)</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#39ff14">3</div>
+            <div class="mini-text">Hacé click en la imagen para diseñar tu personaje — puede ser un monito, una nave, lo que quieran 🎨</div>
+          </div>
+        </div>
+
+        <div class="tip-box verde">
+          <span class="tip-icon">🎮</span>
+          <span class="tip-text">El tipo <strong>"Player"</strong> le dice al juego que este sprite es el jugador — así el juego sabe que las bombas le pueden hacer daño.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="paso-card p2">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-titulo">MOVER IZQUIERDA/DERECHA</div>
+          <div class="paso-sub">Solo movimiento horizontal</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Hacemos que el personaje se mueva <strong>solo de izquierda a derecha</strong>. No puede moverse para arriba o abajo porque el mapa es chico.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-sprites">🟦 Sprites</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#00f5ff; color:#000">1</div>
+            <div class="mini-text">De <strong>Sprites</strong>, arrastrá <strong>"mover [la pili] con los botones"</strong> y agregalo al bloque "al inicio"</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#00f5ff; color:#000">2</div>
+            <div class="mini-text">Hacé click en el <strong>símbolo ➕</strong> del bloque para expandirlo</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#00f5ff; color:#000">3</div>
+            <div class="mini-text">Cambiá <strong>vx</strong> (velocidad horizontal) a cualquier número que quieras — por ejemplo <strong>100</strong></div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#00f5ff; color:#000">4</div>
+            <div class="mini-text">Dejá <strong>vy</strong> (velocidad vertical) en <strong>0</strong> — así solo se mueve de lado, no para arriba/abajo</div>
+          </div>
+        </div>
+
+        <div class="tip-box cyan">
+          <span class="tip-icon">🕹️</span>
+          <span class="tip-text"><strong>vx</strong> es velocidad horizontal (izquierda-derecha) y <strong>vy</strong> es velocidad vertical (arriba-abajo). Con vy en 0, el personaje queda atrapado en el piso. ¡Perfecto para este juego!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="paso-card p3">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-titulo">CREAR EL MAPA (TILEMAP)</div>
+          <div class="paso-sub">El escenario donde pasa todo</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Ahora creamos el <strong>mapa de baldosas</strong> (tilemap) — el escenario del juego.
+          Tiene que ser chico: <strong>16 de ancho × 18 de alto</strong>.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-escena">🟩 Escena</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff6eb4; color:#000">1</div>
+            <div class="mini-text">De <strong>Escena</strong>, agregá primero <strong>"establecer imagen de fondo"</strong> y elegí un fondo que les guste 🎨</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff6eb4; color:#000">2</div>
+            <div class="mini-text">De <strong>Escena</strong>, arrastrá <strong>"establecer mapa de baldosas a [mapa de teselas]"</strong></div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff6eb4; color:#000">3</div>
+            <div class="mini-text">Hacé click en el cuadrado gris para abrir el editor de mapas</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff6eb4; color:#000">4</div>
+            <div class="mini-text">En el editor, cambiá las dimensiones a <strong>16×18</strong> y diseñá el mapa — pueden importar un diseño o hacerlo ustedes</div>
+          </div>
+        </div>
+
+        <div class="tip-box rosa">
+          <span class="tip-icon">🗺️</span>
+          <span class="tip-text">El <strong>mapa de baldosas</strong> es donde van a caer las bombas. Chico es mejor — así las bombas caen más rápido y el juego es más intenso.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 4 -->
+    <div class="paso-card p4">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">4</div>
+        <div class="paso-info">
+          <div class="paso-titulo">CREAR LA PRIMERA BOMBA</div>
+          <div class="paso-sub">El enemigo que cae</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Ahora creamos la <strong>primera bomba</strong>. Va a caer desde arriba con gravedad y explotar cuando toca el piso.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-sprites">🟦 Sprites</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#bf5fff">1</div>
+            <div class="mini-text">De <strong>Sprites</strong>, arrastrá <strong>"establecer [miSprite] como objeto de tipo Enemy"</strong></div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#bf5fff">2</div>
+            <div class="mini-text">Renombralo como <strong>"bomba"</strong> (o "bomba1")</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#bf5fff">3</div>
+            <div class="mini-text">Diseñá una bomba 💣 en el editor de sprites — puede ser negra con una mecha roja</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#bf5fff">4</div>
+            <div class="mini-text">De <strong>Sprites</strong>, agregá <strong>"establecer [bomba] ay (aceleración y) como 200"</strong> — esto hace que la bomba caiga por gravedad</div>
+          </div>
+        </div>
+
+        <div class="tip-box morado">
+          <span class="tip-icon">💣</span>
+          <span class="tip-text">La <strong>aceleración y (ay)</strong> es como la gravedad. Un número positivo hace que el sprite caiga hacia abajo cada vez más rápido. ¡Exactamente lo que necesitamos!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 5 -->
+    <div class="paso-card p5">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">5</div>
+        <div class="paso-info">
+          <div class="paso-titulo">HACER QUE EXPLOTE</div>
+          <div class="paso-sub">Cuando toca el piso</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Programamos qué pasa cuando la bomba <strong>toca el piso</strong>. Necesitamos un nuevo bloque separado que detecta eso.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-escena">🟩 Escena</span>
+          <span class="cat-badge cat-efectos">🟧 Efectos</span>
+          <span class="cat-badge cat-sprites">🟦 Sprites</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff8c00; color:#000">1</div>
+            <div class="mini-text">De <strong>Escena</strong>, arrastrá el bloque <strong>"cuando el [sprite] de tipo Enemy golpea el muro en [location]"</strong> a un lugar vacío</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff8c00; color:#000">2</div>
+            <div class="mini-text">De <strong>Efectos</strong>, poné adentro <strong>"reproducir sonido pequeña caída hasta que termine"</strong> — para que haga ruido al explotar</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff8c00; color:#000">3</div>
+            <div class="mini-text">De <strong>Sprites</strong>, agregá un bloque <strong>"pause 100 ms"</strong> — una pausa cortita</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff8c00; color:#000">4</div>
+            <div class="mini-text">De <strong>Sprites</strong>, agregá <strong>"destroy [sprite] with [fuego] effect for 1000 ms"</strong> — esto hace que la bomba explote con fuego 💥</div>
+          </div>
+        </div>
+
+        <div class="tip-box naranja">
+          <span class="tip-icon">💥</span>
+          <span class="tip-text">El bloque <strong>"destroy with fuego"</strong> hace que el sprite desaparezca con una animación de explosión. ¡Perfecto para una bomba!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 6 -->
+    <div class="paso-card p6">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">6</div>
+        <div class="paso-info">
+          <div class="paso-titulo">AGREGAR MÁS BOMBAS</div>
+          <div class="paso-sub">Hacer que caigan 3 bombas</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Una bomba es fácil de esquivar. ¡Agreguemos <strong>2 bombas más</strong> para hacerlo más difícil!
+          Van a caer en tiempos diferentes para darle ritmo al juego.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-sprites">🟦 Sprites</span>
+          <span class="cat-badge cat-control">🔴 Loops (para siempre)</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff3f3f">1</div>
+            <div class="mini-text">Dentro del bloque "al inicio", agregá un <strong>"pause 2000 ms"</strong> después de la primera bomba</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff3f3f">2</div>
+            <div class="mini-text">Copiá los bloques de la bomba (sprite Enemy + aceleración y) y renombrá la nueva bomba como <strong>"bomba2"</strong></div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff3f3f">3</div>
+            <div class="mini-text">Agregá otro <strong>"pause 5000 ms"</strong> y repetí para crear <strong>"bomba3"</strong></div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff3f3f">4</div>
+            <div class="mini-text">Opcional: De <strong>Loops</strong>, podés poner todo adentro de un <strong>"para siempre"</strong> para que las bombas caigan sin parar</div>
+          </div>
+        </div>
+
+        <div class="tip-box rojo">
+          <span class="tip-icon">⏱️</span>
+          <span class="tip-text">Los <strong>pause</strong> entre bombas crean el ritmo del juego. 2000ms = 2 segundos. Ajusten los tiempos para hacer el juego más fácil o más difícil.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 7 -->
+    <div class="paso-card p7">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">7</div>
+        <div class="paso-info">
+          <div class="paso-titulo">PERDER VIDA AL SER TOCADO</div>
+          <div class="paso-sub">¡Lo que faltaba!</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Ahora viene lo importante: programar que <strong>pierdas una vida</strong> cuando una bomba te toca.
+          Si te quedás sin vidas — ¡game over!
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-sprites">🟦 Sprites</span>
+          <span class="cat-badge cat-info">🟪 Info</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#39ff14; color:#000">1</div>
+            <div class="mini-text">De <strong>Sprites</strong>, arrastrá el bloque <strong>"cuando [sprite] de tipo Player se superpone [otherSprite] de tipo Enemy"</strong> a un lugar vacío</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#39ff14; color:#000">2</div>
+            <div class="mini-text">De <strong>Info</strong>, poné adentro el bloque <strong>"cambiar vida por -1"</strong> — esto resta 1 vida cada vez que una bomba te toca</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#39ff14; color:#000">3</div>
+            <div class="mini-text">De <strong>Sprites</strong>, agregá también <strong>"destroy [otherSprite]"</strong> — para que la bomba desaparezca después de tocarte</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-visual-header" style="background:#2d6a2d;">🧩 Bloque nuevo — perder vida</div>
+          <div class="bloque-visual-content">
+            <div class="bloque b-header">cuando [sprite] Player se superpone [otherSprite] Enemy</div>
+            <div class="bloque b-rosa indent-1">cambiar vida por <span class="b-val">-1</span></div>
+            <div class="bloque b-azul indent-1">destroy <span class="b-val">otherSprite</span></div>
+          </div>
+        </div>
+
+        <div class="tip-box verde">
+          <span class="tip-icon">💔</span>
+          <span class="tip-text">Cuando la vida llega a <strong>0</strong>, MakeCode Arcade automáticamente hace <strong>game over</strong>. No necesitan programarlo — ¡ya viene incluido!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 8 -->
+    <div class="paso-card p8">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">8</div>
+        <div class="paso-info">
+          <div class="paso-titulo">AGREGAR CUENTA REGRESIVA</div>
+          <div class="paso-sub">30 segundos para sobrevivir</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Ahora agregamos la <strong>cuenta regresiva de 30 segundos</strong>. Si sobrevivís hasta que el tiempo llega a 0 — ¡ganás!
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-info">🟪 Info</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#00f5ff; color:#000">1</div>
+            <div class="mini-text">De <strong>Info</strong>, arrastrá <strong>"iniciar cuenta atrás 30 (s)"</strong> al bloque "al inicio" — ponerlo <strong>al principio</strong>, antes de crear los sprites</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#00f5ff; color:#000">2</div>
+            <div class="mini-text">Pueden cambiar el número si quieren hacerlo más corto (20 segundos) o más largo (60 segundos)</div>
+          </div>
+        </div>
+
+        <div class="tip-box cyan">
+          <span class="tip-icon">⏰</span>
+          <span class="tip-text">La cuenta regresiva aparece arriba en la pantalla. Cada segundo que pasa, el número baja. Cuando llega a 0, el juego termina automáticamente.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 9 -->
+    <div class="paso-card p9">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">9</div>
+        <div class="paso-info">
+          <div class="paso-titulo">CONDICIÓN DE GANAR</div>
+          <div class="paso-sub">Si sobrevivís el tiempo</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Programamos qué pasa cuando <strong>la cuenta regresiva llega a 0</strong> y todavía tenés vidas. ¡Ganaste!
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-info">🟪 Info</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ffd700; color:#000">1</div>
+            <div class="mini-text">De <strong>Info</strong>, arrastrá el bloque <strong>"cuando termine la cuenta regresiva"</strong> a un lugar vacío</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ffd700; color:#000">2</div>
+            <div class="mini-text">De <strong>Info</strong>, poné adentro <strong>"game over GANASTE"</strong></div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-visual-header" style="background:#6b3030;">🧩 Bloque nuevo — ganar</div>
+          <div class="bloque-visual-content">
+            <div class="bloque b-header" style="background:#6b3030;">cuando termine la cuenta regresiva</div>
+            <div class="bloque b-rojo indent-1">game over <span class="b-val" style="background:#2d6a2d;">GANASTE</span></div>
+          </div>
+        </div>
+
+        <div class="tip-box amarillo">
+          <span class="tip-icon">🏆</span>
+          <span class="tip-text">Este bloque solo se activa si llegás al final del tiempo <strong>con al menos 1 vida</strong>. Si te quedás sin vidas antes — perdiste automáticamente.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 10 -->
+    <div class="paso-card p10">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">10</div>
+        <div class="paso-info">
+          <div class="paso-titulo">¡JUGAR Y MEJORAR!</div>
+          <div class="paso-sub">Probar y hacer desafíos</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          ¡El juego está completo! Probálo en el simulador haciendo click en <strong>▶ Jugar</strong>.
+          Si funciona bien, probá estos desafíos para mejorarlo:
+        </p>
+
+        <div class="desafios">
+          <h4>🎮 ¡DESAFÍOS EXTRA!</h4>
+          <p>
+            ✨ ¿Podés hacer que las bombas caigan más rápido? Subí el valor de <strong>ay (aceleración y)</strong> de 200 a 300<br>
+            ✨ ¿Podés agregar una cuarta o quinta bomba para hacerlo más difícil?<br>
+            ✨ ¿Podés cambiar el tiempo de 30 segundos a 20 para un desafío intenso?<br>
+            ✨ ¿Podés hacer que las bombas aparezcan en posiciones aleatorias al caer?<br>
+            ✨ ¿Podés agregar un sonido especial cuando perdés una vida?<br>
+            ✨ ¿Podés cambiar las bombas por meteoritos y el personaje por una nave espacial? 🚀
+          </p>
+        </div>
+
+        <div class="tip-box verde">
+          <span class="tip-icon">🏆</span>
+          <span class="tip-text">¡Programaron un juego completo con <strong>gravedad, colisiones, sistema de vidas, cuenta regresiva</strong> y condiciones de ganar/perder! ¡Eso es programación de verdad!</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>IMAR PAGE</span> · MAKECODE ARCADE · CUARTO AÑO · 2026<br>
+    KEEP CALM AND DODGE BOMBS! 💣
+  </footer>
+
+  <script>
+    function togglePaso(header) {
+      header.parentElement.classList.toggle('open');
+    }
+    document.querySelectorAll('.paso-card').forEach(c => c.classList.add('open'));
+  </script>
+
+</body>
+</html>

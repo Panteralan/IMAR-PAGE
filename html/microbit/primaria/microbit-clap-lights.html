@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💡 Luces con Aplausos — Micro:bit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --amarillo:       #f59e0b;
+      --amarillo-light: #fffbeb;
+      --rojo:           #ef4444;
+      --rojo-light:     #fef2f2;
+      --verde:          #10b981;
+      --verde-light:    #ecfdf5;
+      --azul:           #3b82f6;
+      --azul-light:     #eff6ff;
+      --morado:         #8b5cf6;
+      --morado-light:   #f5f3ff;
+      --rosa:           #ec4899;
+      --rosa-light:     #fdf2f8;
+      --teal:           #14b8a6;
+      --teal-light:     #f0fdfa;
+      --bg:             #fffbf0;
+      --texto:          #1e293b;
+      --muted:          #64748b;
+      --card:           #ffffff;
+      --radius:         20px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+      padding: 56px 24px 72px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.1) 2px, transparent 2px);
+      background-size: 28px 28px;
+    }
+
+    .hero-emoji {
+      font-size: 72px;
+      display: block;
+      margin-bottom: 16px;
+      animation: parpadeo 1.5s ease-in-out infinite;
+    }
+
+    @keyframes parpadeo {
+      0%,100% { transform: scale(1); opacity: 1; }
+      50%      { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(32px, 6vw, 64px);
+      color: #fff;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+      margin-bottom: 10px;
+      position: relative; z-index: 1;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,0.9);
+      font-weight: 700;
+      position: relative; z-index: 1;
+      margin-bottom: 28px;
+    }
+
+    .hero-chips {
+      display: flex; flex-wrap: wrap;
+      gap: 10px; justify-content: center;
+      position: relative; z-index: 1;
+    }
+
+    .chip {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.4);
+      color: #fff;
+      padding: 7px 18px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 800;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ===== CONTENEDOR PRINCIPAL ===== */
+    .main {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    /* ===== INTRO ===== */
+    .intro-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: 0 4px 24px rgba(245,158,11,0.1);
+      border: 2px solid rgba(245,158,11,0.2);
+      margin-bottom: 24px;
+    }
+
+    .intro-card h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 26px;
+      color: var(--amarillo);
+      margin-bottom: 12px;
+    }
+
+    .intro-card p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .intro-card strong { color: var(--texto); }
+
+    /* Cómo funciona */
+    .como-funciona {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    @media(max-width:500px){ .como-funciona { grid-template-columns: 1fr; } }
+
+    .cf-item {
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cf-item.on  { background: var(--amarillo-light); border: 2px solid rgba(245,158,11,0.3); }
+    .cf-item.off { background: #f8fafc; border: 2px solid #e2e8f0; }
+
+    .cf-icon { font-size: 32px; flex-shrink: 0; }
+    .cf-text { font-size: 14px; font-weight: 700; line-height: 1.5; }
+    .cf-text strong { color: var(--texto); display: block; font-size: 16px; }
+
+    /* ===== MATERIALES ===== */
+    .mat-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      border: 2px solid rgba(139,92,246,0.2);
+      box-shadow: 0 4px 20px rgba(139,92,246,0.08);
+      margin-bottom: 32px;
+    }
+
+    .mat-card h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 24px;
+      color: var(--morado);
+      margin-bottom: 16px;
+    }
+
+    .mat-list { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .mat-item {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--morado-light);
+      border: 2px solid rgba(139,92,246,0.2);
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: 15px; font-weight: 800;
+      color: var(--morado);
+    }
+
+    /* ===== DIAGRAMA FINAL ===== */
+    .diagrama-card {
+      background: #1e1b4b;
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 32px;
+      border: 2px solid rgba(139,92,246,0.4);
+    }
+
+    .diagrama-card h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* Simulación visual de los bloques finales */
+    .bloques-finales {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .bloque-grupo {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .bloque {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+      width: fit-content;
+      min-width: 160px;
+    }
+
+    .bloque.azul    { background: #4c97ff; }
+    .bloque.morado  { background: #9966ff; }
+    .bloque.rojo    { background: #d9534f; }
+    .bloque.verde   { background: #5cb85c; }
+    .bloque.teal    { background: #20c997; color: #000; }
+    .bloque.naranja { background: #f0ad4e; color: #000; }
+    .bloque.rosa    { background: #ff69b4; }
+
+    .bloque-inner {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.25);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    .bloque-indent-1 { margin-left: 20px; }
+    .bloque-indent-2 { margin-left: 40px; }
+    .bloque-indent-3 { margin-left: 60px; }
+
+    /* ===== PASOS ===== */
+    .pasos-titulo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 32px;
+      color: var(--texto);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .paso-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: 2px solid transparent;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .paso-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.1); }
+
+    .paso-card.p1  { border-color: rgba(245,158,11,0.3); }
+    .paso-card.p2  { border-color: rgba(139,92,246,0.3); }
+    .paso-card.p3  { border-color: rgba(20,184,166,0.3); }
+    .paso-card.p4  { border-color: rgba(59,130,246,0.3); }
+    .paso-card.p5  { border-color: rgba(59,130,246,0.3); }
+    .paso-card.p6  { border-color: rgba(139,92,246,0.3); }
+    .paso-card.p7  { border-color: rgba(16,185,129,0.3); }
+    .paso-card.p8  { border-color: rgba(236,72,153,0.3); }
+    .paso-card.p9  { border-color: rgba(245,158,11,0.3); }
+    .paso-card.p10 { border-color: rgba(16,185,129,0.3); }
+
+    .paso-header {
+      display: flex; align-items: center;
+      gap: 16px; padding: 18px 24px;
+      cursor: pointer; user-select: none;
+    }
+
+    .paso-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Fredoka One', cursive;
+      font-size: 20px; color: #fff; flex-shrink: 0;
+    }
+
+    .p1  .paso-num { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+    .p2  .paso-num { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+    .p3  .paso-num { background: linear-gradient(135deg, #14b8a6, #2dd4bf); }
+    .p4  .paso-num { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+    .p5  .paso-num { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+    .p6  .paso-num { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+    .p7  .paso-num { background: linear-gradient(135deg, #10b981, #34d399); }
+    .p8  .paso-num { background: linear-gradient(135deg, #ec4899, #f472b6); }
+    .p9  .paso-num { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+    .p10 .paso-num { background: linear-gradient(135deg, #10b981, #34d399); }
+
+    .paso-info { flex: 1; }
+
+    .paso-titulo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 18px; color: var(--texto); margin-bottom: 2px;
+    }
+
+    .paso-sub {
+      font-size: 12px; color: var(--muted); font-weight: 700;
+    }
+
+    .paso-arrow {
+      font-size: 16px; color: var(--muted);
+      transition: transform 0.3s;
+    }
+
+    .paso-card.open .paso-arrow { transform: rotate(180deg); }
+
+    .paso-body {
+      display: none;
+      padding: 0 24px 24px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .paso-card.open .paso-body { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Contenido */
+    .paso-body p {
+      font-size: 15px; color: var(--muted);
+      line-height: 1.7; font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .paso-body p strong { color: var(--texto); }
+
+    /* Bloque visual */
+    .bloque-visual {
+      border-radius: 14px; overflow: hidden;
+      margin: 14px 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .bloque-header {
+      padding: 8px 16px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 12px; letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .bloque-content {
+      padding: 16px 20px;
+      background: #1e1b4b;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    /* Mini pasos */
+    .mini-pasos { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
+
+    .mini-paso { display: flex; gap: 12px; align-items: flex-start; }
+
+    .mini-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Fredoka One', cursive;
+      font-size: 13px; color: #fff;
+      flex-shrink: 0; margin-top: 2px;
+    }
+
+    .mini-text {
+      font-size: 14px; font-weight: 700;
+      color: var(--texto); line-height: 1.6; flex: 1;
+    }
+
+    /* Categoría badge */
+    .donde-buscar { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+
+    .cat-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 50px;
+      font-size: 13px; font-weight: 800;
+    }
+
+    .cat-input    { background: #fce7f3; color: #9d174d; }
+    .cat-basic    { background: #dbeafe; color: #1d4ed8; }
+    .cat-var      { background: #fef3c7; color: #92400e; }
+    .cat-logic    { background: #d1fae5; color: #065f46; }
+    .cat-math     { background: #ede9fe; color: #5b21b6; }
+
+    /* Tip box */
+    .tip-box {
+      border-radius: 12px; padding: 14px 18px;
+      display: flex; gap: 10px; align-items: flex-start;
+      margin-top: 10px;
+    }
+
+    .tip-box.amarillo { background: var(--amarillo-light); border-left: 4px solid var(--amarillo); }
+    .tip-box.morado   { background: var(--morado-light);   border-left: 4px solid var(--morado); }
+    .tip-box.azul     { background: var(--azul-light);     border-left: 4px solid var(--azul); }
+    .tip-box.verde    { background: var(--verde-light);    border-left: 4px solid var(--verde); }
+    .tip-box.rosa     { background: var(--rosa-light);     border-left: 4px solid var(--rosa); }
+    .tip-box.teal     { background: var(--teal-light);     border-left: 4px solid var(--teal); }
+    .tip-box.rojo     { background: var(--rojo-light);     border-left: 4px solid var(--rojo); }
+
+    .tip-icon { font-size: 22px; flex-shrink: 0; }
+    .tip-text { font-size: 14px; font-weight: 700; line-height: 1.6; }
+    .tip-text strong { color: var(--texto); }
+
+    /* Desafíos */
+    .desafios {
+      border-radius: 16px; padding: 20px;
+      background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(239,68,68,0.08));
+      border: 2px dashed rgba(245,158,11,0.4);
+      margin-top: 12px;
+    }
+
+    .desafios h4 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 18px; color: var(--amarillo); margin-bottom: 10px;
+    }
+
+    .desafios p {
+      font-size: 14px; color: var(--muted);
+      font-weight: 700; line-height: 1.8; margin-bottom: 0;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--texto);
+      color: rgba(255,255,255,0.5);
+      text-align: center; padding: 24px;
+      font-size: 13px; font-weight: 600;
+    }
+    footer span { color: #fff; font-weight: 800; }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="hero-emoji">👏💡</span>
+    <h1>Luces con Aplausos</h1>
+    <p class="hero-sub">Actividad con Micro:bit — ¡Prendé y apagá luces con un aplauso!</p>
+    <div class="hero-chips">
+      <div class="chip">🔬 Micro:bit</div>
+      <div class="chip">🧩 MakeCode</div>
+      <div class="chip">🎒 Cuarto Año</div>
+      <div class="chip">⏱️ 10 pasos</div>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- INTRO -->
+    <div class="intro-card">
+      <h2>❓ ¿Qué vamos a hacer?</h2>
+      <p>
+        ¡Van a programar el Micro:bit para que <strong>prenda y apague las luces con un aplauso</strong>!
+        Cada vez que hagan un sonido fuerte (como aplaudir), las luces van a cambiar de estado.
+        ¿Están prendidas? Se apagan. ¿Están apagadas? Se prenden. ¡Como un interruptor mágico!
+      </p>
+
+      <div class="como-funciona">
+        <div class="cf-item on">
+          <span class="cf-icon">👏</span>
+          <div class="cf-text">
+            <strong>Primer aplauso</strong>
+            Las luces se PRENDEN 💡
+          </div>
+        </div>
+        <div class="cf-item off">
+          <span class="cf-icon">👏</span>
+          <div class="cf-text">
+            <strong>Segundo aplauso</strong>
+            Las luces se APAGAN 🌑
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATERIALES -->
+    <div class="mat-card">
+      <h2>🎒 ¿Qué necesitan?</h2>
+      <div class="mat-list">
+        <div class="mat-item">🔬 Micro:bit v2 (con logo dorado)</div>
+        <div class="mat-item">💻 Computadora o tablet</div>
+        <div class="mat-item">🌐 MakeCode abierto</div>
+        <div class="mat-item">👏 ¡Sus palmas!</div>
+      </div>
+    </div>
+
+    <!-- DIAGRAMA FINAL -->
+    <div class="diagrama-card">
+      <h3>🗺️ Así va a quedar el programa completo</h3>
+      <div class="bloques-finales">
+        <!-- Bloque al iniciar -->
+        <div class="bloque-grupo">
+          <div class="bloque azul">al iniciar</div>
+          <div class="bloque naranja bloque-indent-1">fijar <span class="bloque-inner">umbral sonido fuerte</span> a <span class="bloque-inner">128</span></div>
+        </div>
+        <!-- Bloque sonido fuerte -->
+        <div class="bloque-grupo">
+          <div class="bloque rosa">al detectar sonido fuerte</div>
+          <div class="bloque rojo bloque-indent-1">fijar <span class="bloque-inner">lucesOn</span> a <span class="bloque-inner">no lucesOn</span></div>
+          <div class="bloque teal bloque-indent-1">si <span class="bloque-inner">lucesOn</span> entonces</div>
+          <div class="bloque azul bloque-indent-2">mostrar LEDs 💡</div>
+          <div class="bloque teal bloque-indent-1">si no</div>
+          <div class="bloque azul bloque-indent-2">limpiar pantalla</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASOS -->
+    <h2 class="pasos-titulo">🪜 Pasos para programar</h2>
+
+    <!-- PASO 1 -->
+    <div class="paso-card p1 open">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🎤 Buscá el bloque "al detectar sonido fuerte"</div>
+          <div class="paso-sub">Categoría: Entrada (Input)</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>Este es el bloque principal de la actividad. Se activa cada vez que el Micro:bit detecta un sonido fuerte — ¡como un aplauso!</p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-input">🔴 Entrada (Input)</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">1</div>
+            <div class="mini-text">Hacé click en <strong>Entrada</strong> en el menú de la izquierda</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">2</div>
+            <div class="mini-text">Buscá el bloque <strong>"al detectar sonido fuerte"</strong> y arrastralo al área de trabajo</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-header" style="background:#ec4899;">🧩 Bloque que van a usar</div>
+          <div class="bloque-content">
+            <div class="bloque rosa">al detectar sonido fuerte</div>
+          </div>
+        </div>
+
+        <div class="tip-box amarillo">
+          <span class="tip-icon">💡</span>
+          <span class="tip-text">Este bloque es como el <strong>"cuando se presiona la tecla"</strong> de Scratch, pero en vez de una tecla, escucha un sonido fuerte. ¡El Micro:bit tiene micrófono!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="paso-card p2">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-titulo">📦 Creá una variable llamada "lucesOn"</div>
+          <div class="paso-sub">Categoría: Variables</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Una <strong>variable</strong> es como una caja donde guardamos información. En este caso, vamos a guardar si las luces están prendidas o apagadas.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-var">🟡 Variables</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">1</div>
+            <div class="mini-text">Hacé click en <strong>Variables</strong> en el menú de la izquierda</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">2</div>
+            <div class="mini-text">Hacé click en <strong>"Crear una variable..."</strong></div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">3</div>
+            <div class="mini-text">Escribí el nombre: <strong>lucesOn</strong> y hacé click en OK</div>
+          </div>
+        </div>
+
+        <div class="tip-box morado">
+          <span class="tip-icon">📦</span>
+          <span class="tip-text">¿Se acuerdan de las variables en Scratch? ¡Es exactamente lo mismo! La variable <strong>lucesOn</strong> va a decir "verdadero" cuando las luces están prendidas y "falso" cuando están apagadas.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="paso-card p3">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🔀 Agregá el bloque "si / si no"</div>
+          <div class="paso-sub">Categoría: Lógica</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Ahora necesitamos decirle al Micro:bit: <strong>"Si las luces están prendidas, apagarlas. Si no, prenderlas."</strong>
+          Para eso usamos el bloque <strong>si / si no</strong>.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-logic">🟢 Lógica (Logic)</span>
+          <span class="cat-badge cat-var">🟡 Variables</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#14b8a6">1</div>
+            <div class="mini-text">De <strong>Lógica</strong>, arrastrá el bloque <strong>"si &lt;verdadero&gt; entonces / si no"</strong> adentro del bloque "al detectar sonido fuerte"</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#14b8a6">2</div>
+            <div class="mini-text">De <strong>Variables</strong>, buscá el bloque <strong>"lucesOn"</strong> y reemplazá el <strong>&lt;verdadero&gt;</strong> con él</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-header" style="background:#14b8a6;">🧩 Así va quedando</div>
+          <div class="bloque-content">
+            <div class="bloque rosa">al detectar sonido fuerte</div>
+            <div class="bloque teal bloque-indent-1">si <span class="bloque-inner">lucesOn</span> entonces</div>
+            <div class="bloque teal bloque-indent-1">si no</div>
+          </div>
+        </div>
+
+        <div class="tip-box teal">
+          <span class="tip-icon">🔀</span>
+          <span class="tip-text">El bloque <strong>"si / si no"</strong> es igual al de Scratch. Pregunta algo y según la respuesta hace una cosa u otra. ¡Como elegir dos caminos diferentes!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 4 -->
+    <div class="paso-card p4">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">4</div>
+        <div class="paso-info">
+          <div class="paso-titulo">💡 Mostrá el diseño de luces</div>
+          <div class="paso-sub">Categoría: Básico — bloque "mostrar LEDs"</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Cuando las luces <strong>están prendidas</strong> (lucesOn = verdadero), queremos mostrar un patrón de luces en la pantalla del Micro:bit.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-basic">🔵 Básico (Basic)</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#3b82f6">1</div>
+            <div class="mini-text">De <strong>Básico</strong>, arrastrá el bloque <strong>"mostrar LEDs"</strong> y ponelo <strong>adentro del SI</strong> (la parte de arriba)</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#3b82f6">2</div>
+            <div class="mini-text">Hacé click en los cuadraditos para crear el diseño que más les guste 🎨</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-header" style="background:#3b82f6;">🧩 Así va quedando</div>
+          <div class="bloque-content">
+            <div class="bloque rosa">al detectar sonido fuerte</div>
+            <div class="bloque teal bloque-indent-1">si <span class="bloque-inner">lucesOn</span> entonces</div>
+            <div class="bloque azul bloque-indent-2">mostrar LEDs 💡</div>
+            <div class="bloque teal bloque-indent-1">si no</div>
+          </div>
+        </div>
+
+        <div class="tip-box azul">
+          <span class="tip-icon">🎨</span>
+          <span class="tip-text">¡Podés hacer el diseño que quieras! Podés prender todos los LEDs del borde para simular una habitación iluminada, o crear tu propio patrón. <strong>¡Sean creativos!</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 5 -->
+    <div class="paso-card p5">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">5</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🌑 Apagá la pantalla en el "si no"</div>
+          <div class="paso-sub">Categoría: Básico — bloque "limpiar pantalla"</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Cuando las luces <strong>están apagadas</strong> (lucesOn = falso), queremos que la pantalla se apague completamente.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-basic">🔵 Básico (Basic)</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#3b82f6">1</div>
+            <div class="mini-text">De <strong>Básico</strong>, buscá el bloque <strong>"limpiar pantalla"</strong></div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#3b82f6">2</div>
+            <div class="mini-text">Poné el bloque <strong>adentro del SI NO</strong> (la parte de abajo)</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-header" style="background:#3b82f6;">🧩 Así va quedando</div>
+          <div class="bloque-content">
+            <div class="bloque rosa">al detectar sonido fuerte</div>
+            <div class="bloque teal bloque-indent-1">si <span class="bloque-inner">lucesOn</span> entonces</div>
+            <div class="bloque azul bloque-indent-2">mostrar LEDs 💡</div>
+            <div class="bloque teal bloque-indent-1">si no</div>
+            <div class="bloque azul bloque-indent-2">limpiar pantalla 🌑</div>
+          </div>
+        </div>
+
+        <div class="tip-box azul">
+          <span class="tip-icon">💡</span>
+          <span class="tip-text"><strong>"Limpiar pantalla"</strong> apaga todos los LEDs del Micro:bit. Es como apagar la luz de verdad.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 6 -->
+    <div class="paso-card p6">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">6</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🔄 Cambiá el valor de "lucesOn" cada vez</div>
+          <div class="paso-sub">Variables + Lógica — el truco del interruptor</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Acá está el <strong>truco más importante</strong>: cada vez que aplaudís, la variable tiene que cambiar al valor contrario.
+          Si era verdadero → pasa a falso. Si era falso → pasa a verdadero.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-var">🟡 Variables</span>
+          <span class="cat-badge cat-logic">🟢 Lógica</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">1</div>
+            <div class="mini-text">De <strong>Variables</strong>, buscá <strong>"fijar lucesOn a 0"</strong> y ponelo <strong>al principio</strong> del bloque "al detectar sonido fuerte" (antes del Si/Si no)</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">2</div>
+            <div class="mini-text">De <strong>Lógica</strong>, buscá el bloque <strong>"no &lt;&gt;"</strong> y reemplazá el <strong>0</strong> con él</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">3</div>
+            <div class="mini-text">De <strong>Variables</strong>, arrastrá <strong>"lucesOn"</strong> adentro del espacio vacío del bloque "no"</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-header" style="background:#8b5cf6;">🧩 Así va quedando</div>
+          <div class="bloque-content">
+            <div class="bloque rosa">al detectar sonido fuerte</div>
+            <div class="bloque rojo bloque-indent-1">fijar <span class="bloque-inner">lucesOn</span> a <span class="bloque-inner">no lucesOn</span></div>
+            <div class="bloque teal bloque-indent-1">si <span class="bloque-inner">lucesOn</span> entonces</div>
+            <div class="bloque azul bloque-indent-2">mostrar LEDs 💡</div>
+            <div class="bloque teal bloque-indent-1">si no</div>
+            <div class="bloque azul bloque-indent-2">limpiar pantalla 🌑</div>
+          </div>
+        </div>
+
+        <div class="tip-box morado">
+          <span class="tip-icon">🔄</span>
+          <span class="tip-text">El bloque <strong>"no"</strong> invierte el valor. Si <strong>lucesOn</strong> era verdadero, <strong>"no lucesOn"</strong> es falso. ¡Y viceversa! Es como darle vuelta un interruptor.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 7 -->
+    <div class="paso-card p7">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">7</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🖥️ Probá en el simulador</div>
+          <div class="paso-sub">¡A probar sin el Micro:bit físico!</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Antes de descargar el programa, podés probarlo en el <strong>simulador</strong> de MakeCode.
+        </p>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#10b981">1</div>
+            <div class="mini-text">Mirá el simulador del Micro:bit en el lado izquierdo de la pantalla</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#10b981">2</div>
+            <div class="mini-text">Buscá la <strong>barra rosada</strong> debajo del ícono del micrófono</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#10b981">3</div>
+            <div class="mini-text">Arrastrá esa barra <strong>hacia arriba</strong> para simular un sonido fuerte</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#10b981">4</div>
+            <div class="mini-text">Las luces deberían <strong>prenderse</strong>. Volvé a arrastrarla — deberían <strong>apagarse</strong></div>
+          </div>
+        </div>
+
+        <div class="tip-box verde">
+          <span class="tip-icon">✅</span>
+          <span class="tip-text">El Micro:bit considera que un sonido es "fuerte" cuando supera el valor <strong>128</strong>. Si arrastrás la barra por encima de ese valor, las luces cambian. ¡Si funciona en el simulador, está listo!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 8 -->
+    <div class="paso-card p8">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">8</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🎚️ Ajustá el umbral de sonido</div>
+          <div class="paso-sub">Para que responda mejor a los aplausos reales</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          A veces el Micro:bit detecta sonidos cuando no queremos — una conversación, una silla que se mueve, etc.
+          Podemos <strong>ajustar el umbral</strong> para que solo responda a aplausos fuertes.
+        </p>
+
+        <div class="donde-buscar">
+          <span class="cat-badge cat-input">🔴 Entrada → ...más</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ec4899">1</div>
+            <div class="mini-text">Hacé click en <strong>Entrada</strong> — debería aparecer una categoría nueva llamada <strong>"...más"</strong></div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ec4899">2</div>
+            <div class="mini-text">De <strong>"...más"</strong>, arrastrá el bloque <strong>"fijar umbral de sonido fuerte a 128"</strong></div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ec4899">3</div>
+            <div class="mini-text">Ponélo adentro del bloque <strong>"al iniciar"</strong> (el bloque azul que arranca solo)</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ec4899">4</div>
+            <div class="mini-text">Probá cambiar el número 128 — si es <strong>más alto</strong>, necesitará un aplauso más fuerte</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-header" style="background:#ec4899;">🧩 Bloque al iniciar</div>
+          <div class="bloque-content">
+            <div class="bloque azul">al iniciar</div>
+            <div class="bloque naranja bloque-indent-1">fijar umbral sonido fuerte a <span class="bloque-inner">128</span></div>
+          </div>
+        </div>
+
+        <div class="tip-box rosa">
+          <span class="tip-icon">🎚️</span>
+          <span class="tip-text">El <strong>umbral</strong> es como el volumen mínimo necesario para activar el programa. Con <strong>128</strong> está en el medio. Si el programa se activa solo, subí el número. Si no responde a los aplausos, bajalo.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 9 -->
+    <div class="paso-card p9">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">9</div>
+        <div class="paso-info">
+          <div class="paso-titulo">⬇️ Descargá al Micro:bit</div>
+          <div class="paso-sub">¡El momento de la verdad!</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          ¡Todo listo! Ahora descargamos el programa al Micro:bit real para probarlo con aplausos de verdad.
+        </p>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">1</div>
+            <div class="mini-text">Conectá el Micro:bit a la computadora con el cable USB</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">2</div>
+            <div class="mini-text">Hacé click en el botón <strong>Descargar</strong> (morado) en MakeCode</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">3</div>
+            <div class="mini-text">Esperá que la luz naranja del Micro:bit deje de parpadear</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">4</div>
+            <div class="mini-text">¡Aplaudí y mirá qué pasa! 👏</div>
+          </div>
+        </div>
+
+        <div class="tip-box amarillo">
+          <span class="tip-icon">⚠️</span>
+          <span class="tip-text">Asegurate de tener el <strong>Micro:bit v2</strong> — el que tiene el logo dorado brillante arriba. El Micro:bit v1 no tiene micrófono y no puede hacer esta actividad.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 10 -->
+    <div class="paso-card p10">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">10</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🎉 ¡Probá y mejorá!</div>
+          <div class="paso-sub">Desafíos extra para los que terminan rápido</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>
+          Si el programa funciona, ¡felicitaciones! Ahora probá estos desafíos para hacerlo todavía mejor:
+        </p>
+
+        <div class="desafios">
+          <h4>🎮 ¡Desafíos extra!</h4>
+          <p>
+            ✨ Cambiá el diseño de los LEDs por algo diferente — ¿una carita, una estrella, una letra?<br>
+            ✨ ¿Podés hacer que muestre dos diseños diferentes alternados en vez de prender/apagar?<br>
+            ✨ Probá ajustar el umbral de sonido — ¿cuál es el número exacto que responde solo a aplausos?<br>
+            ✨ ¿Qué pasa si gritan cerca del Micro:bit? ¿Y si silban?<br>
+            ✨ ¿Podés agregar un sonido cuando las luces se prenden?
+          </p>
+        </div>
+
+        <div class="tip-box verde">
+          <span class="tip-icon">🏆</span>
+          <span class="tip-text">¡Usaron <strong>variables</strong>, <strong>lógica</strong>, <strong>operadores</strong> y el <strong>sensor de sonido</strong> del Micro:bit! Eso es programación avanzada. ¡Están aprendiendo como ingenieros de verdad!</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>IMAR Page</span> · Actividad Micro:bit · Cuarto Año · 2026
+  </footer>
+
+  <script>
+    function togglePaso(header) {
+      header.parentElement.classList.toggle('open');
+    }
+
+    // Abrir todos al cargar
+    document.querySelectorAll('.paso-card').forEach(c => c.classList.add('open'));
+  </script>
+
+</body>
+</html>

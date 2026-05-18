@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🤖 SPIKE Prime Cube Solver</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #050810;
+      --surface:   #0b0f1a;
+      --surface2:  #0f1624;
+      --border:    rgba(0,212,255,0.12);
+      --cyan:      #00d4ff;
+      --cyan-dim:  rgba(0,212,255,0.08);
+      --cyan-glow: rgba(0,212,255,0.25);
+      --verde:     #00ff8c;
+      --verde-dim: rgba(0,255,140,0.08);
+      --amarillo:  #ffd700;
+      --rojo:      #ff3d5a;
+      --morado:    #bf5fff;
+      --texto:     #c8d6e5;
+      --muted:     #4a5568;
+      --radius:    8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--texto);
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* Orbe superior */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -300px; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(0,212,255,0.04) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ===== NAVBAR ===== */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(5,8,16,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+
+    .nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .nav-logo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 16px;
+      color: var(--cyan);
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+    .nav-logo span { color: var(--texto); }
+
+    .nav-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 2px;
+      padding: 5px 12px; border-radius: 4px;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      text-transform: uppercase;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; z-index: 1;
+      padding: 72px 20px 80px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      animation: scan 4s ease-in-out infinite;
+      opacity: 0.4;
+    }
+    @keyframes scan {
+      0%   { top: 0%; }
+      100% { top: 100%; }
+    }
+
+    .hero-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .hero-tag::before { content: '[ '; }
+    .hero-tag::after  { content: ' ]'; }
+
+    .hero-emoji {
+      font-size: 64px;
+      display: block;
+      margin-bottom: 16px;
+      animation: rotar 3s ease-in-out infinite;
+    }
+
+    @keyframes rotar {
+      0%,100% { transform: rotateY(0deg); }
+      50%     { transform: rotateY(180deg); }
+    }
+
+    .hero h1 {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(26px, 5vw, 48px);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      text-shadow: 0 0 30px var(--cyan-glow);
+    }
+    .hero h1 .highlight { color: var(--cyan); }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 28px;
+      font-family: 'Share Tech Mono', monospace;
+    }
+    .hero-sub::before { content: '// '; color: var(--cyan); }
+
+    /* ===== MAIN ===== */
+    .main {
+      position: relative; z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+
+    /* ===== SECCIÓN ===== */
+    .seccion {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .seccion h2 {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 18px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .seccion h2::before {
+      content: '//';
+      color: var(--verde);
+    }
+
+    .seccion p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 14px;
+      font-weight: 500;
+    }
+
+    .seccion p strong { color: var(--texto); }
+
+    .seccion ul {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0;
+    }
+
+    .seccion li {
+      font-size: 15px;
+      color: var(--texto);
+      line-height: 1.7;
+      padding: 10px 0 10px 28px;
+      position: relative;
+      font-weight: 500;
+    }
+
+    .seccion li::before {
+      content: '>';
+      position: absolute;
+      left: 8px;
+      color: var(--cyan);
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    /* Componentes */
+    .componentes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .comp-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: center;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .comp-card:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px rgba(0,212,255,0.1);
+    }
+
+    .comp-emoji {
+      font-size: 36px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .comp-nombre {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--cyan);
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+    }
+
+    .comp-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Código de ejemplo */
+    .code-block {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin: 16px 0;
+      overflow-x: auto;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--texto);
+    }
+
+    .code-block .comment { color: #6a737d; }
+    .code-block .keyword { color: var(--morado); }
+    .code-block .string  { color: var(--verde); }
+    .code-block .number  { color: var(--amarillo); }
+
+    /* ===== QUIZ ===== */
+    .quiz-section {
+      background: var(--surface);
+      border: 2px solid var(--verde);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 30px rgba(0,255,140,0.1);
+    }
+
+    .quiz-titulo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 20px;
+      color: var(--verde);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .quiz-sub {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 28px;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .pregunta {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .pregunta-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .pregunta-texto {
+      font-size: 16px;
+      color: var(--texto);
+      font-weight: 600;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .opciones {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .opcion {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+      color: var(--texto);
+      font-weight: 500;
+    }
+
+    .opcion:hover {
+      border-color: var(--cyan);
+      background: rgba(0,212,255,0.05);
+    }
+
+    .opcion.selected {
+      border-color: var(--cyan);
+      background: var(--cyan-dim);
+      color: var(--cyan);
+    }
+
+    .opcion.correcta {
+      border-color: var(--verde);
+      background: var(--verde-dim);
+      color: var(--verde);
+    }
+
+    .opcion.incorrecta {
+      border-color: var(--rojo);
+      background: rgba(255,61,90,0.08);
+      color: var(--rojo);
+    }
+
+    .opcion::before {
+      content: '○ ';
+      font-family: 'Share Tech Mono', monospace;
+      margin-right: 8px;
+    }
+
+    .opcion.selected::before,
+    .opcion.correcta::before {
+      content: '● ';
+    }
+
+    .opcion.incorrecta::before {
+      content: '✕ ';
+    }
+
+    /* Botón verificar */
+    .btn-verificar {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 1px;
+      padding: 12px 28px;
+      border-radius: 6px;
+      border: 1px solid var(--verde);
+      color: var(--verde);
+      background: var(--verde-dim);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      display: block;
+      margin: 24px auto 0;
+    }
+
+    .btn-verificar:hover {
+      background: var(--verde);
+      color: #000;
+      box-shadow: 0 0 20px rgba(0,255,140,0.3);
+    }
+
+    .btn-verificar:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Resultado */
+    .resultado {
+      display: none;
+      background: var(--surface2);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+      border: 1px solid;
+    }
+
+    .resultado.show { display: block; }
+
+    .resultado.excelente { border-color: var(--verde); }
+    .resultado.bien      { border-color: var(--cyan); }
+    .resultado.mejorar   { border-color: var(--amarillo); }
+
+    .resultado-emoji {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .resultado-titulo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 18px;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .resultado.excelente .resultado-titulo { color: var(--verde); }
+    .resultado.bien .resultado-titulo      { color: var(--cyan); }
+    .resultado.mejorar .resultado-titulo   { color: var(--amarillo); }
+
+    .resultado-puntaje {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      position: relative; z-index: 1;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+      padding: 24px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    footer span { color: var(--cyan); }
+
+    @media(max-width:600px){
+      .componentes-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">🤖 <span>IMAR_PAGE</span></a>
+      <span class="nav-badge">Sexto Año</span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="hero-tag">SPIKE Prime Advanced Project</span>
+    <span class="hero-emoji">🧊</span>
+    <h1>PRIME CUBE SOLVER<br><span class="highlight">ROBOT AUTÓNOMO</span></h1>
+    <p class="hero-sub">El robot que resuelve el cubo Rubik solo</p>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- INTRO -->
+    <div class="seccion">
+      <h2>¿Qué es el Prime Cube?</h2>
+      <p>
+        El <strong>Prime Cube</strong> es un robot construido con LEGO SPIKE Prime que puede <strong>resolver un cubo Rubik 3×3 de forma completamente autónoma</strong>.
+        Analiza las caras del cubo usando el <strong>sensor de color</strong>, calcula la solución con un algoritmo matemático,
+        y ejecuta los movimientos necesarios con <strong>motores grandes</strong> para resolver el cubo en cuestión de minutos.
+      </p>
+      <p>
+        Este proyecto combina <strong>construcción mecánica, programación avanzada y matemáticas</strong>.
+        Es uno de los robots más complejos que pueden hacer con SPIKE Prime, y demuestra la potencia de la robótica educativa.
+      </p>
+    </div>
+
+    <!-- COMPONENTES -->
+    <div class="seccion">
+      <h2>Componentes del Robot</h2>
+      <p>
+        El Prime Cube está construido con las siguientes piezas de SPIKE Prime. Cada componente tiene un rol específico en el funcionamiento del robot.
+      </p>
+
+      <div class="componentes-grid">
+        <div class="comp-card">
+          <span class="comp-emoji">🧠</span>
+          <div class="comp-nombre">HUB SPIKE PRIME</div>
+          <div class="comp-desc">El cerebro del robot. Ejecuta el programa y controla todos los componentes.</div>
+        </div>
+
+        <div class="comp-card">
+          <span class="comp-emoji">⚙️</span>
+          <div class="comp-nombre">2 MOTORES GRANDES</div>
+          <div class="comp-desc">Giran las caras del cubo con precisión. Uno mueve el cubo, el otro lo rota.</div>
+        </div>
+
+        <div class="comp-card">
+          <span class="comp-emoji">🎨</span>
+          <div class="comp-nombre">SENSOR DE COLOR</div>
+          <div class="comp-desc">Detecta los colores de cada cara del cubo para analizar el estado inicial.</div>
+        </div>
+
+        <div class="comp-card">
+          <span class="comp-emoji">🔧</span>
+          <div class="comp-nombre">ESTRUCTURA LEGO</div>
+          <div class="comp-desc">Sostiene el cubo en posición y permite que los motores lo manipulen.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CÓMO FUNCIONA -->
+    <div class="seccion">
+      <h2>¿Cómo funciona?</h2>
+      <p>
+        El proceso que sigue el Prime Cube para resolver el cubo Rubik tiene <strong>tres etapas principales</strong>:
+      </p>
+
+      <ul>
+        <li><strong>1. ESCANEO:</strong> El sensor de color lee todas las caras del cubo, una por una. El robot gira el cubo para exponer cada cara al sensor y registra los colores en una matriz de datos.</li>
+
+        <li><strong>2. CÁLCULO:</strong> El programa analiza el estado del cubo y calcula la secuencia de movimientos necesaria para resolverlo. Usa algoritmos matemáticos como el "método de capas" o "método Kociemba".</li>
+
+        <li><strong>3. EJECUCIÓN:</strong> Los motores ejecutan los movimientos calculados: giros de 90°, 180°, en sentido horario y antihorario. Cada movimiento es preciso — el robot cuenta los grados que gira cada motor.</li>
+      </ul>
+
+      <p>
+        Todo esto sucede de forma <strong>completamente automática</strong>. El usuario solo coloca el cubo desordenado en la estructura,
+        presiona el botón del Hub, y el robot hace el resto.
+      </p>
+    </div>
+
+    <!-- PISTAS DE PROGRAMACIÓN -->
+    <div class="seccion">
+      <h2>Pistas de Programación</h2>
+      <p>
+        Programar el Prime Cube es un desafío avanzado. Aquí hay algunas <strong>pistas de los conceptos principales</strong> que se usan en el código:
+      </p>
+
+      <ul>
+        <li><strong>Variables y Listas:</strong> El programa guarda el estado del cubo en listas — arrays de 54 elementos (9 cuadrados × 6 caras). Cada elemento representa un color.</li>
+
+        <li><strong>Funciones:</strong> El código está dividido en funciones reutilizables: <code>escanear_cara()</code>, <code>girar_motor()</code>, <code>calcular_solucion()</code>, etc. Esto hace que el programa sea más organizado.</li>
+
+        <li><strong>Bucles (for/while):</strong> El escaneo de las caras usa bucles para repetir el proceso 6 veces (una por cara). Los movimientos también se ejecutan en bucles.</li>
+
+        <li><strong>Condicionales (if/else):</strong> El programa toma decisiones según el estado del cubo: "Si esta cara está completa → pasar a la siguiente capa".</li>
+
+        <li><strong>Control de Motores:</strong> Los motores se controlan con precisión usando <code>run_to_position()</code> para girar exactamente 90° o 180°. La velocidad y la aceleración se ajustan para que los movimientos sean suaves.</li>
+
+        <li><strong>Algoritmos:</strong> La parte más compleja es el algoritmo de resolución. No es un código que inventemos nosotros — los métodos para resolver el cubo Rubik ya existen, y el robot implementa uno de esos métodos en código.</li>
+      </ul>
+
+      <p>
+        Nota: El código completo del Prime Cube puede tener <strong>cientos de líneas</strong>.
+        No lo programamos desde cero en clase — usamos proyectos base que ya funcionan y los analizamos para entender cómo trabajan.
+      </p>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz-section">
+      <div class="quiz-titulo">🎯 QUIZ DE COMPRENSIÓN</div>
+      <div class="quiz-sub">Respondé estas preguntas para verificar que entendiste cómo funciona el Prime Cube</div>
+
+      <!-- Pregunta 1 -->
+      <div class="pregunta" data-pregunta="1">
+        <div class="pregunta-num">PREGUNTA 01</div>
+        <div class="pregunta-texto">¿Qué componente usa el robot para detectar los colores de cada cara del cubo?</div>
+        <div class="opciones">
+          <div class="opcion" data-respuesta="a" onclick="seleccionar(1,'a')">A) El sensor de distancia ultrasónico</div>
+          <div class="opcion" data-respuesta="b" onclick="seleccionar(1,'b')">B) El sensor de color</div>
+          <div class="opcion" data-respuesta="c" onclick="seleccionar(1,'c')">C) El motor grande con encoder</div>
+          <div class="opcion" data-respuesta="d" onclick="seleccionar(1,'d')">D) La pantalla del Hub</div>
+        </div>
+      </div>
+
+      <!-- Pregunta 2 -->
+      <div class="pregunta" data-pregunta="2">
+        <div class="pregunta-num">PREGUNTA 02</div>
+        <div class="pregunta-texto">¿Cuántos motores grandes usa el Prime Cube para manipular el cubo?</div>
+        <div class="opciones">
+          <div class="opcion" data-respuesta="a" onclick="seleccionar(2,'a')">A) Un motor grande solamente</div>
+          <div class="opcion" data-respuesta="b" onclick="seleccionar(2,'b')">B) Dos motores grandes</div>
+          <div class="opcion" data-respuesta="c" onclick="seleccionar(2,'c')">C) Tres motores grandes</div>
+          <div class="opcion" data-respuesta="d" onclick="seleccionar(2,'d')">D) Cuatro motores grandes</div>
+        </div>
+      </div>
+
+      <!-- Pregunta 3 -->
+      <div class="pregunta" data-pregunta="3">
+        <div class="pregunta-num">PREGUNTA 03</div>
+        <div class="pregunta-texto">¿En qué orden trabaja el Prime Cube para resolver el cubo?</div>
+        <div class="opciones">
+          <div class="opcion" data-respuesta="a" onclick="seleccionar(3,'a')">A) Cálculo → Ejecución → Escaneo</div>
+          <div class="opcion" data-respuesta="b" onclick="seleccionar(3,'b')">B) Escaneo → Cálculo → Ejecución</div>
+          <div class="opcion" data-respuesta="c" onclick="seleccionar(3,'c')">C) Ejecución → Escaneo → Cálculo</div>
+          <div class="opcion" data-respuesta="d" onclick="seleccionar(3,'d')">D) Escaneo → Ejecución → Cálculo</div>
+        </div>
+      </div>
+
+      <!-- Pregunta 4 -->
+      <div class="pregunta" data-pregunta="4">
+        <div class="pregunta-num">PREGUNTA 04</div>
+        <div class="pregunta-texto">¿Qué estructura de datos se usa para guardar el estado del cubo en el programa?</div>
+        <div class="opciones">
+          <div class="opcion" data-respuesta="a" onclick="seleccionar(4,'a')">A) Una variable simple de texto</div>
+          <div class="opcion" data-respuesta="b" onclick="seleccionar(4,'b')">B) Listas o arrays de colores</div>
+          <div class="opcion" data-respuesta="c" onclick="seleccionar(4,'c')">C) Un diccionario de claves y valores</div>
+          <div class="opcion" data-respuesta="d" onclick="seleccionar(4,'d')">D) No se guarda el estado, se lee en tiempo real</div>
+        </div>
+      </div>
+
+      <!-- Pregunta 5 -->
+      <div class="pregunta" data-pregunta="5">
+        <div class="pregunta-num">PREGUNTA 05</div>
+        <div class="pregunta-texto">¿Por qué el código del Prime Cube usa funciones?</div>
+        <div class="opciones">
+          <div class="opcion" data-respuesta="a" onclick="seleccionar(5,'a')">A) Para hacer el programa más corto en líneas</div>
+          <div class="opcion" data-respuesta="b" onclick="seleccionar(5,'b')">B) Para organizar el código y reutilizar partes</div>
+          <div class="opcion" data-respuesta="c" onclick="seleccionar(5,'c')">C) Porque es obligatorio usar funciones en Python</div>
+          <div class="opcion" data-respuesta="d" onclick="seleccionar(5,'d')">D) Para que el robot vaya más rápido</div>
+        </div>
+      </div>
+
+      <!-- Pregunta 6 -->
+      <div class="pregunta" data-pregunta="6">
+        <div class="pregunta-num">PREGUNTA 06</div>
+        <div class="pregunta-texto">¿Qué tipo de control de motores necesita el robot para ejecutar los movimientos con precisión?</div>
+        <div class="opciones">
+          <div class="opcion" data-respuesta="a" onclick="seleccionar(6,'a')">A) Control por tiempo (encender 3 segundos)</div>
+          <div class="opcion" data-respuesta="b" onclick="seleccionar(6,'b')">B) Control por posición (girar exactamente 90°)</div>
+          <div class="opcion" data-respuesta="c" onclick="seleccionar(6,'c')">C) Control por potencia (velocidad máxima)</div>
+          <div class="opcion" data-respuesta="d" onclick="seleccionar(6,'d')">D) Control manual con botones del Hub</div>
+        </div>
+      </div>
+
+      <button class="btn-verificar" onclick="verificarQuiz()">Verificar Respuestas</button>
+
+      <div class="resultado" id="resultado">
+        <span class="resultado-emoji" id="resultado-emoji"></span>
+        <div class="resultado-titulo" id="resultado-titulo"></div>
+        <div class="resultado-puntaje" id="resultado-puntaje"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>IMAR_PAGE</span> · SPIKE Prime · Sexto Año · 2026
+  </footer>
+
+  <script>
+    // Respuestas correctas
+    const respuestas = {
+      1: 'b', // Sensor de color
+      2: 'b', // Dos motores grandes
+      3: 'b', // Escaneo → Cálculo → Ejecución
+      4: 'b', // Listas o arrays
+      5: 'b', // Organizar código y reutilizar
+      6: 'b'  // Control por posición
+    };
+
+    // Respuestas del usuario
+    const selecciones = {};
+
+    function seleccionar(pregunta, respuesta) {
+      // Desmarcar todas las opciones de esta pregunta
+      document.querySelectorAll(`[data-pregunta="${pregunta}"] .opcion`).forEach(op => {
+        op.classList.remove('selected');
+      });
+
+      // Marcar la opción seleccionada
+      event.target.classList.add('selected');
+      selecciones[pregunta] = respuesta;
+    }
+
+    function verificarQuiz() {
+      // Verificar que respondió todas
+      if (Object.keys(selecciones).length < 6) {
+        alert('⚠️ Respondé todas las preguntas antes de verificar');
+        return;
+      }
+
+      let correctas = 0;
+
+      // Revisar cada pregunta
+      for (let i = 1; i <= 6; i++) {
+        const opciones = document.querySelectorAll(`[data-pregunta="${i}"] .opcion`);
+        const respuestaCorrecta = respuestas[i];
+        const respuestaUsuario = selecciones[i];
+
+        opciones.forEach(op => {
+          const letra = op.dataset.respuesta;
+
+          if (letra === respuestaCorrecta) {
+            op.classList.add('correcta');
+            if (letra === respuestaUsuario) correctas++;
+          } else if (letra === respuestaUsuario) {
+            op.classList.add('incorrecta');
+          }
+        });
+      }
+
+      // Mostrar resultado
+      const resultado = document.getElementById('resultado');
+      const emoji = document.getElementById('resultado-emoji');
+      const titulo = document.getElementById('resultado-titulo');
+      const puntaje = document.getElementById('resultado-puntaje');
+
+      resultado.classList.remove('excelente', 'bien', 'mejorar');
+
+      if (correctas === 6) {
+        resultado.classList.add('excelente');
+        emoji.textContent = '🏆';
+        titulo.textContent = '¡PERFECTO!';
+        puntaje.textContent = `${correctas}/6 — Entendiste completamente cómo funciona el Prime Cube. ¡Excelente!`;
+      } else if (correctas >= 4) {
+        resultado.classList.add('bien');
+        emoji.textContent = '✅';
+        titulo.textContent = '¡MUY BIEN!';
+        puntaje.textContent = `${correctas}/6 — Tenés una buena comprensión del robot. Revisá las que fallaste.`;
+      } else {
+        resultado.classList.add('mejorar');
+        emoji.textContent = '📚';
+        titulo.textContent = 'HAY QUE MEJORAR';
+        puntaje.textContent = `${correctas}/6 — Volvé a leer la información y prestá más atención a los detalles.`;
+      }
+
+      resultado.classList.add('show');
+
+      // Deshabilitar botón
+      document.querySelector('.btn-verificar').disabled = true;
+
+      // Scroll al resultado
+      resultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  </script>
+
+</body>
+</html>

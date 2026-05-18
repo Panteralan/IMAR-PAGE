@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMAR Page — Quinto Año</title>
+  <link rel="stylesheet" href="../../css/bootstrap.css" />
+  <link rel="stylesheet" href="../../css/primaria.css" />
+  <style>
+    /* Colores específicos de quinto */
+    :root {
+      --scratch-color:   #4c97ff;
+      --scratch-light:   #eaf2ff;
+      --codeorg-color:   #1cb947;
+      --codeorg-light:   #e6f9ec;
+      --minecraft-color: #5b8c2a;
+      --minecraft-light: #edf5e0;
+      --arcade-color:    #9c27b0;
+      --arcade-light:    #f5e6fa;
+      --microbit-color:  #0097a7;
+      --microbit-light:  #e0f7fa;
+      --edubit-color:    #f4511e;
+      --edubit-light:    #fbe9e7;
+    }
+
+    /* Scratch + WeDo */
+    .sec-scratch .section-titulo { color: var(--scratch-color); }
+    .sec-scratch .section-badge  { background: var(--scratch-light); color: var(--scratch-color); border: 2px solid var(--scratch-color); }
+    .sec-scratch .card-stripe    { background: var(--scratch-color); }
+    .sec-scratch .btn-ver        { background: var(--scratch-color); color: #fff; box-shadow: 0 4px 14px rgba(76,151,255,0.35); }
+    .sec-scratch .btn-ver:hover  { background: #3a7fd4; color: #fff; transform: scale(1.02); }
+
+    /* Code.org */
+    .sec-codeorg .section-titulo { color: var(--codeorg-color); }
+    .sec-codeorg .section-badge  { background: var(--codeorg-light); color: var(--codeorg-color); border: 2px solid var(--codeorg-color); }
+    .sec-codeorg .card-stripe    { background: var(--codeorg-color); }
+    .sec-codeorg .btn-ver        { background: var(--codeorg-color); color: #fff; box-shadow: 0 4px 14px rgba(28,185,71,0.35); }
+    .sec-codeorg .btn-ver:hover  { background: #158a34; color: #fff; transform: scale(1.02); }
+
+    /* Minecraft */
+    .sec-minecraft .section-titulo { color: var(--minecraft-color); }
+    .sec-minecraft .section-badge  { background: var(--minecraft-light); color: var(--minecraft-color); border: 2px solid var(--minecraft-color); }
+    .sec-minecraft .card-stripe    { background: var(--minecraft-color); }
+    .sec-minecraft .btn-ver        { background: var(--minecraft-color); color: #fff; box-shadow: 0 4px 14px rgba(91,140,42,0.35); }
+    .sec-minecraft .btn-ver:hover  { background: #3d6117; color: #fff; transform: scale(1.02); }
+
+    /* MakeCode Arcade */
+    .sec-arcade .section-titulo { color: var(--arcade-color); }
+    .sec-arcade .section-badge  { background: var(--arcade-light); color: var(--arcade-color); border: 2px solid var(--arcade-color); }
+    .sec-arcade .card-stripe    { background: var(--arcade-color); }
+    .sec-arcade .btn-ver        { background: var(--arcade-color); color: #fff; box-shadow: 0 4px 14px rgba(156,39,176,0.35); }
+    .sec-arcade .btn-ver:hover  { background: #7b1fa2; color: #fff; transform: scale(1.02); }
+
+    /* Micro:bit */
+    .sec-microbit .section-titulo { color: var(--microbit-color); }
+    .sec-microbit .section-badge  { background: var(--microbit-light); color: var(--microbit-color); border: 2px solid var(--microbit-color); }
+    .sec-microbit .card-stripe    { background: var(--microbit-color); }
+    .sec-microbit .btn-ver        { background: var(--microbit-color); color: #fff; box-shadow: 0 4px 14px rgba(0,151,167,0.35); }
+    .sec-microbit .btn-ver:hover  { background: #00838f; color: #fff; transform: scale(1.02); }
+
+    /* Edubit */
+    .sec-edubit .section-titulo { color: var(--edubit-color); }
+    .sec-edubit .section-badge  { background: var(--edubit-light); color: var(--edubit-color); border: 2px solid var(--edubit-color); }
+    .sec-edubit .card-stripe    { background: var(--edubit-color); }
+    .sec-edubit .btn-ver        { background: var(--edubit-color); color: #fff; box-shadow: 0 4px 14px rgba(244,81,30,0.35); }
+    .sec-edubit .btn-ver:hover  { background: #bf360c; color: #fff; transform: scale(1.02); }
+
+    /* Botón secundario Scratch */
+    .btn-scratch { background: #4c97ff !important; box-shadow: 0 4px 14px rgba(76,151,255,0.35) !important; }
+    .btn-scratch:hover { background: #3a7fd4 !important; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="imar-navbar">
+    <div class="container d-flex align-items-center justify-content-between gap-3 flex-wrap">
+      <a href="#" class="navbar-logo">🤖 <span>IMAR Page</span></a>
+      <span class="navbar-grado" style="background: linear-gradient(135deg, #4c97ff 0%, #9c27b0 100%);">🎒 Quinto Año</span>
+      <button class="btn-logout" onclick="AUTH.logout()">Cerrar sesión →</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="prim-hero" style="background: linear-gradient(135deg, #4c97ff 0%, #9c27b0 100%);">
+    <div class="container text-center position-relative">
+      <span class="hero-emoji">🌟</span>
+      <h1 class="hero-titulo">¡Bienvenidos, Quinto Año!</h1>
+      <p class="hero-sub">Scratch, Code.org, Minecraft, Micro:bit y mucho más. ¡El nivel sube!</p>
+      <div class="hero-chips justify-content-center">
+        <span class="hero-chip">🐱 Scratch + WeDo</span>
+        <span class="hero-chip">💻 Code.org</span>
+        <span class="hero-chip">⛏️ Minecraft</span>
+        <span class="hero-chip">🎮 MakeCode Arcade</span>
+        <span class="hero-chip">🔬 Micro:bit</span>
+        <span class="hero-chip">⚡ Edubit</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 1 — SCRATCH + WEDO 2.0
+       ================================================ -->
+  <section class="contenido-section sec-scratch">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🐱</span>
+        <div>
+          <h2 class="section-titulo">Scratch + LEGO WeDo 2.0 + MicroBit</h2>
+          <p class="section-desc">Proyectos combinados de programación y robótica</p>
+        </div>
+        <span class="section-badge">Scratch + WeDo + MicroBit</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más proyectos Scratch+WeDo -->
+        <div class="contenido-card" data-id="sc-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Scratch + WeDo</span>
+            <h3 class="card-titulo">🎮 MicroBauto 🎮</h3>
+            <p class="card-desc">En el siguiente manual, tratarán de armar un auto que podra ser controlado con una microbit. La idea es usar la plataforma Scratch para que este robot pueda ser controlado.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <!-- Reemplazá src con: ../../img/primaria/quinto/nombre.jpg -->
+              <img src="../../img/primaria/microbauto.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <!-- PDF de instrucciones tuyo -->
+            <a class="btn-ver" href="../../pdfs/primaria/microbauto.pdf" target="_blank" rel="noopener">
+              📄 Ver Instrucciones
+            </a>
+            <!-- Link a tu proyecto en Scratch -->
+            <a class="btn-ver btn-scratch" href="https://scratch.mit.edu/" target="_blank" rel="noopener">
+              🐱 Abrir en Scratch
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="sc-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Scratch + WeDo</span>
+            <h3 class="card-titulo">🚀 Videojuego Espacial🚀</h3>
+            <p class="card-desc">En el siguiente proyecto tratarán de armar un bolante de una nave espacial. Tendrás que sobrevivir ante las hordas de enemigos que vienen a por tí. <strong>¿Estás preparado?</strong>.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/Videojuegoespacial.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="../../pdfs/primaria/Videojuego estelar 2.pdf" target="_blank" rel="noopener">
+              📄 Ver Instrucciones
+            </a>
+            <a class="btn-ver btn-scratch" href="https://scratch.mit.edu/projects/985083870/" target="_blank" rel="noopener">
+              🐱 Abrir en Scratch
+            </a>
+          </div>
+        </div>
+
+        <!-- Tarjeta BLOQUEADA -->
+        <div class="contenido-card" data-id="sc-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Proyecto · Scratch + WeDo</span>
+            <h3 class="card-titulo">🐱‍🐉 T-Rex 🐱‍🐉</h3>
+            <p class="card-desc">Pondremos a prueba el trabajo en equípo con este manual desafiante. Para ello deberán de dividirse en grupos de 4 personas y cada uno tratar de armar las partes del dinosaurio.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/T-REX.JPG" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="../../pdfs/primaria/t-rex.pdf" target="_blank" rel="noopener">📄 Ver Instrucciones</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 2 — CODE.ORG
+       ================================================ -->
+  <section class="contenido-section sec-codeorg">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">💻</span>
+        <div>
+          <h2 class="section-titulo">Code.org</h2>
+          <p class="section-desc">Actividades de programación en la plataforma Code.org</p>
+        </div>
+        <span class="section-badge">Code.org</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más actividades de Code.org -->
+        <div class="contenido-card" data-id="co-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad · Code.org</span>
+            <h3 class="card-titulo">Actividades con Minecraft. Hora del Código</h3>
+            <p class="card-desc">Comenzaremos a programar en bloques utilizando los diferentes desafios <strong>gratuitos</strong> en la plataforma <strong>Code.org</strong>.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="https://contentful-images.code.org/90t6bu6vlf76/2LLhACqYlYPNrpvjvN8gXn/88aba8430e5ecc3cdb6241608d3e3712/291daacf8b43681d634c9004b5f0d14a-Minecraft_Voyager.png?fm=avif" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <!-- Reemplazá href con el link directo a la actividad en Code.org -->
+            <a class="btn-ver" href="https://code.org/en-US/minecraft" target="_blank" rel="noopener">
+              💻 Ir a Minecraft Education
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="co-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad · Code.org</span>
+            <h3 class="card-titulo">🎯 CodeCombat junior 🎯</h3>
+            <p class="card-desc">Comenzarás a programar en un entorno gráfico diferente, con acción y aventura en esta plataforma llamada <strong>CodeCombat</strong>, de la mano de <strong>Code.org</strong>.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/CodeCombat.webp" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://codecombat.com/play/odyssey" target="_blank" rel="noopener">
+              💻 Ir a CodeCombat
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="co-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad · Code.org</span>
+            <h3 class="card-titulo">🔒 Nombre de la Actividad 3</h3>
+            <p class="card-desc">Este contenido se habilita más adelante.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/quinto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="#" target="_blank" rel="noopener">💻 Ir a Code.org</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================================
+       SECCIÓN 3 — MAKECODE ARCADE
+       ================================================ -->
+  <section class="contenido-section sec-arcade">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🎮</span>
+        <div>
+          <h2 class="section-titulo">MakeCode Arcade</h2>
+          <p class="section-desc">Creamos videojuegos con bloques de programación</p>
+        </div>
+        <span class="section-badge">MakeCode Arcade</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más juegos de MakeCode -->
+        <div class="contenido-card" data-id="arc-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Videojuego · MakeCode Arcade</span>
+            <h3 class="card-titulo">🕹️ Whack-the-Mole </h3>
+            <p class="card-desc">Tratarás de crear un juego clásico donde puedes golpear a los topos en los agujeros. La idea es que puedas completar el tutorial. Trata de recorrer todo el mapa para poder realizar el juego. Si no entiendes el ingles, puedes usar el <strong>traductor automático de Google</strong> o apretar en la <strong>lamparita 💡</strong> para poder ver cómo van los bloques colocados.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="https://arcade.makecode.com/static/hour-of-code/2022/gameImg_whack_em_all.png" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <!-- Link directo a MakeCode Arcade -->
+            <a class="btn-ver" href="https://arcade.makecode.com/--skillmap#mole" target="_blank" rel="noopener"
+               style="background:#1c7d35; box-shadow: 0 4px 14px rgba(28,125,53,0.35);">
+              🎮 Abrir en MakeCode
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="arc-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Videojuego · MakeCode Arcade</span>
+            <h3 class="card-titulo">🚀 Estallando globos</h3>
+            <p class="card-desc">Programa un raton para que infle globos lo mas rápido posible. Aquí podras implementar la mecanica <strong>multijugador</strong>. Si no entiendes el ingles, puedes usar el <strong>traductor automático de Google</strong> o apretar en la <strong>lamparita 💡</strong> para poder ver cómo van los bloques colocados.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="https://arcade.makecode.com/static/hour-of-code/2022/gameImg_ballon2.png" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar d-flex flex-column gap-2">
+            <a class="btn-ver" href="https://arcade.makecode.com/--skillmap#balloon" target="_blank" rel="noopener"
+               style="background:#1c7d35; box-shadow: 0 4px 14px rgba(28,125,53,0.35);">
+              🎮 Abrir en MakeCode
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="arc-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Videojuego · MakeCode Arcade</span>
+            <h3 class="card-titulo">🚗 Monster Racer 👾</h3>
+            <p class="card-desc">Construye un juego de carreras con un aterrador camión monstruo. Si no entiendes el ingles, puedes usar el <strong>traductor automático de Google</strong> o apretar en la <strong>lamparita 💡</strong> para poder ver cómo van los bloques colocados</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="https://arcade.makecode.com/static/hour-of-code/2022/gameImg_racer.png" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="https://arcade.makecode.com/--skillmap#docs:skillmap/racer" target="_blank" rel="noopener">🎮 Abrir en MakeCode</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 4 — MICRO:BIT
+       ================================================ -->
+  <section class="contenido-section sec-microbit">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">🔬</span>
+        <div>
+          <h2 class="section-titulo">Micro:bit</h2>
+          <p class="section-desc">Actividades con la placa Micro:bit</p>
+        </div>
+        <span class="section-badge">Micro:bit</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más actividades Micro:bit -->
+        <div class="contenido-card" data-id="mb-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad · Micro:bit</span>
+            <h3 class="card-titulo">💡 Nombre de la Actividad 1</h3>
+            <p class="card-desc">Descripción de la actividad. ¿Qué hace el Micro:bit en este proyecto?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/quinto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <!-- Link oficial o tu PDF -->
+            <a class="btn-ver" href="PEGAR_LINK_MICROBIT_AQUI" target="_blank" rel="noopener">
+              🔬 Ver Actividad
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="mb-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad · Micro:bit</span>
+            <h3 class="card-titulo">🌡️ Nombre de la Actividad 2</h3>
+            <p class="card-desc">Descripción de la actividad. ¿Qué hace el Micro:bit en este proyecto?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/quinto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="PEGAR_LINK_MICROBIT_AQUI" target="_blank" rel="noopener">
+              🔬 Ver Actividad
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="mb-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad · Micro:bit</span>
+            <h3 class="card-titulo">📡 Nombre de la Actividad 3</h3>
+            <p class="card-desc">Próximamente disponible.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/quinto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="#" target="_blank" rel="noopener">🔬 Ver Actividad</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECCIÓN 5 — EDUBIT
+       ================================================ -->
+  <section class="contenido-section sec-edubit">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-icon">⚡</span>
+        <div>
+          <h2 class="section-titulo">Edubit</h2>
+          <p class="section-desc">Actividades de programación con Edubit</p>
+        </div>
+        <span class="section-badge">Edubit</span>
+      </div>
+
+      <div class="contenido-grid">
+
+        <!-- TARJETA — copiá este bloque para agregar más actividades Edubit -->
+        <div class="contenido-card" data-id="eb-01" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad · Edubit</span>
+            <h3 class="card-titulo">⚡ Nombre de la Actividad 1</h3>
+            <p class="card-desc">Descripción de la actividad. ¿Qué programa el alumno con Edubit?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/quinto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <!-- Reemplazá href con el link directo a Edubit -->
+            <a class="btn-ver" href="PEGAR_LINK_EDUBIT_AQUI" target="_blank" rel="noopener">
+              ⚡ Ir a Edubit
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="eb-02" data-bloqueado="false">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad · Edubit</span>
+            <h3 class="card-titulo">🔋 Nombre de la Actividad 2</h3>
+            <p class="card-desc">Descripción de la actividad. ¿Qué programa el alumno con Edubit?</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/quinto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="PEGAR_LINK_EDUBIT_AQUI" target="_blank" rel="noopener">
+              ⚡ Ir a Edubit
+            </a>
+          </div>
+        </div>
+
+        <div class="contenido-card" data-id="eb-03" data-bloqueado="true">
+          <div class="card-stripe"></div>
+          <div class="card-body-imar">
+            <span class="card-tipo">Actividad · Edubit</span>
+            <h3 class="card-titulo">🌟 Nombre de la Actividad 3</h3>
+            <p class="card-desc">Este contenido se habilita más adelante.</p>
+          </div>
+          <div class="card-img-wrap">
+            <figure>
+              <img src="../../img/primaria/quinto/IMAGEN.jpg" alt="Vista previa"
+                   onerror="this.parentElement.innerHTML='<span class=img-placeholder>🖼️</span>'" />
+            </figure>
+          </div>
+          <div class="card-footer-imar">
+            <a class="btn-ver" href="#" target="_blank" rel="noopener">⚡ Ir a Edubit</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="imar-footer">
+    <span>IMAR Page</span> · Robótica Educativa · 2026
+  </footer>
+
+  <script src="../../js/auth.js"></script>
+  <script src="../../js/supabase.js"></script>
+  <script src="../../js/visibilidad.js"></script>
+  <script>
+    AUTH.verificar('alumno');
+    // Cargar visibilidad desde Supabase
+    VISIBILIDAD.aplicar('quinto');
+  </script>
+
+</body>
+</html>

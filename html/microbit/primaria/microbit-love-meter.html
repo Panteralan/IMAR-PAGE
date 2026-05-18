@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>❤️ Medidor de Amor — Micro:bit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rosa:      #ff4d8d;
+      --rosa-light:#fff0f6;
+      --morado:    #8b5cf6;
+      --morado-light:#f5f3ff;
+      --azul:      #3b82f6;
+      --azul-light:#eff6ff;
+      --verde:     #10b981;
+      --verde-light:#ecfdf5;
+      --amarillo:  #f59e0b;
+      --amarillo-light:#fffbeb;
+      --bg:        #fff5f9;
+      --texto:     #1e293b;
+      --muted:     #64748b;
+      --card:      #ffffff;
+      --radius:    20px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, #ff4d8d 0%, #8b5cf6 100%);
+      padding: 56px 24px 72px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.1) 2px, transparent 2px);
+      background-size: 28px 28px;
+    }
+
+    .hero-emoji {
+      font-size: 72px;
+      display: block;
+      margin-bottom: 16px;
+      animation: latido 1.2s ease-in-out infinite;
+    }
+
+    @keyframes latido {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.15); }
+    }
+
+    .hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(32px, 6vw, 64px);
+      color: #fff;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+      margin-bottom: 10px;
+      position: relative; z-index: 1;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,0.9);
+      font-weight: 700;
+      position: relative; z-index: 1;
+      margin-bottom: 28px;
+    }
+
+    .hero-chips {
+      display: flex; flex-wrap: wrap;
+      gap: 10px; justify-content: center;
+      position: relative; z-index: 1;
+    }
+
+    .chip {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.4);
+      color: #fff;
+      padding: 7px 18px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 800;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ===== INTRO ===== */
+    .intro-section {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 48px 20px 0;
+      text-align: center;
+    }
+
+    .intro-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: 0 4px 24px rgba(255,77,141,0.1);
+      border: 2px solid rgba(255,77,141,0.15);
+    }
+
+    .intro-card h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 26px;
+      color: var(--rosa);
+      margin-bottom: 12px;
+    }
+
+    .intro-card p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .intro-card strong { color: var(--texto); }
+
+    /* Escala de amor */
+    .love-scale {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .love-item {
+      border-radius: 14px;
+      padding: 14px 12px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .love-item .love-emoji { font-size: 28px; display: block; margin-bottom: 6px; }
+    .love-item .love-range {
+      font-family: 'Fredoka One', cursive;
+      font-size: 18px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .love-item.l1 { background: #f1f5f9; color: #475569; }
+    .love-item.l2 { background: #dbeafe; color: #1d4ed8; }
+    .love-item.l3 { background: #fce7f3; color: #be185d; }
+    .love-item.l4 { background: #fef3c7; color: #92400e; }
+
+    /* ===== SECCIÓN DE MATERIALES ===== */
+    .materiales {
+      max-width: 820px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .mat-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      border: 2px solid rgba(139,92,246,0.2);
+      box-shadow: 0 4px 20px rgba(139,92,246,0.08);
+    }
+
+    .mat-card h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 24px;
+      color: var(--morado);
+      margin-bottom: 16px;
+    }
+
+    .mat-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .mat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--morado-light);
+      border: 2px solid rgba(139,92,246,0.2);
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--morado);
+    }
+
+    /* ===== PASOS ===== */
+    .pasos-section {
+      max-width: 820px;
+      margin: 32px auto 0;
+      padding: 0 20px 60px;
+    }
+
+    .pasos-titulo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 32px;
+      color: var(--texto);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .paso-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: 2px solid transparent;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .paso-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+
+    /* Colores por paso */
+    .paso-card.p1 { border-color: rgba(255,77,141,0.3); }
+    .paso-card.p2 { border-color: rgba(139,92,246,0.3); }
+    .paso-card.p3 { border-color: rgba(139,92,246,0.3); }
+    .paso-card.p4 { border-color: rgba(59,130,246,0.3); }
+    .paso-card.p5 { border-color: rgba(16,185,129,0.3); }
+    .paso-card.p6 { border-color: rgba(245,158,11,0.3); }
+
+    .paso-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .paso-num {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .p1 .paso-num { background: linear-gradient(135deg, #ff4d8d, #ff8fab); }
+    .p2 .paso-num { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+    .p3 .paso-num { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+    .p4 .paso-num { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+    .p5 .paso-num { background: linear-gradient(135deg, #10b981, #34d399); }
+    .p6 .paso-num { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+
+    .paso-info { flex: 1; }
+
+    .paso-titulo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 20px;
+      color: var(--texto);
+      margin-bottom: 2px;
+    }
+
+    .paso-subtitulo {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .paso-arrow {
+      font-size: 18px;
+      color: var(--muted);
+      transition: transform 0.3s;
+    }
+
+    .paso-card.open .paso-arrow { transform: rotate(180deg); }
+
+    .paso-body {
+      display: none;
+      padding: 0 24px 24px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .paso-card.open .paso-body { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Contenido del paso */
+    .paso-body p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .paso-body p strong { color: var(--texto); }
+
+    /* Bloque de código visual */
+    .bloque-visual {
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 16px 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .bloque-header {
+      padding: 8px 16px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .bloque-content {
+      padding: 16px 20px;
+      background: #1e1b4b;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Bloques estilo MakeCode */
+    .bloque {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      width: fit-content;
+    }
+
+    .bloque.azul    { background: #4c97ff; }
+    .bloque.morado  { background: #9966ff; }
+    .bloque.verde   { background: #5cb85c; }
+    .bloque.rojo    { background: #d9534f; }
+    .bloque.naranja { background: #f0ad4e; color: #000; }
+
+    .bloque-inner {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.2);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .bloque-indent {
+      margin-left: 28px;
+    }
+
+    /* Tip box */
+    .tip-box {
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-top: 12px;
+    }
+
+    .tip-box.rosa   { background: var(--rosa-light); border-left: 4px solid var(--rosa); }
+    .tip-box.morado { background: var(--morado-light); border-left: 4px solid var(--morado); }
+    .tip-box.azul   { background: var(--azul-light); border-left: 4px solid var(--azul); }
+    .tip-box.verde  { background: var(--verde-light); border-left: 4px solid var(--verde); }
+    .tip-box.amarillo { background: var(--amarillo-light); border-left: 4px solid var(--amarillo); }
+
+    .tip-icon { font-size: 22px; flex-shrink: 0; }
+    .tip-text { font-size: 14px; font-weight: 700; line-height: 1.6; }
+    .tip-text strong { color: var(--texto); }
+
+    /* Pasos dentro del paso */
+    .mini-pasos {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .mini-paso {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .mini-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Fredoka One', cursive;
+      font-size: 14px;
+      color: #fff;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .mini-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--texto);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* Donde buscar los bloques */
+    .donde-buscar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .categoria-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .cat-basic  { background: #dbeafe; color: #1d4ed8; }
+    .cat-input  { background: #fce7f3; color: #9d174d; }
+    .cat-math   { background: #d1fae5; color: #065f46; }
+
+    /* ===== PROBALO ===== */
+    .probalo {
+      border-radius: 16px;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(255,77,141,0.08), rgba(139,92,246,0.08));
+      border: 2px dashed rgba(255,77,141,0.3);
+      margin-top: 12px;
+    }
+
+    .probalo h4 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 18px;
+      color: var(--rosa);
+      margin-bottom: 10px;
+    }
+
+    .probalo p {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--texto);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    footer span { color: #fff; font-weight: 800; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 576px) {
+      .love-scale { grid-template-columns: 1fr 1fr; }
+      .paso-header { gap: 12px; }
+      .paso-num { width: 42px; height: 42px; font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="hero-emoji">❤️</span>
+    <h1>Medidor de Amor</h1>
+    <p class="hero-sub">Actividad con Micro:bit — ¡Programá tu propia máquina!</p>
+    <div class="hero-chips">
+      <div class="chip">🔬 Micro:bit</div>
+      <div class="chip">🧩 MakeCode</div>
+      <div class="chip">🎒 Cuarto Año</div>
+      <div class="chip">⏱️ 6 pasos</div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro-section">
+    <div class="intro-card">
+      <h2>❓ ¿Qué vamos a hacer?</h2>
+      <p>
+        ¡Van a programar su propio <strong>Medidor de Amor</strong> con el Micro:bit!
+        Cuando toquen los pines del Micro:bit con las manos, va a mostrar un número del <strong>0 al 100</strong>
+        que indica cuánto "amor" circula por su cuerpo. ¿Será mucho o poco? ¡Descubranlo!
+      </p>
+
+      <div class="love-scale">
+        <div class="love-item l1">
+          <span class="love-emoji">🖤</span>
+          <span class="love-range">0 — 25</span>
+          Sin amor
+        </div>
+        <div class="love-item l2">
+          <span class="love-emoji">🤝</span>
+          <span class="love-range">26 — 50</span>
+          Amor de amigos
+        </div>
+        <div class="love-item l3">
+          <span class="love-emoji">💕</span>
+          <span class="love-range">51 — 75</span>
+          Amor con corazón roto
+        </div>
+        <div class="love-item l4">
+          <span class="love-emoji">🔥</span>
+          <span class="love-range">76 — 100</span>
+          ¡Amor ardiente!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATERIALES -->
+  <div class="materiales">
+    <div class="mat-card">
+      <h2>🎒 ¿Qué necesitan?</h2>
+      <div class="mat-list">
+        <div class="mat-item">🔬 Placa Micro:bit</div>
+        <div class="mat-item">💻 Computadora o tablet</div>
+        <div class="mat-item">🌐 MakeCode abierto</div>
+        <div class="mat-item">🤲 ¡Sus manos!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASOS -->
+  <div class="pasos-section">
+    <h2 class="pasos-titulo">🪜 Pasos para programar</h2>
+
+    <!-- PASO 1 -->
+    <div class="paso-card p1 open">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🧩 Busquen el bloque "al presionar el pin"</div>
+          <div class="paso-subtitulo">Categoría: Entrada (rosa/morado)</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>Vamos a usar un bloque especial que detecta cuando tocan el pin <strong>P0</strong> del Micro:bit.</p>
+
+        <div class="donde-buscar">
+          <span class="categoria-badge cat-input">🔴 Entrada (Input)</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff4d8d">1</div>
+            <div class="mini-text">En el menú de la izquierda, hacé click en <strong>Entrada</strong> (es el de color rosa/morado)</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#ff4d8d">2</div>
+            <div class="mini-text">Buscá el bloque <strong>"al presionar el pin P0"</strong> y arrastrálo al área de trabajo</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-header" style="background:#9966ff;">🧩 Así queda el bloque</div>
+          <div class="bloque-content">
+            <div class="bloque morado">al presionar el pin <span class="bloque-inner">P0</span></div>
+          </div>
+        </div>
+
+        <div class="tip-box rosa">
+          <span class="tip-icon">💡</span>
+          <span class="tip-text">Este bloque funciona igual que el bloque <strong>"cuando se presiona la tecla"</strong> de Scratch — espera que pase algo para ejecutar el código de adentro.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="paso-card p2">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🔢 Agreguen el bloque "mostrar número"</div>
+          <div class="paso-subtitulo">Categoría: Básico (azul)</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>Ahora van a hacer que el Micro:bit muestre un número cuando toquen el pin. Este bloque va <strong>adentro</strong> del bloque del paso anterior.</p>
+
+        <div class="donde-buscar">
+          <span class="categoria-badge cat-basic">🔵 Básico (Basic)</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">1</div>
+            <div class="mini-text">Hacé click en <strong>Básico</strong> en el menú de la izquierda</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">2</div>
+            <div class="mini-text">Arrastrá el bloque <strong>"mostrar número"</strong> y soltálo <strong>adentro</strong> del bloque "al presionar el pin P0"</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-header" style="background:#9966ff;">🧩 Así queda hasta ahora</div>
+          <div class="bloque-content">
+            <div class="bloque morado">al presionar el pin <span class="bloque-inner">P0</span></div>
+            <div class="bloque azul bloque-indent">mostrar número <span class="bloque-inner">0</span></div>
+          </div>
+        </div>
+
+        <div class="tip-box morado">
+          <span class="tip-icon">⚠️</span>
+          <span class="tip-text">¡Asegurate de que el bloque "mostrar número" quede <strong>adentro</strong> del bloque rosa! Tiene que encajar como una pieza de LEGO.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="paso-card p3">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🎲 Agreguen el bloque "número al azar"</div>
+          <div class="paso-subtitulo">Categoría: Matemáticas (verde)</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>Para que el medidor muestre un número diferente cada vez, necesitamos un número <strong>al azar</strong> entre 0 y 100. ¡Como tirar un dado pero del 0 al 100!</p>
+
+        <div class="donde-buscar">
+          <span class="categoria-badge cat-math">🟢 Matemáticas (Math)</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">1</div>
+            <div class="mini-text">Hacé click en <strong>Matemáticas</strong> en el menú de la izquierda</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">2</div>
+            <div class="mini-text">Buscá el bloque <strong>"elegir al azar de 0 a 10"</strong></div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">3</div>
+            <div class="mini-text">Arrastralo y <strong>reemplazá el 0</strong> que está en el bloque "mostrar número"</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#8b5cf6">4</div>
+            <div class="mini-text">Cambiá el <strong>10</strong> por <strong>100</strong> para que vaya del 0 al 100</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-header" style="background:#9966ff;">🧩 Así queda hasta ahora</div>
+          <div class="bloque-content">
+            <div class="bloque morado">al presionar el pin <span class="bloque-inner">P0</span></div>
+            <div class="bloque azul bloque-indent">mostrar número <span class="bloque-inner">elegir al azar de 0 a 100</span></div>
+          </div>
+        </div>
+
+        <div class="tip-box verde">
+          <span class="tip-icon">🎲</span>
+          <span class="tip-text">El bloque "elegir al azar" es como cuando en Scratch usaban <strong>"número al azar entre"</strong>. ¡Es exactamente lo mismo pero en MakeCode!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 4 -->
+    <div class="paso-card p4">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">4</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🏷️ Ponganle nombre a la máquina</div>
+          <div class="paso-subtitulo">Bloques: al iniciar + mostrar texto</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>Ahora vamos a hacer que cuando encienda el Micro:bit, muestre el texto <strong>"LOVE METER"</strong> para que todos sepan qué es.</p>
+
+        <div class="donde-buscar">
+          <span class="categoria-badge cat-basic">🔵 Básico (Basic)</span>
+        </div>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#3b82f6">1</div>
+            <div class="mini-text">De <strong>Básico</strong>, arrastrá el bloque <strong>"al iniciar"</strong> a cualquier lugar del área de trabajo</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#3b82f6">2</div>
+            <div class="mini-text">De <strong>Básico</strong>, buscá <strong>"mostrar texto"</strong> y poné lo adentro del bloque "al iniciar"</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#3b82f6">3</div>
+            <div class="mini-text">Escribí <strong>LOVE METER</strong> dentro del bloque "mostrar texto"</div>
+          </div>
+        </div>
+
+        <div class="bloque-visual">
+          <div class="bloque-header" style="background:#4c97ff;">🧩 Nuevo bloque separado</div>
+          <div class="bloque-content">
+            <div class="bloque azul">al iniciar</div>
+            <div class="bloque azul bloque-indent">mostrar texto <span class="bloque-inner">"LOVE METER"</span></div>
+          </div>
+        </div>
+
+        <div class="tip-box azul">
+          <span class="tip-icon">💡</span>
+          <span class="tip-text">El bloque <strong>"al iniciar"</strong> es como el bloque <strong>"al presionar bandera verde"</strong> de Scratch — se ejecuta una sola vez cuando encendés el Micro:bit.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 5 -->
+    <div class="paso-card p5">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">5</div>
+        <div class="paso-info">
+          <div class="paso-titulo">🖥️ Probá en el simulador</div>
+          <div class="paso-subtitulo">¡Sin necesitar el Micro:bit físico!</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>Antes de pasarlo al Micro:bit real, podés probar el programa en el <strong>simulador</strong> que aparece abajo a la izquierda de la pantalla.</p>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#10b981">1</div>
+            <div class="mini-text">Mirá el simulador del Micro:bit en el lado izquierdo de MakeCode</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#10b981">2</div>
+            <div class="mini-text">Hacé click en el <strong>Pin 0 (P0)</strong> del simulador con el mouse</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#10b981">3</div>
+            <div class="mini-text">Deberías ver un número entre 0 y 100 en la pantalla del simulador</div>
+          </div>
+        </div>
+
+        <div class="probalo">
+          <h4>📊 ¿Qué número salió?</h4>
+          <p>Recordá la escala de amor:<br>
+          🖤 <strong>0-25</strong> = Sin amor &nbsp;|&nbsp;
+          🤝 <strong>26-50</strong> = Amor de amigos &nbsp;|&nbsp;
+          💕 <strong>51-75</strong> = Amor con corazón roto &nbsp;|&nbsp;
+          🔥 <strong>76-100</strong> = ¡Amor ardiente!</p>
+        </div>
+
+        <div class="tip-box verde">
+          <span class="tip-icon">✅</span>
+          <span class="tip-text">Si el simulador muestra un número cuando hacés click en P0, ¡tu programa está funcionando perfectamente! Pasá al siguiente paso.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 6 -->
+    <div class="paso-card p6">
+      <div class="paso-header" onclick="togglePaso(this)">
+        <div class="paso-num">6</div>
+        <div class="paso-info">
+          <div class="paso-titulo">⬇️ Descargá y probá en el Micro:bit real</div>
+          <div class="paso-subtitulo">¡El momento de la verdad! 🎉</div>
+        </div>
+        <span class="paso-arrow">▼</span>
+      </div>
+      <div class="paso-body">
+        <p>¡Llegó el momento de probar el <strong>Medidor de Amor</strong> en el Micro:bit de verdad con tus manos!</p>
+
+        <div class="mini-pasos">
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">1</div>
+            <div class="mini-text">Conectá el Micro:bit a la computadora con el cable USB</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">2</div>
+            <div class="mini-text">Hacé click en el botón <strong>Descargar</strong> (morado) en MakeCode</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">3</div>
+            <div class="mini-text">Seguí las instrucciones para transferir el programa al Micro:bit</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">4</div>
+            <div class="mini-text">Con <strong>una mano</strong> tocá el pin <strong>GND</strong> (el de abajo a la izquierda)</div>
+          </div>
+          <div class="mini-paso">
+            <div class="mini-num" style="background:#f59e0b">5</div>
+            <div class="mini-text">Con la <strong>otra mano</strong> tocá el pin <strong>0</strong> — ¡el Micro:bit detectará la corriente de amor que pasa por tu cuerpo!</div>
+          </div>
+        </div>
+
+        <div class="tip-box amarillo">
+          <span class="tip-icon">⚡</span>
+          <span class="tip-text">La corriente que pasa por tu cuerpo es <strong>muy muy pequeña</strong> y completamente segura. ¡El Micro:bit la mide para calcular tu "nivel de amor"!</span>
+        </div>
+
+        <div class="probalo">
+          <h4>🎮 ¡Desafíos extra!</h4>
+          <p>
+            ✨ Probá tocando los pines con un amigo/a — ¡uno toca GND y otro toca P0!<br>
+            ✨ ¿Cambia el número si tenés las manos mojadas o sudadas?<br>
+            ✨ ¿Podés cambiar el texto "LOVE METER" por el nombre de tu grupo?
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>IMAR Page</span> · Actividad Micro:bit · Cuarto Año · 2026
+  </footer>
+
+  <script>
+    function togglePaso(header) {
+      const card = header.parentElement;
+      card.classList.toggle('open');
+    }
+
+    // Abrir todos al cargar
+    document.querySelectorAll('.paso-card').forEach(card => {
+      card.classList.add('open');
+    });
+  </script>
+
+</body>
+</html>
