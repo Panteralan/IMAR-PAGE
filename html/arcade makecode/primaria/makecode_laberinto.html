@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🕹️ MakeCode Arcade – El Laberinto de las Frutas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
+
+  :root {
+    --bg:        #0a0a1a;
+    --bg2:       #111128;
+    --panel:     #1a1a3a;
+    --border:    #4040a0;
+    --accent:    #ffcc00;
+    --accent2:   #ff6600;
+    --green:     #00ff88;
+    --cyan:      #00e5ff;
+    --red:       #ff3333;
+    --text:      #e0e0ff;
+    --pixel:     2px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--bg);
+    background-image:
+      repeating-linear-gradient(0deg,   transparent, transparent 31px, rgba(64,64,160,.15) 32px),
+      repeating-linear-gradient(90deg,  transparent, transparent 31px, rgba(64,64,160,.10) 32px);
+    color: var(--text);
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    line-height: 1.6;
+  }
+
+  /* ── SCANLINE overlay ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(to bottom,
+      transparent, transparent 3px,
+      rgba(0,0,0,.18) 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 48px 24px 32px;
+    position: relative;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 4px 12px;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    clip-path: polygon(6px 0%,calc(100% - 6px) 0%,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0% calc(100% - 6px),0% 6px);
+  }
+  h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(14px, 3vw, 26px);
+    color: var(--accent);
+    text-shadow: 3px 3px 0 var(--accent2), 6px 6px 0 rgba(255,100,0,.3);
+    line-height: 1.6;
+    letter-spacing: 2px;
+  }
+  .subtitle {
+    margin-top: 16px;
+    font-size: 22px;
+    color: var(--cyan);
+    letter-spacing: 2px;
+  }
+
+  /* pixel divider */
+  .px-divider {
+    height: 4px;
+    margin: 24px auto;
+    max-width: 600px;
+    background: repeating-linear-gradient(90deg,
+      var(--accent) 0, var(--accent) 16px,
+      var(--accent2) 16px, var(--accent2) 32px);
+    image-rendering: pixelated;
+  }
+
+  /* ── MAIN WRAPPER ── */
+  main { max-width: 860px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* ── SECTION CARD ── */
+  .card {
+    background: var(--panel);
+    border: 3px solid var(--border);
+    padding: 28px;
+    margin-bottom: 32px;
+    position: relative;
+    box-shadow: 6px 6px 0 rgba(64,64,160,.5);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: 12px;
+    width: 60px; height: 3px;
+    background: var(--bg);
+  }
+
+  .card-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 1px;
+  }
+  .card-title .icon { font-size: 20px; }
+
+  /* number badge */
+  .step-num {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 36px; height: 36px;
+    background: var(--accent2);
+    color: #000;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    flex-shrink: 0;
+    clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  }
+
+  /* ── STEP BLOCK ── */
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: rgba(0,0,0,.3);
+    border-left: 4px solid var(--cyan);
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .step-body { flex: 1; }
+  .step-body strong {
+    color: var(--green);
+    font-size: 21px;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: #000;
+    border: 2px solid var(--green);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 18px;
+    color: var(--green);
+    line-height: 1.8;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code-block::before {
+    content: '▶ CÓDIGO';
+    position: absolute; top: 6px; right: 10px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: rgba(0,255,136,.4);
+  }
+
+  /* ── TIP BOX ── */
+  .tip {
+    background: rgba(0,229,255,.08);
+    border: 2px dashed var(--cyan);
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 19px;
+    color: var(--cyan);
+  }
+  .tip::before { content: '💡 '; }
+
+  /* ── WARNING BOX ── */
+  .warning {
+    background: rgba(255,204,0,.08);
+    border: 2px dashed var(--accent);
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 19px;
+    color: var(--accent);
+  }
+  .warning::before { content: '⚠️ '; }
+
+  /* ── SUCCESS BOX ── */
+  .success {
+    background: rgba(0,255,136,.08);
+    border: 2px solid var(--green);
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 19px;
+    color: var(--green);
+  }
+  .success::before { content: '✅ '; }
+
+  /* ── FRUIT ROW ── */
+  .fruit-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 12px 0;
+  }
+  .fruit-chip {
+    background: rgba(255,102,0,.15);
+    border: 2px solid var(--accent2);
+    padding: 6px 14px;
+    font-size: 20px;
+    color: var(--accent2);
+  }
+
+  /* ── SAVE SECTION (special) ── */
+  .save-card {
+    border-color: var(--green);
+    box-shadow: 6px 6px 0 rgba(0,255,136,.25);
+  }
+  .save-card .card-title { color: var(--green); }
+
+  .save-step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,255,136,.2);
+  }
+  .save-step:last-child { border-bottom: none; }
+  .save-num {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: #000;
+    background: var(--green);
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── FOLDER VISUAL ── */
+  .folder-path {
+    background: #000;
+    border: 2px solid var(--accent);
+    padding: 10px 16px;
+    margin: 10px 0;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* ── OBJECTIVES TABLE ── */
+  .obj-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+  @media (max-width: 520px) { .obj-grid { grid-template-columns: 1fr; } }
+  .obj-item {
+    background: rgba(0,0,0,.4);
+    border: 2px solid var(--border);
+    padding: 10px 14px;
+    font-size: 19px;
+  }
+  .obj-item .label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--cyan);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ── BLINKING cursor ── */
+  @keyframes blink { 50% { opacity: 0; } }
+  .cursor { animation: blink 1s step-end infinite; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,.2);
+    letter-spacing: 2px;
+    border-top: 3px solid var(--border);
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    background: #000;
+    border: 2px solid var(--border);
+    height: 18px;
+    margin: 8px 0;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: repeating-linear-gradient(90deg,
+      var(--accent2) 0, var(--accent2) 12px,
+      var(--accent) 12px, var(--accent) 24px);
+    animation: pbar 2.5s linear infinite;
+  }
+  @keyframes pbar { from { background-position: 0 0; } to { background-position: 48px 0; } }
+
+  /* ── PIXEL ICON ART ── */
+  .pixel-art {
+    display: inline-block;
+    font-size: 32px;
+    image-rendering: pixelated;
+  }
+
+  /* ── IMPORTANT NOTE ── */
+  .important {
+    background: rgba(255,51,51,.1);
+    border: 3px solid var(--red);
+    padding: 16px 20px;
+    margin: 16px 0;
+    color: var(--red);
+    font-size: 20px;
+    text-align: center;
+  }
+  .important strong {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ── BLINKING STAR headline ── */
+  @keyframes starPulse {
+    0%, 100% { color: var(--accent); text-shadow: 0 0 8px var(--accent); }
+    50%       { color: var(--accent2); text-shadow: 0 0 14px var(--accent2); }
+  }
+  .glow { animation: starPulse 2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header>
+  <div class="header-badge">DESAFÍO #1 — MAKECODE ARCADE</div>
+  <h1 class="glow">🕹️ EL LABERINTO<br>DE LAS FRUTAS 🍎</h1>
+  <p class="subtitle">¡Recolecta todas las frutas y escapa a tiempo!</p>
+  <div class="px-divider"></div>
+  <p style="color:var(--text); font-size:19px; max-width:600px; margin:0 auto;">
+    En este desafío vas a programar tu propio videojuego usando <span style="color:var(--cyan)">MakeCode Arcade</span>.
+    ¡Seguí cada paso con atención y vas a terminar con un juego increíble!
+  </p>
+</header>
+
+<main>
+
+  <!-- ═══════ 0 · OBJETIVOS ═══════ -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span> ¿QUÉ VAS A CREAR?</div>
+    <div class="obj-grid">
+      <div class="obj-item"><span class="label">ESCENARIO</span>🧱 Un laberinto con paredes</div>
+      <div class="obj-item"><span class="label">PERSONAJE</span>🧑‍💻 Tu héroe que se mueve</div>
+      <div class="obj-item"><span class="label">MISIÓN</span>🍓 Recolectar hasta 8 frutas</div>
+      <div class="obj-item"><span class="label">TIEMPO</span>⏱️ Cuenta regresiva</div>
+      <div class="obj-item"><span class="label">PUERTA</span>🚪 Se abre solo al tener todas las frutas</div>
+      <div class="obj-item"><span class="label">DERROTA</span>💀 Si se acaba el tiempo, ¡perdiste!</div>
+    </div>
+  </div>
+
+  <!-- ═══════ 1 · ABRIR MAKECODE ═══════ -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🌐</span> PASO 1 — ABRIR MAKECODE ARCADE</div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Abrí tu navegador</strong>
+        Usá Chrome, Edge o Firefox.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Ingresá a la página</strong>
+        Escribí en la barra de direcciones:
+        <div class="code-block">https://arcade.makecode.com</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Creá un proyecto nuevo</strong>
+        Hacé clic en el botón grande que dice <span style="color:var(--accent)">+ Nuevo Proyecto</span>.
+        Ponele de nombre: <span style="color:var(--green)">LaberintoDeFrutas</span>
+      </div>
+    </div>
+
+    <div class="tip">Cuando se abra el editor, vas a ver bloques de colores a la izquierda. ¡Esos son tus herramientas de programación!</div>
+  </div>
+
+  <!-- ═══════ 2 · TILEMAP ═══════ -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🗺️</span> PASO 2 — DIBUJAR EL LABERINTO</div>
+
+    <p style="margin-bottom:14px">El laberinto se hace con el editor de <strong style="color:var(--accent)">Tilemap</strong>. ¡Es como un mapa de cuadraditos!</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Encontrá el bloque "set tilemap to"</strong>
+        En el menú de la izquierda andá a <span style="color:var(--cyan)">Scene</span> → buscá el bloque azul que dice <span style="color:var(--accent)">set tilemap to [ ]</span>.
+        Arrastralo dentro del bloque <span style="color:var(--green)">on start</span>.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Abrí el editor del mapa</strong>
+        Hacé clic en el cuadradito vacío del bloque. Se va a abrir el editor de tilemap.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Dibujá tu laberinto</strong>
+        Usá los tiles (cuadraditos) para crear paredes y caminos. Acordate:
+        <ul style="margin: 8px 0 0 20px; line-height:2">
+          <li>🟫 Los tiles oscuros = <span style="color:var(--accent)">PAREDES</span> (el jugador no puede pasar)</li>
+          <li>⬛ Los tiles vacíos = <span style="color:var(--cyan)">CAMINOS</span> (el jugador sí puede pasar)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>¡Marcá las paredes como "wall"!</strong>
+        En el editor de tilemap, después de pintar las paredes, hacé clic en el ícono 🧱 (pared) y pintá encima de todos los tiles oscuros.
+        <span style="color:var(--red)">¡Esto es muy importante para que el jugador no pueda atravesarlas!</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <strong>Dejá un espacio para la salida</strong>
+        Dibujá en una esquina un tile especial que sea la <span style="color:var(--green)">PUERTA DE SALIDA</span>. Podés usar un tile de color diferente.
+      </div>
+    </div>
+
+    <div class="tip">El laberinto no tiene que ser perfecto. ¡Lo importante es que tenga caminos para explorar y que no sea imposible de resolver!</div>
+  </div>
+
+  <!-- ═══════ 3 · PERSONAJE ═══════ -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🧑‍💻</span> PASO 3 — CREAR TU PERSONAJE</div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Creá el sprite del jugador</strong>
+        Andá a <span style="color:var(--cyan)">Sprites</span> y buscá el bloque:
+        <div class="code-block">set mySprite to sprite [ ] of kind Player</div>
+        Arrastralo dentro del bloque <span style="color:var(--green)">on start</span>, debajo del tilemap.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Diseñá tu personaje</strong>
+        Hacé clic en el cuadradito vacío del sprite. Se abre el editor de dibujo. ¡Dibujá tu héroe como más te guste!
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Poné al jugador en el lugar de inicio</strong>
+        Buscá este bloque en <span style="color:var(--cyan)">Scene</span>:
+        <div class="code-block">place mySprite on top of tilemap col 1 row 1</div>
+        Esto pone a tu personaje en la entrada del laberinto.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Hacé que se mueva con las flechas</strong>
+        Andá a <span style="color:var(--cyan)">Controller</span> y buscá:
+        <div class="code-block">move mySprite with buttons ↕️↔️ (velocidad: 100)</div>
+        Arrastralo dentro de <span style="color:var(--green)">on start</span>.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <strong>Activá la cámara para que siga al jugador</strong>
+        En <span style="color:var(--cyan)">Scene</span> buscá:
+        <div class="code-block">camera follow sprite mySprite</div>
+        ¡Así la pantalla se mueve con tu personaje!
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ 4 · FRUTAS ═══════ -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🍓</span> PASO 4 — PONER LAS FRUTAS</div>
+
+    <p style="margin-bottom:14px">Podés poner <strong style="color:var(--accent)">hasta 8 frutas</strong> en el laberinto. El jugador tiene que juntarlas todas para poder salir.</p>
+
+    <div class="fruit-row">
+      <span class="fruit-chip">🍎 Manzana</span>
+      <span class="fruit-chip">🍊 Naranja</span>
+      <span class="fruit-chip">🍋 Limón</span>
+      <span class="fruit-chip">🍇 Uvas</span>
+      <span class="fruit-chip">🍓 Frutilla</span>
+      <span class="fruit-chip">🍒 Cereza</span>
+      <span class="fruit-chip">🍌 Banana</span>
+      <span class="fruit-chip">🍉 Sandía</span>
+    </div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Creá una variable "frutas"</strong>
+        Andá a <span style="color:var(--cyan)">Variables</span> → <span style="color:var(--accent)">Crear variable</span> → llamala <span style="color:var(--green)">frutas</span>.
+        Luego usá:
+        <div class="code-block">set frutas to 0</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Creá los sprites de fruta</strong>
+        Para CADA fruta, hacé esto (repetilo tantas veces como frutas quieras, máximo 8):
+        <div class="code-block">set fruta1 to sprite [ ] of kind Food
+place fruta1 on top of tilemap col X row Y</div>
+        Cambiá <span style="color:var(--accent)">X</span> e <span style="color:var(--accent)">Y</span> por la posición donde quieras que aparezca en el mapa. Dibujá la fruta en el editor.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Detectá cuando el jugador toca una fruta</strong>
+        En <span style="color:var(--cyan)">Sprites</span> buscá el bloque:
+        <div class="code-block">on sprite of kind Player overlaps otherSprite of kind Food</div>
+        Dentro de ese bloque poné:
+        <div class="code-block">destroy otherSprite ← (la fruta desaparece)
+change frutas by 1  ← (suma 1 al contador)</div>
+      </div>
+    </div>
+
+    <div class="tip">Para saber qué posición (col y row) es un lugar del mapa, pasá el mouse por encima del tilemap en el editor. ¡Te muestra la columna y fila!</div>
+  </div>
+
+  <!-- ═══════ 5 · PUERTA DE SALIDA ═══════ -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🚪</span> PASO 5 — LA PUERTA DE SALIDA</div>
+
+    <p style="margin-bottom:14px">La puerta solo se puede cruzar <strong style="color:var(--red)">si ya juntaste todas las frutas</strong>. ¡Esta es la parte más importante del juego!</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Creá el sprite de la salida</strong>
+        <div class="code-block">set salida to sprite [ ] of kind Enemy
+place salida on top of tilemap col X row Y</div>
+        Dibujalo como una puerta o una estrella. Usamos el tipo "Enemy" solo para distinguirlo.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Detectá cuando el jugador llega a la puerta</strong>
+        <div class="code-block">on sprite of kind Player overlaps otherSprite of kind Enemy</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Comprobá si tiene todas las frutas</strong>
+        Dentro del bloque anterior, poné:
+        <div class="code-block">if frutas = 8 then
+    game over WIN ← ¡ganaste!
+else
+    show long text "¡Necesitas recolectar más frutas!" ← aviso</div>
+        <span style="color:var(--accent)">⚠️ Cambiá el 8 por la cantidad de frutas que pusiste en tu laberinto.</span>
+      </div>
+    </div>
+
+    <div class="warning">Si pusiste 5 frutas, escribí "frutas = 5". Si pusiste 3, escribí "frutas = 3". ¡Tiene que coincidir con la cantidad exacta!</div>
+  </div>
+
+  <!-- ═══════ 6 · TIEMPO ═══════ -->
+  <div class="card">
+    <div class="card-title"><span class="icon">⏱️</span> PASO 6 — EL CONTADOR DE TIEMPO</div>
+
+    <p style="margin-bottom:14px">Si se acaba el tiempo antes de recolectar todas las frutas, <strong style="color:var(--red)">¡el jugador pierde!</strong></p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Agregá el tiempo al inicio</strong>
+        Andá a <span style="color:var(--cyan)">Info</span> y buscá:
+        <div class="code-block">start countdown 120 (s)</div>
+        El número <span style="color:var(--accent)">120</span> son los segundos que tiene el jugador. Podés cambiarlo. ¡Con 60 segundos es más difícil!
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Qué pasa cuando se acaba el tiempo</strong>
+        MakeCode lo hace automático: cuando el countdown llega a 0, el juego termina con derrota. ¡No necesitás programar nada más para eso!
+      </div>
+    </div>
+
+    <div class="tip">Probá tu juego con distintos tiempos. Si es muy fácil, bajalo. Si es muy difícil, súbelo. ¡Vos decidís el desafío!</div>
+
+    <div class="obj-grid" style="margin-top:12px">
+      <div class="obj-item"><span class="label">MUY FÁCIL</span>⏱️ 180 segundos</div>
+      <div class="obj-item"><span class="label">NORMAL</span>⏱️ 120 segundos</div>
+      <div class="obj-item"><span class="label">DIFÍCIL</span>⏱️ 60 segundos</div>
+      <div class="obj-item"><span class="label">EXTREMO</span>⏱️ 30 segundos</div>
+    </div>
+  </div>
+
+  <!-- ═══════ 7 · EXTRAS ═══════ -->
+  <div class="card">
+    <div class="card-title"><span class="icon">✨</span> PASO 7 — DETALLES QUE SUMAN PUNTOS EXTRA</div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Mostrar cuántas frutas lleva el jugador</strong>
+        Andá a <span style="color:var(--cyan)">Info</span>:
+        <div class="code-block">set score to 0</div>
+        Y dentro del bloque de overlap con frutas, también poné:
+        <div class="code-block">change score by 10</div>
+        ¡Así el jugador ve sus puntos en la pantalla!
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Sonido al recolectar una fruta</strong>
+        En <span style="color:var(--cyan)">Music</span> buscá:
+        <div class="code-block">play sound ba ding until done</div>
+        Poné esto dentro del bloque de cuando el jugador agarra una fruta.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Pantalla de inicio</strong>
+        En <span style="color:var(--cyan)">Game</span> buscá:
+        <div class="code-block">splash "¡Junta las frutas y escapa!"</div>
+        Poné esto al principio del bloque <span style="color:var(--green)">on start</span>, antes de todo.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ RESUMEN DEL CÓDIGO ═══════ -->
+  <div class="card" style="border-color:var(--accent2)">
+    <div class="card-title" style="color:var(--accent2)"><span class="icon">📋</span> RESUMEN: ORDEN DE LOS BLOQUES</div>
+    <p style="margin-bottom:12px">Dentro del bloque <strong style="color:var(--green)">on start</strong>, el orden correcto es:</p>
+    <div class="code-block" style="line-height:2.2">
+      1. splash "mensaje de bienvenida"<br>
+      2. set tilemap to [ laberinto ]<br>
+      3. set mySprite (jugador)<br>
+      4. place mySprite on top of tilemap<br>
+      5. move mySprite with buttons<br>
+      6. camera follow sprite mySprite<br>
+      7. set frutas to 0<br>
+      8. set score to 0<br>
+      9. crear y colocar cada fruta (×8)<br>
+      10. crear y colocar la salida<br>
+      11. start countdown 120
+    </div>
+    <div class="success">Si seguiste todos los pasos, ¡ya tenés un juego funcionando!</div>
+  </div>
+
+  <!-- ═══════ 8 · GUARDAR ═══════ -->
+  <div class="card save-card">
+    <div class="card-title"><span class="icon">💾</span> PASO 8 — GUARDAR TU PROYECTO</div>
+
+    <div class="important">
+      <strong>⚠️ MUY IMPORTANTE ⚠️</strong>
+      Vamos a usar este proyecto nuevamente en el próximo desafío.<br>
+      ¡Guardalo bien para no perder tu trabajo!
+    </div>
+
+    <p style="margin-bottom:18px; font-size:21px; color:var(--green)">🖥️ CÓMO GUARDAR EN TU COMPUTADORA:</p>
+
+    <div class="save-step">
+      <div class="save-num">1</div>
+      <div>
+        Fijate en la parte de <strong style="color:var(--accent)">arriba a la izquierda</strong> del editor. 
+        Vas a ver el nombre del proyecto. Hacé clic ahí y confirmá que se llama <span style="color:var(--green)">LaberintoDeFrutas</span>.
+      </div>
+    </div>
+
+    <div class="save-step">
+      <div class="save-num">2</div>
+      <div>
+        Buscá el botón con el ícono del disquete 💾 o el menú de los <strong style="color:var(--accent)">tres puntos ⋯</strong> arriba a la derecha. Hacé clic en <span style="color:var(--accent)">Guardar Proyecto</span> o <span style="color:var(--accent)">Download</span>.
+      </div>
+    </div>
+
+    <div class="save-step">
+      <div class="save-num">3</div>
+      <div>
+        Se va a descargar un archivo con extensión <strong style="color:var(--green)">.mkcd</strong> (por ejemplo: <span style="color:var(--green)">LaberintoDeFrutas.mkcd</span>).<br>
+        Ese archivo contiene <strong>todo tu proyecto</strong>.
+      </div>
+    </div>
+
+    <div class="save-step">
+      <div class="save-num">4</div>
+      <div>
+        Creá una carpeta especial en tu computadora para guardar todos tus proyectos de MakeCode. Podés llamarla:
+        <div class="folder-path">📁 MisJuegosArcade\</div>
+        O si ya tenés una carpeta de la materia:
+        <div class="folder-path">📁 Computacion → 📁 MakeCode → 📁 LaberintoDeFrutas</div>
+      </div>
+    </div>
+
+    <div class="save-step">
+      <div class="save-num">5</div>
+      <div>
+        Mové el archivo <span style="color:var(--green)">.mkcd</span> a esa carpeta. <strong style="color:var(--accent)">¡Listo!</strong>
+      </div>
+    </div>
+
+    <div class="save-step">
+      <div class="save-num">6</div>
+      <div>
+        <strong style="color:var(--cyan)">¿Cómo abrir el proyecto la próxima vez?</strong><br>
+        Entrá a <span style="color:var(--text)">arcade.makecode.com</span> → hacé clic en <span style="color:var(--accent)">Importar</span> → buscá tu archivo <span style="color:var(--green)">.mkcd</span> → ¡y seguís trabajando donde lo dejaste!
+      </div>
+    </div>
+
+    <div class="progress-wrap" style="margin-top:16px">
+      <div class="progress-bar" style="width:100%"></div>
+    </div>
+    <p style="text-align:center; margin-top:8px; color:var(--green); font-size:21px">✅ ¡PROYECTO GUARDADO CON ÉXITO!</p>
+  </div>
+
+  <!-- ═══════ CHECKLIST FINAL ═══════ -->
+  <div class="card" style="border-color:var(--accent)">
+    <div class="card-title"><span class="icon">☑️</span> CHECKLIST FINAL — ¿LO TENÉS TODO?</div>
+    <div style="font-size:20px; line-height:2.4">
+      <div>☐ &nbsp; Dibujé el laberinto con paredes marcadas como "wall"</div>
+      <div>☐ &nbsp; Creé mi personaje y se mueve con las flechas</div>
+      <div>☐ &nbsp; Puse entre 1 y 8 frutas en el mapa</div>
+      <div>☐ &nbsp; Las frutas desaparecen cuando las toco</div>
+      <div>☐ &nbsp; La puerta de salida solo me deja ganar si junté todas las frutas</div>
+      <div>☐ &nbsp; El temporizador está activado</div>
+      <div>☐ &nbsp; Probé el juego y funciona</div>
+      <div>☐ &nbsp; Guardé el archivo .mkcd en mi carpeta</div>
+    </div>
+  </div>
+
+  <!-- ═══════ PRÓXIMO DESAFÍO ═══════ -->
+  <div class="card" style="border-color:var(--border); text-align:center">
+    <div class="card-title" style="justify-content:center"><span class="icon">🔮</span> PRÓXIMO DESAFÍO</div>
+    <p style="font-size:22px; color:var(--text); margin-bottom:12px">¡Guardá bien tu proyecto porque en el próximo desafío vas a agregarle…</p>
+    <p style="font-family:'Press Start 2P', monospace; font-size:14px; color:var(--red); text-shadow: 2px 2px 0 #800000; letter-spacing:3px">
+      👾 ¡ENEMIGOS! 👾
+    </p>
+    <p style="font-size:18px; color:rgba(255,255,255,.4); margin-top:16px">
+      (por ahora quedan para después…)
+    </p>
+  </div>
+
+</main>
+
+<footer>
+  MAKECODE ARCADE · DESAFÍO #1 · EL LABERINTO DE LAS FRUTAS<br><br>
+  PRESIONÁ START PARA COMENZAR <span class="cursor">█</span>
+</footer>
+
+</body>
+</html>
