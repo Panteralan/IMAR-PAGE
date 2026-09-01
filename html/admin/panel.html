@@ -18,6 +18,8 @@
       --red:      #ff3d5a;
       --yellow:   #ffd700;
       --orange:   #ff9f43;
+      --purple:   #b06dff;
+      --purple-dim: rgba(176,109,255,0.08);
       --muted:    #4a5568;
       --texto:    #cbd5e0;
       --radius:   10px;
@@ -50,12 +52,10 @@
       border-bottom: 1px solid var(--border);
       padding: 14px 0;
     }
-
     .nav-inner {
       display: flex; align-items: center;
       justify-content: space-between; flex-wrap: wrap; gap: 12px;
     }
-
     .nav-logo {
       font-family: 'Share Tech Mono', monospace;
       font-size: 16px; color: var(--cyan);
@@ -63,7 +63,6 @@
       display: flex; align-items: center; gap: 8px;
     }
     .nav-logo span { color: #fff; }
-
     .nav-admin-badge {
       font-family: 'Share Tech Mono', monospace;
       font-size: 11px; letter-spacing: 2px;
@@ -72,7 +71,6 @@
       color: var(--yellow);
       background: rgba(255,215,0,0.06);
     }
-
     .nav-logout {
       font-family: 'Share Tech Mono', monospace;
       font-size: 11px; letter-spacing: 1px;
@@ -90,14 +88,12 @@
       border-bottom: 1px solid var(--border);
       background: linear-gradient(180deg, rgba(0,212,255,0.03) 0%, transparent 100%);
     }
-
     .header-tag {
       font-family: 'Share Tech Mono', monospace;
       font-size: 11px; letter-spacing: 3px;
       color: var(--cyan); text-transform: uppercase;
       display: block; margin-bottom: 12px;
     }
-
     .header-titulo {
       font-family: 'Share Tech Mono', monospace;
       font-size: clamp(24px, 4vw, 40px);
@@ -105,7 +101,6 @@
       text-shadow: 0 0 20px rgba(0,212,255,0.2);
     }
     .header-titulo span { color: var(--cyan); }
-
     .header-sub {
       font-family: 'Share Tech Mono', monospace;
       font-size: 12px; color: var(--muted); letter-spacing: 1px;
@@ -113,33 +108,24 @@
     .header-sub::before { content: '// '; color: var(--cyan); }
 
     /* Stats */
-    .admin-stats {
-      display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px;
-    }
-
+    .admin-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
     .stat-box {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 14px 20px; text-align: center; min-width: 100px;
     }
-
     .stat-n {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 28px; display: block; line-height: 1;
-      margin-bottom: 4px;
+      font-size: 28px; display: block; line-height: 1; margin-bottom: 4px;
     }
     .stat-n.cyan   { color: var(--cyan); }
     .stat-n.green  { color: var(--green); }
     .stat-n.red    { color: var(--red); }
     .stat-n.yellow { color: var(--yellow); }
+    .stat-n.purple { color: var(--purple); }
+    .stat-l { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
 
-    .stat-l {
-      font-size: 11px; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--muted);
-    }
-
-    /* Botón guardar todo */
     .btn-save-all {
       font-family: 'Share Tech Mono', monospace;
       font-size: 13px; letter-spacing: 1px;
@@ -153,17 +139,10 @@
     .btn-save-all:disabled { opacity: 0.5; cursor: not-allowed; }
 
     /* ===== MAIN ===== */
-    main {
-      position: relative; z-index: 1;
-      padding: 40px 0 80px;
-    }
+    main { position: relative; z-index: 1; padding: 40px 0 80px; }
 
     /* ===== TABS DE GRADO ===== */
-    .grado-tabs {
-      display: flex; gap: 8px; flex-wrap: wrap;
-      margin-bottom: 32px;
-    }
-
+    .grado-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
     .tab-btn {
       font-family: 'Share Tech Mono', monospace;
       font-size: 12px; letter-spacing: 1.5px;
@@ -174,11 +153,12 @@
     }
     .tab-btn:hover { border-color: var(--cyan); color: var(--cyan); }
     .tab-btn.active { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim); }
+    .tab-btn.tab-proyectos.active { border-color: var(--purple); color: var(--purple); background: var(--purple-dim); }
+    .tab-btn.tab-proyectos:hover  { border-color: var(--purple); color: var(--purple); }
 
     /* ===== PANEL DE GRADO ===== */
     .grado-panel { display: none; }
     .grado-panel.active { display: block; animation: fadeIn 0.3s ease; }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -186,146 +166,263 @@
 
     .grado-titulo {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 20px; color: #fff;
-      margin-bottom: 6px; letter-spacing: 1px;
+      font-size: 20px; color: #fff; margin-bottom: 6px; letter-spacing: 1px;
     }
-
     .grado-sub {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 12px; color: var(--muted);
-      margin-bottom: 28px; letter-spacing: 1px;
+      font-size: 12px; color: var(--muted); margin-bottom: 28px; letter-spacing: 1px;
     }
     .grado-sub::before { content: '> '; color: var(--cyan); }
 
-    /* ===== SECCIÓN DENTRO DEL PANEL ===== */
+    /* ===== SECCIÓN ===== */
     .admin-seccion {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      margin-bottom: 20px;
-      overflow: hidden;
+      margin-bottom: 20px; overflow: hidden;
     }
-
     .seccion-head {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(0,0,0,0.2);
-      cursor: pointer;
-      user-select: none;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.2); cursor: pointer; user-select: none;
     }
-
     .seccion-nombre {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 13px; letter-spacing: 1px;
-      color: var(--cyan);
+      font-size: 13px; letter-spacing: 1px; color: var(--cyan);
     }
-
-    .seccion-conteo {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11px; color: var(--muted); letter-spacing: 1px;
-    }
-
-    .seccion-arrow {
-      font-size: 14px; color: var(--muted);
-      transition: transform 0.3s;
-    }
+    .seccion-conteo { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+    .seccion-arrow { font-size: 14px; color: var(--muted); transition: transform 0.3s; }
     .admin-seccion.open .seccion-arrow { transform: rotate(180deg); }
-
-    .seccion-body {
-      display: none; padding: 16px 20px;
-    }
+    .seccion-body { display: none; padding: 16px 20px; }
     .admin-seccion.open .seccion-body { display: block; }
 
     /* ===== FILA DE TARJETA ===== */
     .card-row {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px; border-radius: 8px;
-      border: 1px solid transparent;
-      margin-bottom: 8px; gap: 12px;
-      transition: all 0.2s;
-      background: var(--surface2);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-radius: 8px; border: 1px solid transparent;
+      margin-bottom: 8px; gap: 12px; transition: all 0.2s; background: var(--surface2);
     }
     .card-row:last-child { margin-bottom: 0; }
     .card-row:hover { border-color: var(--border); }
     .card-row.visible-on  { border-left: 3px solid var(--green); }
     .card-row.visible-off { border-left: 3px solid var(--red); opacity: 0.6; }
-
     .card-row-info { flex: 1; min-width: 0; }
-
-    .card-row-id {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px; color: var(--muted);
-      letter-spacing: 1.5px; margin-bottom: 2px;
-    }
-
-    .card-row-titulo {
-      font-size: 15px; font-weight: 700;
-      color: #fff; white-space: nowrap;
-      overflow: hidden; text-overflow: ellipsis;
-    }
-
-    .card-row-estado {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px; letter-spacing: 1px;
-      margin-top: 2px;
-    }
+    .card-row-id { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1.5px; margin-bottom: 2px; }
+    .card-row-titulo { font-size: 15px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-row-estado { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1px; margin-top: 2px; }
     .card-row-estado.on  { color: var(--green); }
     .card-row-estado.off { color: var(--red); }
 
     /* ===== SWITCH ===== */
     .switch-wrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-
-    .switch-label {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px; letter-spacing: 1px;
-      text-transform: uppercase; min-width: 40px;
-      text-align: right;
-    }
+    .switch-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; min-width: 40px; text-align: right; }
     .switch-label.on  { color: var(--green); }
     .switch-label.off { color: var(--red); }
-
-    .switch {
-      position: relative; width: 48px; height: 26px; flex-shrink: 0;
-    }
+    .switch { position: relative; width: 48px; height: 26px; flex-shrink: 0; }
     .switch input { opacity: 0; width: 0; height: 0; }
-
     .slider {
       position: absolute; inset: 0;
-      background: rgba(255,61,90,0.2);
-      border: 1px solid var(--red);
-      border-radius: 50px; cursor: pointer;
-      transition: all 0.3s;
+      background: rgba(255,61,90,0.2); border: 1px solid var(--red);
+      border-radius: 50px; cursor: pointer; transition: all 0.3s;
     }
     .slider::before {
-      content: '';
-      position: absolute;
-      left: 3px; top: 50%; transform: translateY(-50%);
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: var(--red);
-      transition: all 0.3s;
-      box-shadow: 0 0 8px rgba(255,61,90,0.5);
+      content: ''; position: absolute; left: 3px; top: 50%; transform: translateY(-50%);
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--red); transition: all 0.3s; box-shadow: 0 0 8px rgba(255,61,90,0.5);
+    }
+    .switch input:checked + .slider { background: rgba(0,255,140,0.15); border-color: var(--green); }
+    .switch input:checked + .slider::before { transform: translateY(-50%) translateX(22px); background: var(--green); box-shadow: 0 0 8px rgba(0,255,140,0.5); }
+
+    /* ===================================================
+       PANEL PROYECTOS FIREBASE
+       =================================================== */
+    .fb-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; margin-bottom: 24px;
+    }
+    .fb-search {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px; letter-spacing: 1px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; padding: 9px 16px;
+      color: var(--texto); outline: none; width: 260px;
+      transition: border-color 0.2s;
+    }
+    .fb-search:focus { border-color: var(--purple); }
+    .fb-search::placeholder { color: var(--muted); }
+
+    .btn-fb-reload {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 1px;
+      padding: 9px 18px; border-radius: 6px;
+      border: 1px solid var(--purple); color: var(--purple);
+      background: var(--purple-dim); cursor: pointer;
+      transition: all 0.2s; text-transform: uppercase;
+    }
+    .btn-fb-reload:hover { background: var(--purple); color: #000; }
+
+    /* Tabla de grupos */
+    .grupos-tabla {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .grupos-tabla-head {
+      display: grid;
+      grid-template-columns: 1fr 140px 90px 90px 110px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.3);
+    }
+    .th {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 2px;
+      color: var(--muted); text-transform: uppercase;
     }
 
-    .switch input:checked + .slider {
-      background: rgba(0,255,140,0.15);
-      border-color: var(--green);
+    .grupo-fila {
+      display: grid;
+      grid-template-columns: 1fr 140px 90px 90px 110px;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      align-items: center;
+      transition: background 0.2s;
     }
-    .switch input:checked + .slider::before {
-      transform: translateY(-50%) translateX(22px);
-      background: var(--green);
-      box-shadow: 0 0 8px rgba(0,255,140,0.5);
+    .grupo-fila:last-child { border-bottom: none; }
+    .grupo-fila:hover { background: rgba(176,109,255,0.05); }
+
+    .grupo-nombre {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px; color: #fff; letter-spacing: 1px;
     }
+    .grupo-id {
+      font-size: 11px; color: var(--muted); margin-top: 3px;
+      font-family: 'Share Tech Mono', monospace; letter-spacing: 1px;
+    }
+    .grupo-fecha {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; color: var(--muted); letter-spacing: 1px;
+    }
+    .grupo-sprites {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 16px; font-weight: 700; color: var(--purple);
+    }
+    .grupo-actions { display: flex; gap: 8px; }
+
+    .btn-ver-grupo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 1px;
+      padding: 6px 12px; border-radius: 4px;
+      border: 1px solid var(--cyan); color: var(--cyan);
+      background: transparent; cursor: pointer;
+      transition: all 0.2s; text-transform: uppercase;
+    }
+    .btn-ver-grupo:hover { background: var(--cyan); color: #000; }
+
+    .btn-del-grupo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 1px;
+      padding: 6px 10px; border-radius: 4px;
+      border: 1px solid var(--muted); color: var(--muted);
+      background: transparent; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-del-grupo:hover { border-color: var(--red); color: var(--red); background: rgba(255,61,90,0.08); }
+
+    /* Modal sprites */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(6,8,15,0.92);
+      backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid rgba(176,109,255,0.3);
+      border-radius: 14px;
+      width: 100%; max-width: 800px;
+      max-height: 85vh;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.3);
+    }
+    .modal-titulo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 16px; color: var(--purple); letter-spacing: 1px;
+    }
+    .modal-cerrar {
+      background: transparent; border: 1px solid var(--muted);
+      border-radius: 4px; color: var(--muted);
+      font-size: 16px; width: 32px; height: 32px;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-cerrar:hover { border-color: var(--red); color: var(--red); }
+    .modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
+
+    .sprites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .sprite-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+    }
+    .sprite-img {
+      width: 100%; aspect-ratio: 1;
+      object-fit: contain; background: #fff;
+      display: block; padding: 6px;
+    }
+    .sprite-info { padding: 8px 10px; }
+    .sprite-nombre {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; color: var(--texto);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .sprite-fecha { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); }
+    .sprite-dl {
+      display: block; width: 100%;
+      padding: 6px; text-align: center;
+      font-family: 'Share Tech Mono', monospace; font-size: 10px;
+      color: var(--cyan); border-top: 1px solid var(--border);
+      background: transparent; border-left: none; border-right: none; border-bottom: none;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .sprite-dl:hover { background: rgba(0,212,255,0.08); }
+
+    .modal-empty {
+      text-align: center; padding: 48px 20px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px; color: var(--muted); letter-spacing: 1px;
+    }
+
+    /* FB stats */
+    .fb-stats {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;
+    }
+
+    /* Loading estado vacío */
+    .fb-loading, .fb-empty {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px; color: var(--muted);
+      letter-spacing: 1px; text-align: center;
+      padding: 48px 20px;
+    }
+    .fb-loading { color: var(--purple); animation: blink 1s infinite; }
 
     /* ===== TOAST ===== */
-    .toast-container {
-      position: fixed; bottom: 24px; right: 24px;
-      z-index: 9999; display: flex; flex-direction: column; gap: 8px;
-    }
-
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
     .toast {
       font-family: 'Share Tech Mono', monospace;
       font-size: 12px; letter-spacing: 1px;
@@ -333,45 +430,28 @@
       border: 1px solid; min-width: 240px;
       animation: toast-in 0.3s ease;
     }
-    @keyframes toast-in {
-      from { opacity: 0; transform: translateX(20px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-
+    @keyframes toast-in { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
     .toast.ok  { background: rgba(0,255,140,0.1); border-color: var(--green); color: var(--green); }
     .toast.err { background: rgba(255,61,90,0.1); border-color: var(--red); color: var(--red); }
+    .toast.info { background: rgba(176,109,255,0.1); border-color: var(--purple); color: var(--purple); }
 
     /* Loading overlay */
-    .loading-overlay {
-      position: fixed; inset: 0; z-index: 500;
-      background: rgba(6,8,15,0.8);
-      backdrop-filter: blur(4px);
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 16px;
-    }
+    .loading-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(6,8,15,0.8); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
     .loading-overlay.hidden { display: none; }
-
-    .loading-text {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 14px; color: var(--cyan);
-      letter-spacing: 2px; animation: blink 1s infinite;
-    }
+    .loading-text { font-family: 'Share Tech Mono', monospace; font-size: 14px; color: var(--cyan); letter-spacing: 2px; animation: blink 1s infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-    .loading-spinner {
-      width: 40px; height: 40px;
-      border: 3px solid var(--border);
-      border-top-color: var(--cyan);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
+    .loading-spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--cyan); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .grupos-tabla-head { grid-template-columns: 1fr 80px 80px; }
+      .grupos-tabla-head .th:nth-child(2),
+      .grupo-fila > *:nth-child(2) { display: none; }
+      .grupo-fila { grid-template-columns: 1fr 80px 80px; }
+    }
     @media (max-width: 576px) {
       .admin-stats { gap: 8px; }
       .stat-box { min-width: 80px; padding: 10px 14px; }
-      .card-row-titulo { font-size: 13px; }
     }
   </style>
 </head>
@@ -385,6 +465,19 @@
 
   <!-- Toast container -->
   <div class="toast-container" id="toasts"></div>
+
+  <!-- Modal sprites -->
+  <div class="modal-overlay" id="modal-sprites">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-titulo" id="modal-grupo-nombre">—</span>
+        <button class="modal-cerrar" onclick="cerrarModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body-content">
+        <div class="modal-empty">Cargando sprites...</div>
+      </div>
+    </div>
+  </div>
 
   <!-- NAVBAR -->
   <nav class="admin-nav">
@@ -400,7 +493,7 @@
     <div class="container">
       <span class="header-tag">Sistema IMAR · Control de Acceso · 2026</span>
       <h1 class="header-titulo">PANEL DE <span>ADMINISTRACIÓN</span></h1>
-      <p class="header-sub">Controlá la visibilidad de contenidos por grado en tiempo real</p>
+      <p class="header-sub">Controlá la visibilidad de contenidos y los proyectos de alumnos</p>
 
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-4">
         <div class="admin-stats">
@@ -419,6 +512,14 @@
           <div class="stat-box">
             <span class="stat-n yellow">6</span>
             <span class="stat-l">Grados</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-n purple" id="stat-grupos">--</span>
+            <span class="stat-l">Grupos</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-n purple" id="stat-sprites-total">--</span>
+            <span class="stat-l">Sprites</span>
           </div>
         </div>
         <button class="btn-save-all" id="btn-guardar-todo" onclick="guardarTodo()">
@@ -439,6 +540,7 @@
         <button class="tab-btn" onclick="switchTab('quinto', this)">5° Primaria</button>
         <button class="tab-btn" onclick="switchTab('sexto', this)">6° Primaria</button>
         <button class="tab-btn" onclick="switchTab('secundaria', this)">Secundaria</button>
+        <button class="tab-btn tab-proyectos" onclick="switchTab('proyectos', this)">📁 Proyectos</button>
       </div>
 
       <!-- ================================================
@@ -447,35 +549,24 @@
       <div class="grado-panel active" id="panel-tercero">
         <div class="grado-titulo">// TERCER AÑO</div>
         <div class="grado-sub">WeDo 2.0 Básicos · WeDo 2.0 Avanzados · Scratch + WeDo</div>
-
-        <!-- Sección WeDo Básico -->
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🧱 WeDo 2.0 — Básicos Oficiales</span>
-            <div class="d-flex align-items-center gap-3">
-              <span class="seccion-conteo" id="conteo-tercero-wb"></span>
-              <span class="seccion-arrow">▼</span>
-            </div>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-tercero-wb"></span><span class="seccion-arrow">▼</span></div>
           </div>
           <div class="seccion-body">
-            <!-- Las filas se generan dinámicamente -->
             <div id="rows-tercero-wb">
-              <!-- wb-01 --> <div data-grado="tercero" data-card="wb-01" data-titulo="Manual Oficial 1" data-seccion="WeDo Básico"></div>
-              <!-- wb-02 --> <div data-grado="tercero" data-card="wb-02" data-titulo="Manual Oficial 2" data-seccion="WeDo Básico"></div>
-              <!-- wb-03 --> <div data-grado="tercero" data-card="wb-03" data-titulo="Manual Oficial 3" data-seccion="WeDo Básico"></div>
-              <!-- wb-04 --> <div data-grado="tercero" data-card="wb-04" data-titulo="Manual Oficial 4" data-seccion="WeDo Básico"></div>
+              <div data-grado="tercero" data-card="wb-01" data-titulo="Manual Oficial 1"></div>
+              <div data-grado="tercero" data-card="wb-02" data-titulo="Manual Oficial 2"></div>
+              <div data-grado="tercero" data-card="wb-03" data-titulo="Manual Oficial 3"></div>
+              <div data-grado="tercero" data-card="wb-04" data-titulo="Manual Oficial 4"></div>
             </div>
           </div>
         </div>
-
-        <!-- Sección WeDo Avanzado -->
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">⚙️ WeDo 2.0 — Avanzados</span>
-            <div class="d-flex align-items-center gap-3">
-              <span class="seccion-conteo" id="conteo-tercero-wa"></span>
-              <span class="seccion-arrow">▼</span>
-            </div>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-tercero-wa"></span><span class="seccion-arrow">▼</span></div>
           </div>
           <div class="seccion-body">
             <div id="rows-tercero-wa">
@@ -485,15 +576,10 @@
             </div>
           </div>
         </div>
-
-        <!-- Sección Scratch -->
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🐱 Scratch + WeDo 2.0</span>
-            <div class="d-flex align-items-center gap-3">
-              <span class="seccion-conteo" id="conteo-tercero-sc"></span>
-              <span class="seccion-arrow">▼</span>
-            </div>
+            <div class="d-flex align-items-center gap-3"><span class="seccion-conteo" id="conteo-tercero-sc"></span><span class="seccion-arrow">▼</span></div>
           </div>
           <div class="seccion-body">
             <div id="rows-tercero-sc">
@@ -511,7 +597,6 @@
       <div class="grado-panel" id="panel-cuarto">
         <div class="grado-titulo">// CUARTO AÑO</div>
         <div class="grado-sub">WeDo Avanzado · Micro:bit · MakeCode Arcade · Scratch + WeDo</div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🧱 WeDo 2.0 — Avanzados</span>
@@ -525,7 +610,6 @@
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">💻 Micro:bit</span>
@@ -539,7 +623,6 @@
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🎮 MakeCode Arcade + Makey Makey</span>
@@ -553,7 +636,6 @@
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🐱 Scratch + WeDo</span>
@@ -575,7 +657,6 @@
       <div class="grado-panel" id="panel-quinto">
         <div class="grado-titulo">// QUINTO AÑO</div>
         <div class="grado-sub">Scratch + WeDo · Code.org · Minecraft · MakeCode · Micro:bit · Edubit</div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🐱 Scratch + WeDo</span>
@@ -589,7 +670,6 @@
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">💻 Code.org</span>
@@ -603,9 +683,6 @@
             </div>
           </div>
         </div>
-
-
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🎮 MakeCode Arcade</span>
@@ -616,11 +693,10 @@
               <div data-grado="quinto" data-card="arc-01" data-titulo="Juego MakeCode 1"></div>
               <div data-grado="quinto" data-card="arc-02" data-titulo="Juego MakeCode 2"></div>
               <div data-grado="quinto" data-card="arc-03" data-titulo="Juego MakeCode 3"></div>
-              <div data-grado="quinto" data-card="arc-04" data-titulo="Juego MakeCode 4"></div>
+              <div data-grado="quinto" data-card="arc-04" data-titulo="Creación de un laberinto"></div>
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🔬 Micro:bit</span>
@@ -634,7 +710,6 @@
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">⚡ Edubit</span>
@@ -656,7 +731,6 @@
       <div class="grado-panel" id="panel-sexto">
         <div class="grado-titulo">// SEXTO AÑO</div>
         <div class="grado-sub">SPIKE Prime · Micro:bit · Arduino · Tinkercad · Studio 2.0</div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🟡 SPIKE Prime — Oficiales</span>
@@ -673,7 +747,6 @@
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">⚙️ SPIKE Prime — Avanzados</span>
@@ -687,7 +760,6 @@
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">⚡ Arduino</span>
@@ -701,7 +773,6 @@
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🖨️ Tinkercad</span>
@@ -715,7 +786,6 @@
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🧱 Studio 2.0</span>
@@ -737,7 +807,6 @@
       <div class="grado-panel" id="panel-secundaria">
         <div class="grado-titulo">// SECUNDARIA</div>
         <div class="grado-sub">SPIKE Prime Oficiales · SPIKE Prime Avanzados</div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">🟡 SPIKE Prime — Oficiales</span>
@@ -752,7 +821,6 @@
             </div>
           </div>
         </div>
-
         <div class="admin-seccion open">
           <div class="seccion-head" onclick="toggleSeccion(this)">
             <span class="seccion-nombre">⚙️ SPIKE Prime — Avanzados</span>
@@ -769,30 +837,271 @@
         </div>
       </div>
 
+      <!-- ================================================
+           PANEL PROYECTOS FIREBASE
+           ================================================ -->
+      <div class="grado-panel" id="panel-proyectos">
+        <div class="grado-titulo">// PROYECTOS DE ALUMNOS</div>
+        <div class="grado-sub">Grupos y sprites subidos desde Firebase · 6to y 5to grado</div>
+
+        <div class="fb-toolbar">
+          <input type="text" class="fb-search" id="fb-search"
+            placeholder="// Buscar grupo..." oninput="filtrarGrupos()">
+          <button class="btn-fb-reload" onclick="cargarGruposFirebase()">↺ RECARGAR</button>
+        </div>
+
+        <!-- Stats Firebase -->
+        <div class="fb-stats">
+          <div class="stat-box">
+            <span class="stat-n purple" id="fb-stat-grupos">--</span>
+            <span class="stat-l">Grupos</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-n purple" id="fb-stat-sprites">--</span>
+            <span class="stat-l">Sprites totales</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-n cyan" id="fb-stat-hoy">--</span>
+            <span class="stat-l">Creados hoy</span>
+          </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="grupos-tabla">
+          <div class="grupos-tabla-head">
+            <div class="th">Grupo</div>
+            <div class="th">Creado</div>
+            <div class="th">Sprites</div>
+            <div class="th">Estado</div>
+            <div class="th">Acciones</div>
+          </div>
+          <div id="fb-grupos-body">
+            <div class="fb-loading">// CONECTANDO CON FIREBASE...</div>
+          </div>
+        </div>
+
+      </div><!-- fin panel-proyectos -->
+
     </div>
   </main>
 
   <script src="../../js/auth.js"></script>
   <script src="../../js/supabase.js"></script>
-  <script>
 
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDERMhJcypqn-_Z-M6YvKrwHLY_jK8_gFE",
+      authDomain: "imar-proyectos-6to.firebaseapp.com",
+      projectId: "imar-proyectos-6to",
+      storageBucket: "imar-proyectos-6to.firebasestorage.app",
+      messagingSenderId: "111230121763",
+      appId: "1:111230121763:web:83cffb86b4ca8e30653e96"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // Guardamos grupos en memoria para filtrar sin recargar
+    let todosLosGrupos = [];
+
+    // ── Cargar todos los grupos ──
+    window.cargarGruposFirebase = async function() {
+      const body = document.getElementById('fb-grupos-body');
+      body.innerHTML = '<div class="fb-loading">// CARGANDO GRUPOS...</div>';
+
+      try {
+        const snap = await getDocs(collection(db, 'grupos'));
+        todosLosGrupos = [];
+
+        snap.forEach(docSnap => {
+          const d = docSnap.data();
+          todosLosGrupos.push({
+            id:        docSnap.id,
+            nombre:    d.nombre || docSnap.id,
+            sprites:   d.sprites || [],
+            creadoEn:  d.creadoEn || null
+          });
+        });
+
+        // Ordenar por fecha de creación descendente
+        todosLosGrupos.sort((a, b) => (b.creadoEn || 0) - (a.creadoEn || 0));
+
+        actualizarStatsFirebase(todosLosGrupos);
+        renderGrupos(todosLosGrupos);
+
+      } catch(e) {
+        body.innerHTML = '<div class="fb-loading" style="color:var(--red)">// ERROR AL CONECTAR CON FIREBASE</div>';
+        console.error(e);
+      }
+    };
+
+    // ── Render tabla de grupos ──
+    function renderGrupos(grupos) {
+      const body = document.getElementById('fb-grupos-body');
+
+      if (!grupos.length) {
+        body.innerHTML = '<div class="fb-empty">// No hay grupos creados todavía</div>';
+        return;
+      }
+
+      body.innerHTML = grupos.map(g => {
+        const fecha    = g.creadoEn ? formatFecha(g.creadoEn) : '—';
+        const cantidad = g.sprites.length;
+        const estado   = cantidad > 0 ? `<span style="color:var(--green)">● ACTIVO</span>` : `<span style="color:var(--muted)">○ VACÍO</span>`;
+
+        return `
+          <div class="grupo-fila">
+            <div>
+              <div class="grupo-nombre">${g.nombre}</div>
+              <div class="grupo-id">// ${g.id}</div>
+            </div>
+            <div class="grupo-fecha">${fecha}</div>
+            <div class="grupo-sprites">${cantidad}</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:11px;">${estado}</div>
+            <div class="grupo-actions">
+              <button class="btn-ver-grupo" onclick="verSpritesGrupo('${g.id}', '${g.nombre}')">VER</button>
+              <button class="btn-del-grupo" onclick="eliminarGrupo('${g.id}', '${g.nombre}')">✕</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ── Filtrar por búsqueda ──
+    window.filtrarGrupos = function() {
+      const q = document.getElementById('fb-search').value.toLowerCase().trim();
+      const filtrados = q
+        ? todosLosGrupos.filter(g => g.nombre.toLowerCase().includes(q) || g.id.includes(q))
+        : todosLosGrupos;
+      renderGrupos(filtrados);
+    };
+
+    // ── Stats Firebase ──
+    function actualizarStatsFirebase(grupos) {
+      const totalSprites = grupos.reduce((acc, g) => acc + g.sprites.length, 0);
+      const hoy = new Date(); hoy.setHours(0,0,0,0);
+      const creadosHoy = grupos.filter(g => g.creadoEn && g.creadoEn >= hoy.getTime()).length;
+
+      document.getElementById('fb-stat-grupos').textContent  = grupos.length;
+      document.getElementById('fb-stat-sprites').textContent = totalSprites;
+      document.getElementById('fb-stat-hoy').textContent     = creadosHoy;
+
+      // También actualizar stats del header
+      document.getElementById('stat-grupos').textContent        = grupos.length;
+      document.getElementById('stat-sprites-total').textContent = totalSprites;
+    }
+
+    // ── Ver sprites de un grupo ──
+    window.verSpritesGrupo = async function(id, nombre) {
+      document.getElementById('modal-grupo-nombre').textContent = `// ${nombre}`;
+      document.getElementById('modal-body-content').innerHTML = '<div class="modal-empty">Cargando sprites...</div>';
+      document.getElementById('modal-sprites').classList.add('open');
+
+      try {
+        const snap   = await getDoc(doc(db, 'grupos', id));
+        const sprites = snap.exists() ? (snap.data().sprites || []) : [];
+
+        if (!sprites.length) {
+          document.getElementById('modal-body-content').innerHTML =
+            '<div class="modal-empty">// Este grupo no tiene sprites subidos todavía</div>';
+          return;
+        }
+
+        document.getElementById('modal-body-content').innerHTML = `
+          <div class="sprites-grid">
+            ${sprites.map(s => `
+              <div class="sprite-card">
+                <img class="sprite-img" src="${s.data}" alt="${s.nombre}">
+                <div class="sprite-info">
+                  <div class="sprite-nombre">${s.nombre}</div>
+                  <div class="sprite-fecha">${formatFecha(s.subidoEn)}</div>
+                </div>
+                <button class="sprite-dl" onclick="descargarSprite('${s.id}', '${id}')">⬇ DESCARGAR</button>
+              </div>
+            `).join('')}
+          </div>
+        `;
+
+        // Guardar sprites en memoria para descarga
+        window._spritesActuales = sprites;
+
+      } catch(e) {
+        document.getElementById('modal-body-content').innerHTML =
+          '<div class="modal-empty" style="color:var(--red)">// Error al cargar los sprites</div>';
+      }
+    };
+
+    // ── Descargar sprite desde modal ──
+    window.descargarSprite = function(spriteId, grupoId) {
+      const sprite = (window._spritesActuales || []).find(s => s.id === spriteId);
+      if (!sprite) return;
+      const a = document.createElement('a');
+      a.href = sprite.data;
+      a.download = sprite.archivo || `${sprite.nombre}.png`;
+      a.click();
+    };
+
+    // ── Eliminar grupo ──
+    window.eliminarGrupo = async function(id, nombre) {
+      if (!confirm(`¿Seguro que querés eliminar el grupo "${nombre}"?\nSe borrarán todos sus sprites. Esta acción no se puede deshacer.`)) return;
+
+      try {
+        await deleteDoc(doc(db, 'grupos', id));
+        toast(`✓ Grupo "${nombre}" eliminado`, 'ok');
+        await cargarGruposFirebase();
+      } catch(e) {
+        toast('Error al eliminar el grupo', 'err');
+        console.error(e);
+      }
+    };
+
+    // ── Cerrar modal ──
+    window.cerrarModal = function() {
+      document.getElementById('modal-sprites').classList.remove('open');
+      window._spritesActuales = [];
+    };
+    document.getElementById('modal-sprites').addEventListener('click', function(e) {
+      if (e.target === this) cerrarModal();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+
+    // ── Helpers ──
+    function formatFecha(ts) {
+      if (!ts) return '—';
+      return new Date(ts).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'2-digit' });
+    }
+
+    // Cargar Firebase cuando se abre la tab de proyectos
+    window._fbCargado = false;
+    const tabProyectos = document.querySelector('.tab-proyectos');
+    if (tabProyectos) {
+      tabProyectos.addEventListener('click', () => {
+        if (!window._fbCargado) {
+          window._fbCargado = true;
+          cargarGruposFirebase();
+        }
+      });
+    }
+
+  </script>
+
+  <script>
     // Solo admin puede entrar
     AUTH.verificar('admin');
 
-    // Estado local de switches
-    // { "tercero:wb-01": true/false, ... }
     const estado = {};
     let cambiosPendientes = 0;
 
-    // ---- Generar fila de tarjeta con switch ----
     function crearFila(grado, cardId, titulo, visible) {
       const key = `${grado}:${cardId}`;
       estado[key] = visible;
-
       const row = document.createElement('div');
       row.className = `card-row ${visible ? 'visible-on' : 'visible-off'}`;
       row.id = `row-${key.replace(':','-')}`;
-
       row.innerHTML = `
         <div class="card-row-info">
           <div class="card-row-id">// ${grado.toUpperCase()} · ${cardId.toUpperCase()}</div>
@@ -815,112 +1124,75 @@
       return row;
     }
 
-    // ---- Toggle de switch ----
     function toggleSwitch(grado, cardId, checkbox) {
-      const key = `${grado}:${cardId}`;
+      const key     = `${grado}:${cardId}`;
       const visible = checkbox.checked;
-      estado[key] = visible;
-
-      const safeKey = key.replace(':','-');
-      const row     = document.getElementById(`row-${safeKey}`);
-      const label   = document.getElementById(`label-${safeKey}`);
+      estado[key]   = visible;
+      const safeKey  = key.replace(':','-');
+      const row      = document.getElementById(`row-${safeKey}`);
+      const label    = document.getElementById(`label-${safeKey}`);
       const estadoEl = document.getElementById(`estado-${safeKey}`);
-
       row.className = `card-row ${visible ? 'visible-on' : 'visible-off'}`;
       label.textContent = visible ? 'ON' : 'OFF';
-      label.className = `switch-label ${visible ? 'on' : 'off'}`;
+      label.className   = `switch-label ${visible ? 'on' : 'off'}`;
       estadoEl.textContent = visible ? '● VISIBLE' : '○ BLOQUEADO';
-      estadoEl.className = `card-row-estado ${visible ? 'on' : 'off'}`;
-
+      estadoEl.className   = `card-row-estado ${visible ? 'on' : 'off'}`;
       cambiosPendientes++;
-      document.getElementById('btn-guardar-todo').textContent =
-        `💾 GUARDAR (${cambiosPendientes} cambios)`;
-
+      document.getElementById('btn-guardar-todo').textContent = `💾 GUARDAR (${cambiosPendientes} cambios)`;
       actualizarStats();
     }
 
-    // ---- Guardar todos los cambios en Supabase ----
     async function guardarTodo() {
       const btn = document.getElementById('btn-guardar-todo');
-      btn.disabled = true;
-      btn.textContent = '⏳ GUARDANDO...';
-
+      btn.disabled = true; btn.textContent = '⏳ GUARDANDO...';
       let ok = 0; let err = 0;
-
       for (const [key, visible] of Object.entries(estado)) {
         const [grado, cardId] = key.split(':');
         const resultado = await DB.setVisibilidad(grado, cardId, visible);
         if (resultado) ok++; else err++;
       }
-
-      btn.disabled = false;
-      cambiosPendientes = 0;
+      btn.disabled = false; cambiosPendientes = 0;
       btn.textContent = '💾 GUARDAR CAMBIOS';
-
-      if (err === 0) {
-        toast(`✅ ${ok} registros guardados correctamente`, 'ok');
-      } else {
-        toast(`⚠️ ${ok} guardados · ${err} con error`, 'err');
-      }
+      if (err === 0) toast(`✅ ${ok} registros guardados correctamente`, 'ok');
+      else toast(`⚠️ ${ok} guardados · ${err} con error`, 'err');
     }
 
-    // ---- Cargar datos desde Supabase y renderizar filas ----
     async function cargarDatos() {
       const todo = await DB.obtenerTodo();
-
-      // Recorrer todos los contenedores de filas
       document.querySelectorAll('[id^="rows-"]').forEach(container => {
-        const partes = container.id.replace('rows-','').split('-');
-        const grado = partes[0];
+        const partes  = container.id.replace('rows-','').split('-');
+        const grado   = partes[0];
         const seccion = partes.slice(1).join('-');
-
-        // Buscar los divs placeholder dentro del container
         const placeholders = container.querySelectorAll('[data-card]');
         container.innerHTML = '';
-
         placeholders.forEach(ph => {
           const cardId  = ph.dataset.card;
           const titulo  = ph.dataset.titulo;
-
-          // Visible por defecto según data-bloqueado del HTML original
-          // Si está en Supabase, usar ese valor
-          let visible = true; // default
-          if (todo[grado] && cardId in todo[grado]) {
-            visible = todo[grado][cardId];
-          }
-
+          let visible   = true;
+          if (todo[grado] && cardId in todo[grado]) visible = todo[grado][cardId];
           const fila = crearFila(grado, cardId, titulo, visible);
           container.appendChild(fila);
         });
-
-        // Actualizar conteo de la sección
         actualizarConteosSeccion(grado, seccion, container);
       });
-
       actualizarStats();
       document.getElementById('loading').classList.add('hidden');
     }
 
-    // ---- Conteo por sección ----
     function actualizarConteosSeccion(grado, seccion, container) {
-      const conteoBadge = document.getElementById(`conteo-${grado}-${seccion}`);
-      if (!conteoBadge) return;
-      const total = container.querySelectorAll('.card-row').length;
+      const badge = document.getElementById(`conteo-${grado}-${seccion}`);
+      if (!badge) return;
+      const total    = container.querySelectorAll('.card-row').length;
       const visibles = container.querySelectorAll('.card-row.visible-on').length;
-      conteoBadge.textContent = `${visibles}/${total} visibles`;
+      badge.textContent = `${visibles}/${total} visibles`;
     }
 
-    // ---- Stats globales ----
     function actualizarStats() {
       const total     = Object.keys(estado).length;
       const visibles  = Object.values(estado).filter(v => v).length;
-      const bloqueados = total - visibles;
-
       document.getElementById('stat-total').textContent     = total;
       document.getElementById('stat-visibles').textContent  = visibles;
-      document.getElementById('stat-bloqueados').textContent = bloqueados;
-
-      // Actualizar conteos de cada sección
+      document.getElementById('stat-bloqueados').textContent = total - visibles;
       document.querySelectorAll('[id^="rows-"]').forEach(container => {
         const partes  = container.id.replace('rows-','').split('-');
         const grado   = partes[0];
@@ -929,7 +1201,6 @@
       });
     }
 
-    // ---- Tabs ----
     function switchTab(grado, btn) {
       document.querySelectorAll('.grado-panel').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -937,12 +1208,8 @@
       btn.classList.add('active');
     }
 
-    // ---- Acordeón de secciones ----
-    function toggleSeccion(head) {
-      head.parentElement.classList.toggle('open');
-    }
+    function toggleSeccion(head) { head.parentElement.classList.toggle('open'); }
 
-    // ---- Toast ----
     function toast(msg, tipo) {
       const container = document.getElementById('toasts');
       const t = document.createElement('div');
@@ -952,10 +1219,7 @@
       setTimeout(() => t.remove(), 3500);
     }
 
-    // ---- Inicializar ----
     cargarDatos();
-
   </script>
-
 </body>
 </html>
